@@ -1,0 +1,24 @@
+{
+    "CidrBlock": "",
+    "Ipv6Pool": "",
+    "Ipv6CidrBlock": "",
+    "Ipv4IpamPoolId": "",
+    "Ipv4NetmaskLength": 0,
+    "Ipv6IpamPoolId": "",
+    "Ipv6NetmaskLength": 0,
+    "Ipv6CidrBlockNetworkBorderGroup": "",
+    "TagSpecifications": [
+        {
+            "ResourceType": "capacity-reservation",
+            "Tags": [
+                {
+                    "Key": "",
+                    "Value": ""
+                }
+            ]
+        }
+    ],
+    "DryRun": true,
+    "InstanceTenancy": "default",
+    "AmazonProvidedIpv6CidrBlock": true
+}
