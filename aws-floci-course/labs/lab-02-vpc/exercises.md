@@ -187,3 +187,104 @@ aws ec2 authorize-security-group-ingress \
 ---
 
 ## Exercise 5 — Integration: complete the second Availability Zone
+
+Lab 6's RDS subnet group requires subnets in at least two Availability Zones, and the private tier only had one (`usms-private-subnet-a`, `us-east-1a`). This exercise completed the second AZ by creating `usms-private-subnet-b` while holding `usms-developer-role`'s temporary credentials — not the normal root identity — exactly as the VPC itself was created back in Step 3.
+
+**Before — confirmed identity is root:**
+
+```bash
+./scripts/utilities/whoami.sh
+```
+
+![alt text](img/36.png)
+
+Output confirmed `arn:aws:iam::000000000000:root`.
+
+**Assumed the role:**
+
+```bash
+ROLE_ARN="arn:aws:iam::${USMS_ACCOUNT_ID}:role/${USMS_ROLE_DEVELOPER}"
+
+aws sts assume-role \
+  --role-arn "$ROLE_ARN" \
+  --role-session-name "lab02-exercise5" \
+  --profile usms-dev \
+  > outputs/lab-02-ex5-assumed-role.json
+
+chmod 600 outputs/lab-02-ex5-assumed-role.json
+
+export AWS_ACCESS_KEY_ID=$(jq -r '.Credentials.AccessKeyId'     outputs/lab-02-ex5-assumed-role.json)
+export AWS_SECRET_ACCESS_KEY=$(jq -r '.Credentials.SecretAccessKey' outputs/lab-02-ex5-assumed-role.json)
+export AWS_SESSION_TOKEN=$(jq -r '.Credentials.SessionToken'    outputs/lab-02-ex5-assumed-role.json)
+
+aws sts get-caller-identity --no-cli-pager
+```
+
+Result confirmed the assumed identity: `arn:aws:sts::000000000000:assumed-role/usms-developer-role/floci-session` (the session-name substitution is the same Floci quirk documented in the main report — Floci does not honour `--role-session-name`).
+
+**Created the subnet and associated it, while holding the assumed role's credentials:**
+
+```bash
+PRIVATE_SUBNET_B_ID=$(aws ec2 create-subnet \
+  --vpc-id "$VPC_ID" \
+  --cidr-block 10.0.4.0/24 \
+  --availability-zone "${AWS_REGION_COURSE}b" \
+  --tag-specifications 'ResourceType=subnet,Tags=[{Key=Name,Value=usms-private-subnet-b},{Key=Project,Value=USMS},{Key=Tier,Value=private},{Key=AZ,Value=b}]' \
+  --query 'Subnet.SubnetId' \
+  --output text)
+
+aws ec2 associate-route-table \
+  --route-table-id "$PRIVATE_RT_ID" \
+  --subnet-id "$PRIVATE_SUBNET_B_ID" \
+  --query 'AssociationId' \
+  --output text
+```
+
+![alt text](img/37.png)
+
+**Applied `usms-private-nacl` to the new subnet**, using the corrected explicit-filter pattern learned from the Step 18 mistake (never `Associations[0]` on a shared NACL):
+
+```bash
+NACL_ASSOC_B_ID=$(aws ec2 describe-network-acls \
+  --filters "Name=association.subnet-id,Values=$PRIVATE_SUBNET_B_ID" \
+  --query "NetworkAcls[0].Associations[?SubnetId=='$PRIVATE_SUBNET_B_ID'].NetworkAclAssociationId | [0]" \
+  --output text)
+
+aws ec2 replace-network-acl-association \
+  --association-id "$NACL_ASSOC_B_ID" \
+  --network-acl-id "$PRIVATE_NACL_ID" \
+  --query 'NewAssociationId' \
+  --output text
+```
+
+![alt text](img/38.png)
+
+**After — restored identity and verified:**
+
+```bash
+unset AWS_ACCESS_KEY_ID AWS_SECRET_ACCESS_KEY AWS_SESSION_TOKEN
+./scripts/utilities/whoami.sh
+```
+
+![alt text](img/39.png)
+
+**Regenerated `configs/lab-02.env`** to pick up the new subnet, and confirmed no empty values remained:
+
+```bash
+grep -n 'export .*=$\|None' configs/lab-02.env || echo "all values populated"
+```
+
+**Built and ran `scripts/utilities/verify-lab-02.sh`** (Section 9 of the lab, not yet built at the time the main steps were completed). The first run surfaced two further issues, both diagnosed and fixed:
+
+- `USMS_PRIVATE_NACL` in `configs/lab-02.env` had resolved to the literal string `acl-default` rather than a real NACL ID. This was traced to a genuine **Floci Limitation**: `describe-network-acls --filters Name=tag:Name,Values=usms-private-nacl` does not correctly resolve tag-based filters for NACL resources, even though the tag was independently confirmed present and correct on the actual NACL object (`acl-2d156e19ebd08123e`) via a direct `describe-network-acls --network-acl-ids` call. Worked around by hardcoding the confirmed-correct ID directly into `configs/lab-02.env`.
+- The verify script's `usms-db-sg is sourced from usms-app-sg` check initially failed because it queried `describe-security-groups ... IpPermissions[0].UserIdGroupPairs[0].GroupId`, which returned empty — `usms-db-sg` now has *two* group-referenced rules (from `usms-app-sg` and, after Exercise 4, from `usms-exam-sg`), so indexing `[0]` was fragile, and this Floci build does not populate `UserIdGroupPairs` reliably in that particular query shape regardless. Rewrote the check to use `describe-security-group-rules` filtered by port and assert the rule's `CidrIpv4` field is empty (i.e., it is genuinely group-referenced, not CIDR-based) — the same query pattern already proven reliable earlier in this lab.
+
+**Final verification result:**
+
+![alt text](img/40.png)
+
+```
+PASS=33  FAIL=0
+```
+
+**Outcome achieved:** four subnets across two Availability Zones, two of them private and both using `usms-private-rt` and `usms-private-nacl`; `configs/lab-02.env` fully populated and committed; `verify-lab-02.sh` passing cleanly.
