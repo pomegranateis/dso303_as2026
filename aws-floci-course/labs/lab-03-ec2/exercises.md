@@ -46,3 +46,23 @@ a production version should write the marker only after every step succeeds.
 When could a re-run actually happen? Per-boot cloud-init directive; an instance rebuilt from an AMI
 or volume where the marker was not preserved; manual or configuration-management invocation. The
 marker makes these safe, subject to the concurrency caveat above.
+
+## Exercise 3 - a reachability report
+
+Wrote scripts/utilities/lab-03-reachability.sh. For each running Project=USMS instance it prints
+name, private IP, public IP, verdict and reason. The verdict is computed from the subnet's route
+table (a 0.0.0.0/0 route to an igw-*) and the security group (tcp/80 from 0.0.0.0/0), never from
+names or tags. No resource IDs are hard-coded, it works from any directory (REPO_ROOT is derived
+from the script's own path), and None/empty fields are handled by a helper function.
+
+set -e is deliberately off: describe-* calls legitimately return empty or None for some instances,
+and a missing field must produce a verdict instead of aborting the report for the rest. -u and
+pipefail stay on.
+
+Result: identical output from ~ and from labs/lab-03-ec2/. web-01, web-02 and usms-admin-01-host
+are REACHABLE; db-01 and db-02 are UNREACHABLE ("no igw route on subnet") even though Floci reports
+127.0.0.1 as their public address, which shows the verdict comes from routing, not the address field.
+
+Limitation: the NO-ADDRESS branch (IGW route present, no public address) cannot be triggered on
+Floci because every instance reports 127.0.0.1. It exists for real AWS, where a public-subnet
+instance launched without a public IP and without an Elastic IP is exactly this state.
