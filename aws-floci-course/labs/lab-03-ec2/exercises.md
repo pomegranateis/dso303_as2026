@@ -65,4 +65,4 @@ are REACHABLE; db-01 and db-02 are UNREACHABLE ("no igw route on subnet") even t
 
 Limitation: the NO-ADDRESS branch (IGW route present, no public address) cannot be triggered on
 Floci because every instance reports 127.0.0.1. It exists for real AWS, where a public-subnet
-instance launched without a public IP and without an Elastic IP is exactly this state.
+instance launched without a public IP and without an Elastic IP is in exactly this state.
