@@ -128,3 +128,29 @@ usms-web-eip (associated), and usms-db-02 (kept until the Exercise 2 evidence is
 
 Verification afterwards: verify-lab-03.sh still reports PASS=32 FAIL=5, the same five [floci]
 failures as before, so the cleanup removed nothing the lab depends on.
+
+## Exercise 5 - the S3 hand-off for Lab 4
+
+Wrote labs/lab-03-ec2/transcript-upload.sh. It takes a student ID and a file, validates both (usage
+and bad ID exit 64, missing or unreadable file exits 66), and uploads to
+s3://usms-student-data/transcripts/<student-id>/<filename> with aws s3 cp. It contains no credential
+variables; on the instance the CLI picks up temporary credentials from the instance profile. The
+student ID is restricted to letters, digits, '-' and '_' so it cannot inject path components.
+
+USMS_BUCKET_NAME is already exported by configs/lab-01.env (usms-student-data), so I did not add it
+to configs/lab-03.env.
+
+Outbound rule: usms-app-sg has one egress rule, protocol -1 to 0.0.0.0/0, which AWS adds by default
+to a new security group. No additional rule was needed. The S3 call is an outbound HTTPS request
+from the instance, and security groups are stateful, so the reply is allowed back without an inbound
+rule. That default egress rule, which I never wrote, is what lets the call leave the instance.
+
+Readiness: outputs/lab-03-s3-readiness.txt records the chain instance -> instance profile ->
+usms-ec2-app-role -> USMSStudentDataReadWrite -> arn:aws:s3:::usms-student-data, followed by the
+head-bucket result. head-bucket fails with a non-zero exit code because the bucket does not exist
+yet. When Lab 4 creates it, the same check should succeed, and the permission chain, which is already
+in place, starts to have an effect.
+
+Limitation: head-bucket was run from the host with Floci's root credentials, so it shows only that the
+bucket is absent. Floci does not deliver instance-profile credentials to instances, so the upload
+script itself could not be run end to end; it is validated for syntax and argument handling only.
