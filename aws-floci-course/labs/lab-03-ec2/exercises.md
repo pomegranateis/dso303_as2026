@@ -66,3 +66,65 @@ are REACHABLE; db-01 and db-02 are UNREACHABLE ("no igw route on subnet") even t
 Limitation: the NO-ADDRESS branch (IGW route present, no public address) cannot be triggered on
 Floci because every instance reports 127.0.0.1. It exists for real AWS, where a public-subnet
 instance launched without a public IP and without an Elastic IP is in exactly this state.
+
+## Exercise 4 - right-size and clean up
+
+### Scale up or scale out?
+I would scale out. The workload is mostly reads, with 400 concurrent users at midday and idle
+overnight, so two or more small instances in different AZs behind a load balancer fit it. Scaling
+up (one bigger instance) raises the ceiling but does nothing about overnight idle time, because a
+larger instance costs the same per hour whether it is busy or not, and it leaves a single point of
+failure. Scaling out lets an Auto Scaling group (Lab 6) hold fewer instances overnight, so idle
+time costs less. We already run web-01 (us-east-1a) and web-02 (us-east-1b), so the shape exists.
+
+### Why 85 percent sustained is a problem on a t3
+t3 instances are burstable. They earn CPU credits while running below a baseline and spend them
+when running above it. A t3.micro's baseline is only about 10 percent of each vCPU (AWS burstable
+documentation; not re-checked here). Running at 85 percent through midday spends credits much faster
+than they are earned. What happens next depends on the credit mode. In standard mode the instance
+is throttled to its baseline once credits run out. In unlimited mode, which is the default for t3
+launches, it keeps full speed and AWS bills surplus credits (about USD 0.05 per vCPU-hour for Linux,
+quoted from memory and to be verified). Roughly (0.85 - 0.10) x 2 vCPU x 0.05 = USD 0.075 per
+hour, several times the instance's own 0.0104 per hour. So the t3.micro looks cheap but either
+throttles or is billed far above its list price. I tried describe-instance-credit-specifications
+to see which mode ours is in; the result is recorded in the audit output.
+
+### Monthly cost comparison (us-east-1, Linux on-demand, 730 hours/month)
+| Option | Calculation | Per month |
+|---|---|---|
+| Current: 1 x t3.micro | 0.0104 x 730 | USD 7.59, but throttled or surcharged at 85% CPU |
+| Scale up: 1 x t3.medium | 0.0416 x 730 | USD 30.37, still burstable, no overnight saving |
+| Scale out: 2 x t3.small, always on | 2 x 0.0208 x 730 | USD 30.37 |
+| Scale out with scheduling: 2 x t3.small for 12 h, 1 for 12 h | 1.5 x 0.0208 x 730 | USD 22.78 |
+| Same fleet on Spot (batch or tolerant work only) | 0.0064-0.0087 x 730 per instance | about USD 4.70-6.35 each, interruptible |
+Not included: a load balancer, data transfer and EBS storage, which I did not price. Each public
+IPv4 address adds USD 0.005 per hour (about USD 3.65/month), whether in use or idle. Instances
+behind a load balancer need not carry their own public address.
+
+Sources: doit.com EC2 t3 price pages (t3.micro, t3.small, t3.medium), Holori t3.micro calculator,
+and the AWS News Blog post "New - AWS Public IPv4 Address Charge + Public IP Insights".
+Prices should be re-checked on the AWS pricing page before relying on them.
+
+### Cleanup decisions (see the deletions below)
+Delete: the Exercise 1 admin host (Ephemeral=true). Keep: usms-web-01, usms-web-02, usms-db-01,
+usms-web-data-vol, usms-web-eip, and usms-nat-eip. The NAT's Elastic IP shows no instance
+association but is in use by the NAT gateway, so it is not an idle address.
+
+### Deletions executed
+Audit first (read-only): credit mode could not be checked (describe-instance-credit-specifications
+is UnsupportedOperation on Floci). The audit found one ephemeral instance and three orphaned volumes.
+
+1. terminate-instances on usms-admin-01-host (i-64b67d0ab35000c43). Its root volume was deleted with
+   it (DeleteOnTermination True), and its two port-forward containers disappeared.
+2. delete-volume on three orphaned root volumes (vol-1f1bbb557a007b7d4, vol-31fe0d0df8b8101f3,
+   vol-392c2b899e9f564e5). They belonged to the three launches that failed with a port conflict
+   (Exercise 1). Floci marked those instances terminated but left the volumes in-use. On real AWS
+   they would have been deleted at termination, so this is a Floci limitation, and on a real account
+   it would be storage billed for nothing.
+
+Deliberately NOT deleted: usms-web-data-vol (KEEP, and only unattached because attach-volume is
+unsupported), usms-nat-eip (no instance association, but in use by the NAT gateway, not idle),
+usms-web-eip (associated), and usms-db-02 (kept until the Exercise 2 evidence is captured).
+
+Verification afterwards: verify-lab-03.sh still reports PASS=32 FAIL=5, the same five [floci]
+failures as before, so the cleanup removed nothing the lab depends on.
