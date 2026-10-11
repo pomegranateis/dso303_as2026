@@ -263,8 +263,6 @@ Launched `usms-admin-01-host` (`i-64b67d0ab35000c43`) in usms-public-subnet-b wi
 
 Written analysis in `exercises.md`: scale out, not up, because it can reduce overnight cost and removes the single point of failure. A t3.micro at 85 percent sustained either throttles or accrues unlimited-mode surcharges. Cost table (us-east-1, Linux on-demand, 730 h): t3.micro 7.59, t3.medium 30.37, 2 x t3.small 30.37, scheduled 2 x t3.small about 22.78 USD per month. Prices come from third-party trackers (doit.com, Holori) and the AWS News Blog for the public IPv4 charge, and should be re-checked on the AWS pricing page. Deleted: the admin host, and three orphaned root volumes left by the failed launches. Kept: the data volume, both Elastic IPs (`usms-nat-eip` looks unassociated but is in use by the NAT gateway) and `usms-db-02`. `verify-lab-03.sh` was unchanged at PASS=32 FAIL=5.
 
-![Cleanup and volumes after](img/lab03-27-ex4-cleanup.png)
-
 ### Exercise 5: S3 hand-off for Lab 4
 
 `transcript-upload.sh` takes a student ID and a file, validates both (exit 64 for usage or a bad ID, 66 for an unreadable file), contains no credential variables, and uploads to `s3://usms-student-data/transcripts/<id>/<file>`. `USMS_BUCKET_NAME` already exists in `lab-01.env`, so it was not added to `lab-03.env`. `usms-app-sg` has one egress rule, all protocols to 0.0.0.0/0, the default; that unwritten rule is what lets the S3 call leave the instance, and the reply returns because security groups are stateful.
@@ -279,7 +277,6 @@ exit code: 254
 
 Exit code 254 is the AWS CLI's code for a failed service call, and the 404 means the bucket does not exist yet (Lab 4 creates it). The check was run from the host with Floci's root credentials, so it proves only that the bucket is absent; the upload itself could not be run end to end because Floci does not deliver profile credentials to instances.
 
-![Argument validation and readiness file](img/lab03-28-ex5-readiness.png)
 
 ---
 
