@@ -1,0 +1,16 @@
+usms-a-alb   internal  application  active  AZs=2  SGs=1
+  HTTP:80
+    prio  9        path-pattern  /nine                        -> empty-tg (0 targets, 0 healthy)
+    prio  10       path-pattern  /ten                         -> fixed-response 503
+    prio  default  -                                          -> redirect HTTP_301 to HTTPS://#{host}/#{path}
+  HTTPS:443
+    prio  default  -                                          -> blue-tg (2 targets, 1 healthy) + green-tg (1 targets, 0 healthy)
+
+usms-nolisteners   internet-facing  application  provisioning  AZs=2  SGs=1
+  (no listeners - this load balancer answers nothing)
+
+usms-broken   internet-facing  application  active  AZs=2  SGs=1
+  HTTP:80
+    ERROR reading rules
+
+JSON written to outputs/lab-05-lb-report.json

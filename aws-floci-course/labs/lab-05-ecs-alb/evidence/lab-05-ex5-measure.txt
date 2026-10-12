@@ -1,0 +1,22 @@
+== A. force-new-deployment, poll until exactly one deployment and a stable target list (cap 120 s) ==
+start 2026-10-12T17:37:23.961Z  targets: 172.20.0.3 172.20.0.4
+None
+poll 1  deployments=0  healthy targets: 172.20.0.3 172.20.0.4
+poll 2  deployments=0  healthy targets: 172.20.0.3 172.20.0.4
+poll 3  deployments=0  healthy targets: 172.20.0.3 172.20.0.4
+poll 4  deployments=0  healthy targets: 172.20.0.3 172.20.0.4
+poll 5  deployments=0  healthy targets: 172.20.0.3 172.20.0.4
+poll 6  deployments=0  healthy targets: 172.20.0.3 172.20.0.4
+poll 7  deployments=0  healthy targets: 172.20.0.3 172.20.0.4
+poll 8  deployments=0  healthy targets: 172.20.0.3 172.20.0.4
+poll 9  deployments=0  healthy targets: 172.20.0.3 172.20.0.4
+poll 10  deployments=0  healthy targets: 172.20.0.3 172.20.0.4
+poll 11  deployments=0  healthy targets: 172.20.0.3 172.20.0.4
+poll 12  deployments=0  healthy targets: 172.20.0.3 172.20.0.4
+end   2026-10-12T17:39:42.617Z  elapsed 138.7 s  condition met: no
+
+== B. stand-in: stop one task, time until the service has two healthy targets again ==
+start 2026-10-12T17:39:43.359Z  stopping 15192458eec148cd9e1b0291d37e54e2  targets: 172.20.0.3 172.20.0.4
+STOPPED
+two healthy targets again: 172.20.0.3 172.20.0.4
+end   2026-10-12T17:40:17.092Z  elapsed 33.7 s
