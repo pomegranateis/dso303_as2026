@@ -4,3 +4,14 @@ running=4 at 2026-10-12T18:03:23.684Z  (+12.8 s)  healthy=3
 4 healthy targets at 2026-10-12T18:03:48.015Z  (+37.1 s)
 == restore desiredCount 2 ==
 after restore: desired=2 running=2 healthy=2
+
+# Exercise 5 summary (stand-in: desiredCount raised with update-service, because
+# re-registering MinCapacity is not implemented on this build)
+start timestamp            : 2026-10-12T18:03:10.890Z
+capacity before / after    : 2 / 4
+running=4 timestamp        : 2026-10-12T18:03:23.684Z
+elapsed to running (s)     : 12.8
+4 healthy targets timestamp: 2026-10-12T18:03:48.015Z
+elapsed_seconds            : 37.1
+floor restored             : desiredCount 2 (no scalable target exists, so MinCapacity was never changed)
+AWS reference              : the course text gives 20 to 60 s for a Fargate task to start on real AWS

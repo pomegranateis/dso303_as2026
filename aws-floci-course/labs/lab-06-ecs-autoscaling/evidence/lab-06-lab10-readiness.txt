@@ -1,0 +1,9 @@
+# Lab 06 Exercise 5 -> Lab 10 readiness, written 2026-10-12T18:08:30Z
+history file             : outputs/lab-06-scaling-history.json (1905 bytes, valid JSON)
+scale-out latency (s)    : 37.1 (stand-in: desiredCount 2 -> 4 to four healthy targets; outputs/lab-06-scale-latency.txt)
+task role ARN            : arn:aws:iam::000000000000:role/usms-ecs-task-role (configs/lab-04.env; attached: USMSStudentDataReadWrite)
+bucket ARN (from policy) : arn:aws:s3:::usms-student-data (read with get-policy-version v1 of USMSStudentDataReadWrite; the second Resource, arn:aws:s3:::usms-student-data/*, is the objects inside it - I recorded the bucket)
+permissions on the bucket: Allow s3:ListBucket and s3:GetBucketLocation on the bucket, Allow s3:GetObject, s3:PutObject and s3:DeleteObject on its objects, and an explicit Deny on s3:DeleteBucket.
+head-bucket exit code    : 254
+head-bucket output       :  An error occurred (404) when calling the HeadBucket operation: Not Found 
+after Lab 10 Step 1      : once usms-student-data exists, head-bucket returns exit 0 with no output, and the Allow statements in USMSStudentDataReadWrite - attached to usms-ecs-task-role since Lab 04 and to usms-ec2-app-role since Lab 03 - stop naming a bucket that does not exist and start granting real access, both roles at the same instant.
