@@ -125,6 +125,8 @@ The git-hygiene check ignores `outputs/.gitkeep`, as in Labs 2, 4 and 5. `script
 
 ![verify-lab-06](img/lab06-04-verify.png)
 
+The screenshot shows the summary line; the full list of checks, with every `[floci]` label, is in the [evidence file](evidence/lab-06-verify.txt).
+
 ---
 
 ## 7. Independent exercises
@@ -143,6 +145,8 @@ The full write-ups are in [`exercises.md`](exercises.md).
 
 ![Lab 10 readiness](img/lab06-05-readiness.png)
 
+The first line shows the history export run again for the screenshot: 1,874 bytes, because the alarm's state reason had changed to "reset" after screenshot 3. The readiness file records 1,905 bytes, the size when it was written; both were valid JSON.
+
 ## 8. Review questions
 
 Answered in prose in `notes/lab-06-notes.md`, all conceptual on this build.
@@ -153,7 +157,7 @@ Three things stood out. First, a build that does not have a service is easier to
 
 ## 10. Screenshot checklist
 
-`lab06-01-support-probe`, `lab06-02-alarm`, `lab06-03-alarm-fired`, `lab06-04-verify`, `lab06-05-readiness`, all `.png`, in `labs/lab-06-ecs-autoscaling/img/`.
+`lab06-01-support-probe`, `lab06-02-alarm`, `lab06-03-alarm-fired`, `lab06-04-verify`, `lab06-05-readiness`, all `.png`, in `labs/lab-06-ecs-autoscaling/img/`, all present.
 
 ## 11. Commits
 
