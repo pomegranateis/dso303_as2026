@@ -1,0 +1,49 @@
+== Environment ==
+  ok   Floci container running
+  ok   Storage mode is NOT memory
+  ok   AWS CLI reaches Floci
+  ok   Account is 000000000000
+== Lab 01 to 03 dependencies ==
+  ok   usms-app-sg still exists
+  ok   usms-private-subnet-a exists
+  ok   usms-private-subnet-b exists
+  ok   private subnet's route table has NO igw route
+  ok   USMSStudentDataReadWrite policy exists
+== Lab 04 IAM ==
+  ok   usms-ecs-exec-role exists
+  ok   usms-ecs-task-role exists
+  ok   exec role trusts ecs-tasks.amazonaws.com
+  ok   task role trusts ecs-tasks.amazonaws.com
+  ok   exec role carries USMSECSTaskExecution
+  ok   task role REUSES Lab 01's USMSStudentDataReadWrite
+== Lab 04 logging ==
+  ok   log group /usms/ecs/enrolment exists
+  ok   log group has a retention policy set
+== Lab 04 ECS ==
+  ok   cluster usms-ecs-cluster is ACTIVE
+  ok   task definition family usms-enrolment is registered
+  ok   task definition uses awsvpc network mode
+  ok   task definition is FARGATE compatible
+  ok   exec role and task role are DIFFERENT
+  ok   service usms-enrolment-svc is ACTIVE
+  ok   service launch type is FARGATE
+  ok   service spans TWO subnets
+  ok   service does NOT assign a public IP
+  ok   service carries usms-enrolment-sg
+  ok   service desiredCount is 2 (one task per Availability Zone)
+== Lab 04 networking ==
+  ok   usms-enrolment-sg exists
+  ok   usms-enrolment-sg is sourced from a group, and that group is usms-alb-sg
+  ok   usms-app-sg is no longer a source of usms-enrolment-sg
+  ok   usms-enrolment-sg has NO CIDR-sourced ingress rule
+  FAIL [floci] enrolment source group readable via the API, and it is usms-alb-sg
+== Files and Git hygiene ==
+  ok   configs/lab-04.env exists
+  ok   configs/lab-04.env has no empty values
+  ok   task definition document is valid JSON
+  ok   trust policy is valid JSON
+  ok   execution policy is valid JSON
+  ok   no task definition document contains an unexpanded variable
+  ok   no secret is tracked by git
+
+PASS=39  FAIL=1

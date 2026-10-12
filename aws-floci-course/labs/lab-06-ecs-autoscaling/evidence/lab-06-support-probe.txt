@@ -1,0 +1,19 @@
+== Application Auto Scaling ==
+describe-scalable-targets                            not available
+register-scalable-target (skeleton)                  SUPPORTED
+describe-scaling-policies                            not available
+put-scaling-policy (skeleton)                        SUPPORTED
+describe-scheduled-actions                           not available
+describe-scaling-activities                          not available
+== CloudWatch, which is where every decision comes from ==
+cloudwatch describe-alarms                           SUPPORTED
+cloudwatch put-metric-alarm (skeleton)               SUPPORTED
+cloudwatch put-metric-data (skeleton)                SUPPORTED
+cloudwatch set-alarm-state (skeleton)                SUPPORTED
+cloudwatch list-metrics                              SUPPORTED
+== IAM and ECS, already used in Labs 1 to 4B ==
+iam create-service-linked-role (skeleton)            SUPPORTED
+ecs describe-services                                SUPPORTED
+elbv2 describe-target-groups                         SUPPORTED
+An error occurred (UnknownOperationException) when calling the RegisterScalableTarget operation: Unknown operation: AnyScaleFrontendService.RegisterScalableTarget
+An error occurred (UnknownOperationException) when calling the PutScalingPolicy operation: Unknown operation: AnyScaleFrontendService.PutScalingPolicy

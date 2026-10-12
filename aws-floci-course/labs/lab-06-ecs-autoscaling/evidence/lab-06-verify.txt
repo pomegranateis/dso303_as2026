@@ -1,0 +1,80 @@
+== Environment ==
+  ok   Floci container running
+  ok   Storage mode is NOT memory
+  ok   AWS CLI reaches Floci
+  ok   Account is 000000000000
+== Lab 02 to 05 dependencies ==
+  ok   usms-private-subnet-a exists
+  ok   usms-private-subnet-b exists
+  ok   cluster usms-ecs-cluster is ACTIVE
+  ok   service usms-enrolment-svc is ACTIVE
+  ok   service still has exactly ONE loadBalancers entry
+  ok   target group usms-enrolment-tg still has target type ip
+== Lab 06 scalable target ==
+  FAIL [floci] exactly ONE scalable target in the ecs namespace
+  FAIL [floci] the resource ID is service/usms-ecs-cluster/usms-enrolment-svc
+  FAIL [floci] the scalable dimension is ecs:service:DesiredCount
+  FAIL [floci] MinCapacity is the Lab 04 baseline of 2
+  FAIL [floci] MaxCapacity is 10
+  FAIL [floci] NO suspension switch was left true (on an existing target)
+  -- stand-ins: what register-scalable-target would be given --
+  ok   the resource ID in configs/lab-06.env is the service ARN's suffix, three segments
+  ok   configs/lab-06.env records the target's bounds as not-created, not an invented value
+== Lab 06 scaling policies ==
+  FAIL [floci] CPU target tracking policy usms-enrolment-cpu-target-tracking exists
+  FAIL [floci] its policy type is TargetTrackingScaling
+  FAIL [floci] its predefined metric is ECSServiceAverageCPUUtilization
+  FAIL [floci] its target value is 50
+  FAIL [floci] scale-out cooldown 60 and scale-in cooldown 300 (deliberately asymmetric)
+  FAIL [floci] step scaling policy usms-enrolment-queue-step-out exists with type StepScaling
+  FAIL [floci] the step policy has 2+ adjustments and an OPEN-ENDED top interval
+  -- stand-ins: the request bodies put-scaling-policy would be given --
+  ok   cpu document: ECSServiceAverageCPUUtilization, target 50, out 60, in 300, scale-in enabled
+  ok   requests document: ResourceLabel equals what usms-resource-label.sh derives now
+  ok   step document: ChangeInCapacity, 2 adjustments, +1 then +3, open-ended top
+== Lab 06 alarms ==
+  ok   custom alarm usms-enrolment-queue-high exists
+  ok   it watches USMS/Enrolment EnrolmentQueueDepth
+  FAIL [floci] it INVOKES the step policy (the link you made yourself)
+  FAIL [floci] target tracking created 2+ managed alarms for you
+  -- stand-ins: the alarm's own configuration, which CloudWatch does store --
+  ok   the alarm fires at Average >= 100 over one 60-second period
+  ok   missing data is notBreaching, and the alarm was not left in ALARM after Step 12
+== Lab 06 scheduled actions ==
+  FAIL [floci] morning action usms-enrolment-morning-scale-out exists
+  FAIL [floci] evening action usms-enrolment-evening-scale-in exists
+  FAIL [floci] the morning action raises the floor ABOVE the evening action's
+== Lab 06 service state ==
+  FAIL [floci] desiredCount is INSIDE the scalable target's bounds
+  ok   desiredCount is back at the baseline of 2
+  FAIL [floci] exactly ONE deployment (nothing stuck mid-roll)
+  ok   nothing stuck mid-roll: runningCount equals desiredCount, pendingCount 0
+== Lab 06 custom metric ==
+  ok   the USMS/Enrolment namespace has at least one metric
+== Files and Git hygiene ==
+  ok   configs/lab-06.env exists
+  ok   configs/lab-06.env has no empty values and no None
+  ok   target tracking (cpu) document is valid JSON
+  ok   target tracking (requests) document is valid JSON, or absent
+  ok   step scaling document is valid JSON
+  ok   suspended-state document is valid JSON and does NOT suspend scale-out
+  ok   no Lab 06 document contains an unexpanded variable
+  ok   no secret is tracked by git
+
+PASS=30  FAIL=20
+
+A failure under "== Environment ==" is the real problem, and most failures below it are
+a consequence. Fix that block first:
+  ./scripts/utilities/floci-storage-check.sh
+
+A failure under "== Lab 02 to 05 dependencies ==" means an earlier lab's resource is
+gone or has been changed. Run verify-lab-04.sh and verify-lab-05.sh before re-reading
+anything here. Remember that verify-lab-04.sh is EXPECTED to report exactly one
+failure, on the usms-app-sg source check, unless you did Lab 05's Exercise 2.
+
+Two failures are worth reading twice because they are silent in production:
+  "NO suspension switch was left true"  -- a suspended target does not scale and does
+                                           not say so. Step 13 part 3 clears it.
+  "desiredCount is back at the baseline" -- a Step 11 or Step 12 experiment was not
+                                           undone. Push the metric down FIRST, then set
+                                           the count; see Step 12 part 6.

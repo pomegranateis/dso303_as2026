@@ -1,0 +1,7 @@
+== request bodies for the Application Auto Scaling calls this build cannot run ==
+templates/lab-06-step-scaling-out.json           valid JSON  literal $: 0
+templates/lab-06-suspended-state.json            valid JSON  literal $: 0
+templates/lab-06-target-tracking-cpu.json        valid JSON  literal $: 0
+templates/lab-06-target-tracking-requests.json   valid JSON  literal $: 0
+ResourceLabel in requests policy: app/usms-enrolment-alb/794a0732ca6d4a09/targetgroup/usms-enrolment-tg/2414901868f64c56 (6 segments)
+step adjustments: [[0,100,1],[100,"open",3]]
