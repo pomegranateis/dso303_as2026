@@ -1,0 +1,9 @@
+== Step 4: service-linked role ==
+
+An error occurred (UnsupportedOperation) when calling the CreateServiceLinkedRole operation: Operation CreateServiceLinkedRole is not supported.
+not created
+
+An error occurred (NoSuchEntity) when calling the GetRole operation: The role with name AWSServiceRoleForApplicationAutoScaling_ECSService cannot be found.
+role not present
+attached: 
+An error occurred (NoSuchEntity) when calling the ListAttachedRolePolicies operation: The role with name AWSServiceRoleForApplicationAutoScaling_ECSService cannot be found.

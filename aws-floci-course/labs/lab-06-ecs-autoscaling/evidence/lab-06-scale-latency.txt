@@ -1,0 +1,6 @@
+== stand-in scale-out latency: desiredCount 2 -> 4 with update-service (re-registering MinCapacity is not implemented) ==
+start  2026-10-12T18:03:10.890Z  desired=2 running=2 healthy=2
+running=4 at 2026-10-12T18:03:23.684Z  (+12.8 s)  healthy=3
+4 healthy targets at 2026-10-12T18:03:48.015Z  (+37.1 s)
+== restore desiredCount 2 ==
+after restore: desired=2 running=2 healthy=2

@@ -1,0 +1,38 @@
+== part 1: before ==
+2026-10-12T17:59:19Z
+2	2	0
+scaling activities: An error occurred (UnknownOperationException) when calling the DescribeScalingActivities operation: Unknown operation: AnyScaleFrontendService.DescribeScalingActivities
+== part 2: publish 260 three times (prediction on real AWS: breach 160 -> open-ended step, +3, desired 2 -> 5) ==
+-------------------------------------------------
+|              GetMetricStatistics              |
++----------------------------+--------+---------+
+|  2026-10-12T17:59:00+00:00 |  132.0 |  260.0  |
++----------------------------+--------+---------+
+poll 1  2026-10-12T17:59:39Z  state=INSUFFICIENT_DATA  Unchecked
+poll 2  2026-10-12T17:59:55Z  state=INSUFFICIENT_DATA  Unchecked
+poll 3  2026-10-12T18:00:10Z  state=INSUFFICIENT_DATA  Unchecked
+poll 4  2026-10-12T18:00:26Z  state=INSUFFICIENT_DATA  Unchecked
+poll 5  2026-10-12T18:00:42Z  state=INSUFFICIENT_DATA  Unchecked
+poll 6  2026-10-12T18:00:58Z  state=INSUFFICIENT_DATA  Unchecked
+== part 3: force the alarm state ==
+alarm state forced to ALARM
+{
+    "State": "ALARM",
+    "Reason": "Lab 06 Step 12: forcing the alarm state to prove the alarm-to-policy link",
+    "Updated": "2026-10-12T18:01:24+00:00",
+    "Actions": null
+}
+== part 4: did anything move desiredCount? ==
+poll 1  2026-10-12T18:01:25Z  desired=2 running=2 pending=0
+poll 2  2026-10-12T18:01:36Z  desired=2 running=2 pending=0
+poll 3  2026-10-12T18:01:47Z  desired=2 running=2 pending=0
+poll 4  2026-10-12T18:01:58Z  desired=2 running=2 pending=0
+poll 5  2026-10-12T18:02:08Z  desired=2 running=2 pending=0
+poll 6  2026-10-12T18:02:19Z  desired=2 running=2 pending=0
+== who moved it? ==
+An error occurred (UnknownOperationException) when calling the DescribeScalingActivities operation: Unknown operation: AnyScaleFrontendService.DescribeScalingActivities
+== alarm history ==
+
+An error occurred (UnsupportedOperation) when calling the DescribeAlarmHistory operation: Operation DescribeAlarmHistory is not supported by CloudWatch Query.
+== part 5: put the alarm back to OK (it will not be re-evaluated by Floci) ==
+state now: OK

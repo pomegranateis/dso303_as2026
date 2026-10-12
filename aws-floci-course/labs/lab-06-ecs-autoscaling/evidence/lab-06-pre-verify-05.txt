@@ -1,0 +1,72 @@
+== Environment ==
+  ok   Floci container running
+  ok   Storage mode is NOT memory
+  ok   AWS CLI reaches Floci
+  ok   Account is 000000000000
+== Lab 02 to 04 dependencies ==
+  ok   usms-vpc exists
+  ok   usms-public-subnet-a exists
+  ok   usms-public-subnet-b exists
+  ok   the two public subnets are in TWO different AZs
+  ok   usms-app-sg still exists
+  ok   cluster usms-ecs-cluster is ACTIVE
+  ok   service usms-enrolment-svc is ACTIVE
+== Lab 05 security groups ==
+  ok   usms-alb-sg exists
+  ok   usms-alb-sg admits tcp/80 from 0.0.0.0/0
+  FAIL [floci] usms-enrolment-sg admits tcp/80 from usms-alb-sg (source readable via the API)
+  ok   enrolment rule file names usms-alb-sg, the group the load balancer carries
+  ok   cutover done: usms-enrolment-sg no longer admits usms-app-sg
+  ok   cutover done: usms-enrolment-sg has exactly ONE inbound permission
+  ok   usms-enrolment-sg has NO CIDR-sourced ingress
+== Lab 05 load balancer ==
+  ok   load balancer usms-enrolment-alb exists
+  ok   load balancer state is active
+  ok   scheme is internet-facing
+  ok   type is application
+  ok   spans TWO availability zones
+  ok   carries usms-alb-sg
+== Lab 05 target group ==
+  ok   target group usms-enrolment-tg exists
+  ok   target type is ip (mandatory for awsvpc)
+  ok   protocol HTTP on port 80
+  ok   target group lives in usms-vpc
+  ok   health check is GET / with matcher 200
+  ok   deregistration delay is 30 seconds
+== Lab 05 listener and rule ==
+  ok   a listener exists on port 80
+  ok   listener default action forwards to usms-enrolment-tg
+  ok   at least one non-default rule exists
+  ok   the non-default rule returns a fixed-response 200
+== Lab 05 service wiring ==
+  ok   service has exactly ONE loadBalancers entry
+  ok   it names usms-enrolment-tg
+  ok   containerName is enrolment-api
+  ok   containerPort is 80
+  FAIL [floci] healthCheckGracePeriodSeconds is set (not None, not 0)
+  ok   service still spans two private subnets
+  ok   service still assigns NO public IP
+  FAIL [floci] exactly ONE deployment (nothing stuck mid-roll)
+  ok   nothing stuck mid-roll: runningCount equals desiredCount, pendingCount 0
+  ok   the target group holds as many healthy targets as the service runs
+== Files and Git hygiene ==
+  ok   configs/lab-05.env exists
+  ok   configs/lab-05.env has no empty values
+  ok   configs/lab-05.env has no None other than the documented grace period
+  ok   policies/usms-alb-sg-ingress.json is valid JSON
+  ok   policies/usms-enrolment-sg-ingress-alb.json is valid JSON
+  ok   templates/lab-05-listener-default-actions.json is valid JSON
+  ok   templates/lab-05-rule-conditions.json is valid JSON
+  ok   templates/lab-05-rule-actions.json is valid JSON
+  ok   templates/lab-05-service-load-balancers.json is valid JSON
+  ok   no Lab 05 document contains an unexpanded variable
+  ok   no secret is tracked by git
+
+PASS=52  FAIL=3
+A failure under "== Environment ==" is the real problem, and most failures below it are
+a consequence. Fix that block first:
+  ./scripts/utilities/floci-storage-check.sh
+A failure under "== Lab 02 to 04 dependencies ==" means an earlier lab's resource is
+gone. Run verify-lab-02.sh, verify-lab-03.sh and verify-lab-04.sh before re-reading
+anything here. Remember that verify-lab-04.sh is EXPECTED to report exactly one
+failure after Step 13, on the usms-app-sg source check.
