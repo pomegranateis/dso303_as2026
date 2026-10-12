@@ -2,6 +2,12 @@
 # Verify every Lab 04 artefact exists and is configured correctly.
 # Exit 1 if anything is missing. Read-only; safe to run at any time.
 # Checks labelled [floci] are known Floci limitations, recorded in notes/lab-04-notes.md.
+#
+# Expected on Floci after Lab 05: PASS=39 FAIL=1 (40 checks). The one failure is the
+# [floci] read-back of the enrolment group's source. Without Lab 05 the two
+# usms-alb-sg checks fail too, with a readable message, because the caller changed.
+# A stated count turns "some checks failed" into "exactly these, for these reasons";
+# with no count, a new real failure looks just like the known ones.
 set -uo pipefail
 
 REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
@@ -11,6 +17,9 @@ source "$REPO_ROOT/configs/lab-01.env" 2>/dev/null || true
 source "$REPO_ROOT/configs/lab-02.env" 2>/dev/null || true
 source "$REPO_ROOT/configs/lab-03.env" 2>/dev/null || true
 source "$REPO_ROOT/configs/lab-04.env" 2>/dev/null || true
+# Lab 05 moved the enrolment API behind a load balancer; its group is the caller now.
+# Optional, so a student who has done Lab 04 but not Lab 05 can still run this script.
+source "$REPO_ROOT/configs/lab-05.env" 2>/dev/null || true
 
 : "${USMS_APP_SG:=none}"
 : "${USMS_PRIVATE_SUBNET_A:=none}"
@@ -20,6 +29,7 @@ source "$REPO_ROOT/configs/lab-04.env" 2>/dev/null || true
 : "${USMS_ENROLMENT_TASK_FAMILY:=usms-enrolment}"
 : "${USMS_ECS_DESIRED_BASELINE:=2}"
 : "${USMS_ENROLMENT_SG:=none}"
+: "${USMS_ALB_SG:=none}"
 : "${USMS_ECS_EXEC_ROLE:=usms-ecs-exec-role}"
 : "${USMS_ECS_TASK_ROLE:=usms-ecs-task-role}"
 : "${USMS_LOG_GROUP_ENROLMENT:=/usms/ecs/enrolment}"
@@ -94,12 +104,22 @@ check "service desiredCount is 2 (one task per Availability Zone)" \
 
 echo "== Lab 04 networking =="
 check "usms-enrolment-sg exists"  "aws ec2 describe-security-groups --group-ids $USMS_ENROLMENT_SG"
-check "enrolment rule file names usms-app-sg as its only source" \
-  "test \"\$(jq -r '.[0].UserIdGroupPairs[0].GroupId' policies/usms-enrolment-sg-ingress.json)\" = $USMS_APP_SG"
+# Property: the enrolment tasks accept tcp/80 only from a named security group - the one
+# tier allowed to call them - and never from an address range. Lab 04 built that with
+# usms-app-sg; Lab 05 Step 13 moved the caller to the load balancer's usms-alb-sg.
+# Floci does not return the source group (see the [floci] check below), so the rule
+# document now in force is read instead.
+check "usms-enrolment-sg is sourced from a group, and that group is usms-alb-sg" \
+  "test $USMS_ALB_SG != none && test \"\$(jq -r '.[0].UserIdGroupPairs[0].GroupId' policies/usms-enrolment-sg-ingress-alb.json)\" = $USMS_ALB_SG"
+# Confirming the new caller is not enough: it would still pass if both rules existed.
+# One inbound permission means the Lab 04 rule is gone; the API read excludes usms-app-sg
+# where the build returns sources (real AWS).
+check "usms-app-sg is no longer a source of usms-enrolment-sg" \
+  "test \"\$(aws ec2 describe-security-groups --group-ids $USMS_ENROLMENT_SG --query 'length(SecurityGroups[0].IpPermissions)' --output text)\" = 1 && ! aws ec2 describe-security-groups --group-ids $USMS_ENROLMENT_SG --query 'SecurityGroups[0].IpPermissions[].UserIdGroupPairs[].GroupId' --output text | grep -qw $USMS_APP_SG"
 check "usms-enrolment-sg has NO CIDR-sourced ingress rule" \
   "aws ec2 describe-security-group-rules --filters Name=group-id,Values=$USMS_ENROLMENT_SG --output json | jq -e '[.SecurityGroupRules[] | select(.IsEgress==false and .CidrIpv4!=null)] | length==0'"
-check "[floci] enrolment source group readable via the API" \
-  "test \"\$(aws ec2 describe-security-groups --group-ids $USMS_ENROLMENT_SG --query 'SecurityGroups[0].IpPermissions[0].UserIdGroupPairs[0].GroupId' --output text)\" = $USMS_APP_SG"
+check "[floci] enrolment source group readable via the API, and it is usms-alb-sg" \
+  "test \"\$(aws ec2 describe-security-groups --group-ids $USMS_ENROLMENT_SG --query 'SecurityGroups[0].IpPermissions[0].UserIdGroupPairs[0].GroupId' --output text)\" = $USMS_ALB_SG"
 
 echo "== Files and Git hygiene =="
 check "configs/lab-04.env exists"        "test -f configs/lab-04.env"

@@ -1,0 +1,25 @@
+==== from the repo root ====
+== Lab 04 networking ==
+  ok   usms-enrolment-sg exists
+  ok   usms-enrolment-sg is sourced from a group, and that group is usms-alb-sg
+  ok   usms-app-sg is no longer a source of usms-enrolment-sg
+  ok   usms-enrolment-sg has NO CIDR-sourced ingress rule
+  FAIL [floci] enrolment source group readable via the API, and it is usms-alb-sg
+== Files and Git hygiene ==
+PASS=39  FAIL=1
+==== from ~ ====
+PASS=39  FAIL=1
+==== without configs/lab-05.env (a Lab 04-only student) ====
+== Lab 04 networking ==
+  ok   usms-enrolment-sg exists
+  FAIL usms-enrolment-sg is sourced from a group, and that group is usms-alb-sg
+  ok   usms-app-sg is no longer a source of usms-enrolment-sg
+  ok   usms-enrolment-sg has NO CIDR-sourced ingress rule
+  FAIL [floci] enrolment source group readable via the API, and it is usms-alb-sg
+== Files and Git hygiene ==
+PASS=38  FAIL=2
+==== verify-lab-05 ====
+  FAIL [floci] usms-enrolment-sg admits tcp/80 from usms-alb-sg (source readable via the API)
+  FAIL [floci] healthCheckGracePeriodSeconds is set (not None, not 0)
+  FAIL [floci] exactly ONE deployment (nothing stuck mid-roll)
+PASS=52  FAIL=3
