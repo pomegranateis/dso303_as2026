@@ -271,11 +271,3 @@ Answered in prose in `notes/lab-05-notes.md`.
 ## 10. Reflection
 
 Three things stood out. First, the order of Steps 9, 12 and 13 is the whole lesson: build the new path, prove it, then remove the old one. Doing it in that order meant the Step 13 problems could not cause an outage, because the load balancer's path was already proven and was the one I put back. Second, a check that reads a file instead of the environment looks like verification but is not. My Lab 04 workaround passed straight through a change it existed to catch, and the same trap was hiding in the lab's own "cutover done" check. Third, Floci reported success for operations it did not perform (`update-service --load-balancers`, `revoke-security-group-ingress`), and a 200 from the wrong service looked like a working load balancer. Reading the result back after every change, and checking what actually answered, caught all three.
-
-## 11. Screenshot checklist
-
-`lab05-01-support-probe`, `lab05-02-alb-sg`, `lab05-03-alb`, `lab05-04-target-group`, `lab05-05-matcher`, `lab05-06-tg-attributes`, `lab05-07-listener`, `lab05-08-wiring`, `lab05-09-recreate`, `lab05-10-checkpoint4`, `lab05-11-health-side-by-side`, `lab05-12-scale-yourturn`, `lab05-13-data-path`, `lab05-14-path-proof`, `lab05-15-cutover`, `lab05-16-revoke-test`, `lab05-17-verify04-diff`, `lab05-18-checkpoint5`, `lab05-19-stoptask`, `lab05-20-rules`, `lab05-21-rule-test`, `lab05-22-checkpoint7`, `lab05-23-restart-runtime`, all `.png`, in `labs/lab-05-ecs-alb/img/`, all present. Checkpoints 4, 5 and 7, which the lab requires, are screenshots 10, 18 and 22.
-
-## 12. Commits
-
-`7620cf5` main lab (load balancer, target group, listener, rule, service attachment, cutover, evidence), `7acac5c` verification and cleanup scripts, `59f58be` `verify-lab-04` repaired for the new caller (Exercise 2) and exercises 1 to 2, `a293e99` exercises 3 to 5, `7c751b1` review question answers.
