@@ -1,0 +1,26 @@
+== Exercise 1: usms-results-tg and the priority-20 rule ==
+RESULTS_TG_ARN = arn:aws:elasticloadbalancing:us-east-1:000000000000:targetgroup/usms-results-tg/df2bdac9c7884180
+deregistration_delay.timeout_seconds	15
+conditions valid
+actions valid
+literal $ in actions: 0
+RESULTS_RULE_ARN = arn:aws:elasticloadbalancing:us-east-1:000000000000:listener-rule/app/usms-enrolment-alb/794a0732ca6d4a09/e36e179bfb864fdc/5fa5428b8b9f46fe
+---- rules, in evaluation order (Priority is a string; numeric ones sorted as numbers, default last) ----
+10       /alb-health,/alb-health/*  fixed-response  200
+20       /results,/results/*        forward         targetgroup/usms-results-tg/df2bdac9c7884180
+default  -                          forward         targetgroup/usms-enrolment-tg/2414901868f64c56
+---- usms-results-tg ----
+{
+    "Type": "ip",
+    "Proto": "HTTP",
+    "Port": 80,
+    "HCPath": "/",
+    "Matcher": "200-399",
+    "LBs": 1
+}
+dereg delay: 15
+targets: []
+tags: results	results
+/results     -> 503 server=
+/results/x   -> 503 server=
+/resultsx    -> 404 server=nginx/1.30.5
