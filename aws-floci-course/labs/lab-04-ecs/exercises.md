@@ -33,6 +33,8 @@ Observed: the lookups returned `subnet-704e2524`, `subnet-f9cff6ed` and `sg-5f99
 
 Two ACTIVE services with different names and different desired counts, as required.
 
+![Two services](img/lab04-08b-ex1-second-service.png)
+
 **Floci limitation:** the service's task definition is stored as the bare family name (`usms-enrolment`) and not pinned to a revision. Real ECS pins a service to a concrete revision at creation. This matters in Exercise 2.
 
 ---
@@ -168,6 +170,8 @@ aws ecs delete-service --cluster usms-ecs-cluster --service usms-results-svc --f
 ```
 
 Observed: `running` fell from 1 to 0 over three checks, the service went `INACTIVE`, `usms-enrolment-svc` stayed `ACTIVE` at desired 2 with 2 running, and Docker showed 2 `enrolment-api` containers. `./scripts/utilities/verify-lab-04.sh` reported `PASS=38 FAIL=1`; the single failure is the labelled `[floci]` check (the enrolment group's source cannot be read back through the API), unchanged by the deletion. I did not reach `FAIL=0` because of that Floci limitation, and I did not hide it by deleting the check.
+
+![Exercise 1 service scaled to 0 and deleted](img/lab04-10b-ex4-cleanup.png)
 
 ---
 

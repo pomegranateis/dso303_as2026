@@ -66,7 +66,11 @@ My first attach failed with `NoSuchEntity` because `USMS_POLICY_S3_RW` in `lab-0
 
 ![One policy on two roles](img/lab04-03-policy-reuse.png)
 
-The policy document is the one Lab 3 printed: list and get-location on the bucket, get/put/delete-object inside it, and an explicit deny on `s3:DeleteBucket`. The bucket does not exist yet, so neither chain has any effect until a later lab creates it.
+The policy document is the one Lab 3 printed: list and get-location on the bucket, get/put/delete-object inside it, and an explicit deny on `s3:DeleteBucket`.
+
+![The shared policy document](img/lab04-03b-policy-document.png)
+
+The bucket does not exist yet, so neither chain has any effect until a later lab creates it.
 
 **Floci limitations:** `list-entities-for-policy` is unsupported; Floci does not serve task-role credentials to containers (stated in the lab text, **not tested by me**), so the association is verified through the task definition and `iam get-role` and not by calling S3 from a task.
 
@@ -84,7 +88,11 @@ Wrote `templates/lab-04-taskdef.json` with an unquoted heredoc (valid JSON, zero
 
 ![Task definition](img/lab04-05-taskdef.png)
 
-**Floci limitation:** the `awslogs` `logConfiguration` I sent was **not stored**. My JMESPath query for `options."awslogs-group"` returned `null`, so I read the whole `logConfiguration` field: Floci returned `null` while the file I registered holds it. Ports (80) and the three environment variables survived. On real AWS the task's stdout would go to `/usms/ecs/enrolment`; here nothing would reach the log group. The image is a stand-in (`public.ecr.aws/nginx/nginx:stable-alpine`) for the real service image that would live in a private ECR repository.
+**Floci limitation:** the `awslogs` `logConfiguration` I sent was **not stored**. My JMESPath query for `options."awslogs-group"` returned `null`, so I read the whole `logConfiguration` field: Floci returned `null` while the file I registered holds it.
+
+![logConfiguration sent but not stored](img/lab04-05b-logconfig-null.png)
+
+Ports (80) and the three environment variables survived. On real AWS the task's stdout would go to `/usms/ecs/enrolment`; here nothing would reach the log group. The image is a stand-in (`public.ecr.aws/nginx/nginx:stable-alpine`) for the real service image that would live in a private ECR repository.
 
 ### Step 10: the service in the private subnets
 
@@ -98,7 +106,7 @@ Created `usms-enrolment-svc` with desired count 2 in both private subnets, `assi
 
 `ACTIVE`, FARGATE, desired 2, running 2, pending 0, both private subnets, `usms-enrolment-sg`, public IP DISABLED. `list-tasks` returned 2, and `docker ps` showed two real containers named `floci-floci-course-ecs-<id>-enrolment-api`, both `Up`.
 
-**Your turn:** set the desired count to 3, then back to 2. The service followed in about ten seconds each way and the container count followed it (3, then 2). I did by hand exactly what a scaling policy will later do.
+**Your turn:** set the desired count to 3, then back to 2. The service followed within about ten seconds each way (three polls going up, two coming down) and the container count followed it (3, then 2). I did by hand exactly what a scaling policy will later do.
 
 ![Manual scale 2 to 3 to 2](img/lab04-07-manual-scale.png)
 
@@ -142,6 +150,9 @@ Created `usms-enrolment-svc` with desired count 2 in both private subnets, `assi
 The full write-ups, commands, outputs and sources are in [`exercises.md`](exercises.md). Summary:
 
 1. **Second service.** `usms-results-svc` (desired 1) created from the same task definition and group. `describe-services` showed two `ACTIVE` services with different names and counts.
+
+![Two services](img/lab04-08b-ex1-second-service.png)
+
 2. **New revision.** `usms-enrolment:2` (memory 1024, `USMS_LOG_LEVEL=info`) registered from a `jq` copy, the service pointed at it, revision 1 still `ACTIVE` at 512 MiB. The running tasks stayed on `:1` even after a forced deployment, which Floci does not perform.
 
 ![Revisions and running tasks](img/lab04-09-ex2-revisions.png)
@@ -151,6 +162,9 @@ The full write-ups, commands, outputs and sources are in [`exercises.md`](exerci
 ![Inventory output](img/lab04-10-ex3-inventory.png)
 
 4. **Capacity plan.** A written plan with derived numbers: minimum 2, a scheduled floor of 6 on Monday 07:45 to 09:00, maximum 10, and target tracking on request count per task. The assumptions (3,000 students, 25 requests per second per task) are labelled as assumptions. The scheduled plan costs $18.29 a month against $18.02 for today's fixed 2 and $54.06 for a fixed 6, using AWS's published Fargate rates (read 2026-10-12, to be re-checked before submission). The Exercise 1 service was deleted after a danger notice, and verification was unchanged.
+
+![Exercise 1 service scaled to 0 and deleted](img/lab04-10b-ex4-cleanup.png)
+
 5. **Close the loop to Lab 3.** The enrolment rule's source group resolves to `usms-web-01` (the instance in `configs/lab-03.env`) and also to `usms-web-02`. `LOOP CLOSED`. The server-side `instance.group-id` filter was ignored by Floci (it returned the two database instances as well), so I kept that result as evidence and used a client-side check. The tag audit showed `Project=USMS` on the cluster and the service.
 
 ![Lab 3 linkage](img/lab04-11-ex5-linkage.png)
@@ -165,7 +179,7 @@ Three things stood out. First, the two roles look almost identical on paper (sam
 
 ## 10. Screenshot checklist
 
-`lab04-01-support-probe`, `lab04-02-cluster`, `lab04-03-policy-reuse`, `lab04-04-enrolment-sg`, `lab04-05-taskdef`, `lab04-06-service`, `lab04-07-manual-scale`, `lab04-08-verify`, `lab04-09-ex2-revisions`, `lab04-10-ex3-inventory`, `lab04-11-ex5-linkage`, all `.png`, in `labs/lab-04-ecs/img/`.
+`lab04-01-support-probe` (still to capture), `lab04-02-cluster`, `lab04-03-policy-reuse`, `lab04-03b-policy-document`, `lab04-04-enrolment-sg`, `lab04-05-taskdef`, `lab04-05b-logconfig-null`, `lab04-06-service`, `lab04-07-manual-scale`, `lab04-08-verify`, `lab04-08b-ex1-second-service`, `lab04-09-ex2-revisions`, `lab04-10-ex3-inventory`, `lab04-10b-ex4-cleanup`, `lab04-11-ex5-linkage`, all `.png`, in `labs/lab-04-ecs/img/`.
 
 ## 11. Commits
 
