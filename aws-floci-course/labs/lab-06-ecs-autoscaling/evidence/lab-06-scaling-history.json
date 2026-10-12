@@ -1,0 +1,48 @@
+{
+  "generated": "2026-10-12T18:08:05Z",
+  "resourceId": "service/usms-ecs-cluster/usms-enrolment-svc",
+  "serviceArn": "arn:aws:ecs:us-east-1:000000000000:service/usms-ecs-cluster/usms-enrolment-svc",
+  "serviceNamespace": "ecs",
+  "scalableDimension": "ecs:service:DesiredCount",
+  "service": {
+    "desiredCount": 2,
+    "runningCount": 2,
+    "pendingCount": 0,
+    "taskDefinition": "usms-enrolment:2"
+  },
+  "scalableTarget": {
+    "error": "An error occurred (UnknownOperationException) when calling the DescribeScalableTargets operation: Unknown operation: AnyScaleFrontendService.DescribeScalableTargets"
+  },
+  "scalingPolicies": {
+    "error": "An error occurred (UnknownOperationException) when calling the DescribeScalingPolicies operation: Unknown operation: AnyScaleFrontendService.DescribeScalingPolicies"
+  },
+  "scheduledActions": {
+    "error": "An error occurred (UnknownOperationException) when calling the DescribeScheduledActions operation: Unknown operation: AnyScaleFrontendService.DescribeScheduledActions"
+  },
+  "alarms": [
+    {
+      "AlarmName": "usms-enrolment-queue-high",
+      "Namespace": "USMS/Enrolment",
+      "MetricName": "EnrolmentQueueDepth",
+      "Dimensions": [
+        {
+          "Name": "Service",
+          "Value": "enrolment"
+        }
+      ],
+      "Statistic": "Average",
+      "Period": 60,
+      "EvaluationPeriods": 1,
+      "ComparisonOperator": "GreaterThanOrEqualToThreshold",
+      "Threshold": 100.0,
+      "TreatMissingData": "notBreaching",
+      "AlarmActions": null,
+      "StateValue": "OK",
+      "StateReason": "Lab 06 Step 12: reset after the test",
+      "StateUpdatedTimestamp": "2026-10-12T18:02:31+00:00"
+    }
+  ],
+  "scalingActivities": {
+    "error": "An error occurred (UnknownOperationException) when calling the DescribeScalingActivities operation: Unknown operation: AnyScaleFrontendService.DescribeScalingActivities"
+  }
+}
