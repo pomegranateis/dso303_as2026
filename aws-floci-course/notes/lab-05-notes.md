@@ -165,3 +165,14 @@ Block 2 stand-in -> CUTOVER CONFIRMED (by stand-in): usms-enrolment-sg has 1 inb
 
 ## Step 18: configs/lab-05.env
 15 exports, every value looked up from the API. 14 populated; USMS_SVC_GRACE_PERIOD=None, because Floci never stores healthCheckGracePeriodSeconds (Step 10). It is left as the read-back value with a comment, rather than hard-coding 60, so the file stays a record of what exists. The checklist's "no empty values or None" cannot be met on this build for that one key.
+
+## Section 8: verify-lab-05.sh and lab-05-cleanup.sh
+Run exactly as the lab gives it: PASS=44 FAIL=5 (49 checks). Failures: enrolment-sg source from usms-alb-sg (UserIdGroupPairs not returned), grace period None, deployments null, lab-05.env contains None (the grace period), and "no secret is tracked by git" (the outputs/.gitkeep false positive, same as Labs 2 and 4).
+A silent problem the run did not show: "cutover done: usms-enrolment-sg no longer admits usms-app-sg" passed, but on Floci the source list is always empty, so that check cannot fail - it would pass even with Step 13 skipped.
+Adapted (same approach as Lab 04), every lab check kept:
+- The three Floci checks are labelled [floci]: enrolment source readable via the API, grace period set, exactly one deployment.
+- Stand-ins that can fail: the enrolment rule file names the group the load balancer carries; usms-enrolment-sg has exactly ONE inbound permission (it had two after Step 9, so this detects a skipped cutover); no CIDR-sourced ingress; runningCount = desiredCount with pendingCount 0; healthy targets = desiredCount.
+- lab-05.env: "no empty values" kept; None allowed only for the documented USMS_SVC_GRACE_PERIOD.
+- Git hygiene: ignores outputs/.gitkeep, as in Labs 2 and 4.
+Result: PASS=52 FAIL=3, the three [floci] checks (labs/lab-05-ecs-alb/evidence/lab-05-verify.txt).
+Cleanup script: copied from the lab, passes bash -n, NOT run. Fixed a typo in the lab text, which said "run AFTER lab-04-cleanup.sh and BEFORE lab-04-cleanup.sh"; the lab's own order is Lab 06 cleanup first, then this, then Lab 04. Its scalable-target guard treats an unsupported Application Auto Scaling as 0 targets, so on this build it does not block.
