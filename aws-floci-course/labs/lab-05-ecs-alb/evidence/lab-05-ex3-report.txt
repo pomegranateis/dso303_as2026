@@ -1,0 +1,7 @@
+usms-enrolment-alb   internet-facing  application  active  AZs=2  SGs=1
+  HTTP:80
+    prio  10       path-pattern  /alb-health,/alb-health/*    -> fixed-response 200
+    prio  20       path-pattern  /results,/results/*          -> usms-results-tg (0 targets, 0 healthy)
+    prio  default  -                                          -> usms-enrolment-tg (2 targets, 2 healthy)
+
+JSON written to outputs/lab-05-lb-report.json

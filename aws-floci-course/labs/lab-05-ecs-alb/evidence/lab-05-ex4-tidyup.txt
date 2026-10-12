@@ -1,0 +1,23 @@
+looked up: rule priority 20 = arn:aws:elasticloadbalancing:us-east-1:000000000000:listener-rule/app/usms-enrolment-alb/794a0732ca6d4a09/e36e179bfb864fdc/5fa5428b8b9f46fe
+looked up: usms-results-tg  = arn:aws:elasticloadbalancing:us-east-1:000000000000:targetgroup/usms-results-tg/df2bdac9c7884180
+rule's tags: results   tg's targets: 0
+---- 1. delete the priority-20 rule (it references the target group) ----
+delete-rule returned success
+rules left: 10	default
+---- 2. delete usms-results-tg ----
+delete-target-group returned success
+usms-results-tg is gone (TargetGroupNotFound)
+---- untouched ----
+usms-enrolment-tg: usms-enrolment-tg, /alb-health rule priority: 10
+==== verify-lab-05 after the tidy-up ====
+  FAIL [floci] usms-enrolment-sg admits tcp/80 from usms-alb-sg (source readable via the API)
+  FAIL [floci] healthCheckGracePeriodSeconds is set (not None, not 0)
+  FAIL [floci] exactly ONE deployment (nothing stuck mid-roll)
+PASS=52  FAIL=3
+==== usms-lb-report after the tidy-up (= the state before Exercise 1) ====
+usms-enrolment-alb   internet-facing  application  active  AZs=2  SGs=1
+  HTTP:80
+    prio  10       path-pattern  /alb-health,/alb-health/*    -> fixed-response 200
+    prio  default  -                                          -> usms-enrolment-tg (2 targets, 2 healthy)
+
+JSON written to outputs/lab-05-lb-report.json

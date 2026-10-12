@@ -1,0 +1,12 @@
+# Lab 05 Exercise 5 -> Lab 06 readiness, written 2026-10-12T17:40:34Z
+resource label           : app/usms-enrolment-alb/794a0732ca6d4a09/targetgroup/usms-enrolment-tg/2414901868f64c56
+target group ARN         : arn:aws:elasticloadbalancing:us-east-1:000000000000:targetgroup/usms-enrolment-tg/2414901868f64c56
+load balancer ARN        : arn:aws:elasticloadbalancing:us-east-1:000000000000:loadbalancer/app/usms-enrolment-alb/794a0732ca6d4a09
+scalable resource ID     : service/usms-ecs-cluster/usms-enrolment-svc
+scalable dimension       : ecs:service:DesiredCount
+current desired count    : 2
+recommended metric       : ALBRequestCountPerTarget, because the enrolment API is I/O-bound (CPU stays low while requests queue) and requests per target measures the actual load per task directly, now that a target group exists to count them.
+capacity replacement (s) : not measurable as specified - after --force-new-deployment, Floci reported 0 deployments and replaced no task for 138.7 s (condition never met).
+replacement stand-in (s) : 33.7 - one task stopped with ecs stop-task until the target group again held 2 healthy targets (new task started, registered, passed 2 health checks at a 30 s interval).
+AWS reference            : the course text gives 20 to 60 s for a Fargate task to start on real AWS; a rolling replacement also adds the 30 s deregistration delay and the health check (2 x 30 s), so size Lab 06's scale-in cooldown above about 2 minutes.
+label check              : segments=6 (want 6), first=app (want app), contains usms-enrolment-alb=yes, contains usms-enrolment-tg=yes

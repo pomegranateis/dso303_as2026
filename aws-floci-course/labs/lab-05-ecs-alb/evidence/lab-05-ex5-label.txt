@@ -1,0 +1,17 @@
+== default arguments, from the repo ==
+app/usms-enrolment-alb/794a0732ca6d4a09/targetgroup/usms-enrolment-tg/2414901868f64c56
+exit=0
+== from ~ ==
+app/usms-enrolment-alb/794a0732ca6d4a09/targetgroup/usms-enrolment-tg/2414901868f64c56
+exit=0
+== explicit names ==
+app/usms-enrolment-alb/794a0732ca6d4a09/targetgroup/usms-enrolment-tg/2414901868f64c56
+exit=0
+== wrong load balancer name ==
+usms-resource-label: no load balancer named no-such-alb
+exit=1
+== wrong target group name ==
+usms-resource-label: no target group named no-such-tg
+exit=1
+== grep for access keys in the script ==
+0
