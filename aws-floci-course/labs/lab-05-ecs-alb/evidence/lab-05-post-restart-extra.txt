@@ -1,0 +1,5 @@
+deregistration_delay.timeout_seconds	30
+load_balancing.algorithm.type	least_outstanding_requests
+/alb-health	/alb-health/*
+1
+2

@@ -1,0 +1,12 @@
+---- revoke test on a scratch group (sg-1554d3c2c8278d29a, deleted afterwards) ----
+added CIDR rule sgr-024334ac31ea1365b and group rule sgr-72b7248c7a86c5dbb -> inbound 2
+revoke CIDR rule by ID   -> inbound 2
+revoke group rule by ID  -> inbound 2
+scratch sg-6b6c6081790c8af8b: inbound 2
+revoke --cidr shorthand         -> inbound 2
+revoke --source-group shorthand -> inbound 2
+describe-security-groups IpPermissions count: 0
+---- scratch sg-b5845611ec7d6d72a: two group-sourced tcp/80 rules (app-sg, alb-sg), as on usms-enrolment-sg ----
+after both authorize        : IpPermissions=2  rules=2
+revoke app-sg rule by ID    : IpPermissions=2  rules=2
+revoke app-sg by rule file  : IpPermissions=0  rules=2

@@ -1,0 +1,9 @@
+---- Step 15 part 3: requests through the listener ----
+/                             [200, 896 bytes, server=nginx/1.30.5]
+/alb-health                   [200, 22 bytes, server=]
+/alb-health/x                 [200, 22 bytes, server=]
+/alb-healthcheck-internal     [404, 153 bytes, server=nginx/1.30.5]
+  body of /alb-health: usms-enrolment-alb ok
+---- which requests reached a task (task access logs) ----
+  task saw: /alb-healthcheck-internal -> 404
+  task saw: / -> 200

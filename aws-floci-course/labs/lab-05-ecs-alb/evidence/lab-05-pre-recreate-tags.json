@@ -1,0 +1,20 @@
+{
+    "tags": [
+        {
+            "key": "Project",
+            "value": "USMS"
+        },
+        {
+            "key": "Tier",
+            "value": "app"
+        },
+        {
+            "key": "Lab",
+            "value": "04"
+        },
+        {
+            "key": "Name",
+            "value": "usms-enrolment-svc"
+        }
+    ]
+}

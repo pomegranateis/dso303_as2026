@@ -1,0 +1,16 @@
+---- part 2: the service's account ----
+{
+    "Desired": 2,
+    "Running": 2,
+    "Pending": 0,
+    "Deployments": null,
+    "LB": "arn:aws:elasticloadbalancing:us-east-1:000000000000:targetgroup/usms-enrolment-tg/2414901868f64c56"
+}
+events: None
+---- part 3: ECS health vs target health ----
+None	None	RUNNING	arn:aws:ecs:us-east-1:000000000000:task/usms-ecs-cluster/eb3b766e79b544afb085569b0679340a
+None	None	RUNNING	arn:aws:ecs:us-east-1:000000000000:task/usms-ecs-cluster/2897a016f9cf47c2a34f217b0a0698aa
+172.20.0.3	healthy
+172.20.0.4	healthy
+task eb3b766e79b544afb085569b0679340a  container-ip 172.20.0.4  docker-health no-healthcheck
+task 2897a016f9cf47c2a34f217b0a0698aa  container-ip 172.20.0.3  docker-health no-healthcheck

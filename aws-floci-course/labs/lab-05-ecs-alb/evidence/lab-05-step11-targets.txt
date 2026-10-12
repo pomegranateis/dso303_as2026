@@ -1,0 +1,19 @@
+--- poll 1 ---
+---------------------------------------------------------------------------------------------------------------
+|                                            DescribeTargetHealth                                             |
++------+--------------------------------------+-------+------------------------------+----------+-------------+
+|  AZ  |                Desc                  | Port  |           Reason             |  State   |   Target    |
++------+--------------------------------------+-------+------------------------------+----------+-------------+
+|  None|  Initial health checks in progress   |  80   |  Elb.InitialHealthChecking   |  initial |  172.20.0.3 |
+|  None|  Target registration is in progress  |  80   |  Elb.RegistrationInProgress  |  initial |  172.20.0.4 |
++------+--------------------------------------+-------+------------------------------+----------+-------------+
+poll  1  172.20.0.3	initial 172.20.0.4	initial 
+poll  2  172.20.0.3	healthy 172.20.0.4	initial 
+poll  3  172.20.0.3	healthy 172.20.0.4	initial 
+poll  4  172.20.0.3	healthy 172.20.0.4	initial 
+poll  5  172.20.0.3	healthy 172.20.0.4	healthy 
+poll  6  172.20.0.3	healthy 172.20.0.4	healthy 
+poll  7  172.20.0.3	healthy 172.20.0.4	healthy 
+poll  8  172.20.0.3	healthy 172.20.0.4	healthy 
+poll  9  172.20.0.3	healthy 172.20.0.4	healthy 
+poll 10  172.20.0.3	healthy 172.20.0.4	healthy 
