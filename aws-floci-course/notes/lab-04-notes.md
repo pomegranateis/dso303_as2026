@@ -32,3 +32,6 @@ Real AWS would store it and send task stdout/stderr to /usms/ecs/enrolment. Here
 - describe-services returns taskDefinition as the family name (usms-enrolment), not the full ARN with :1.
 - describe-services events list is None; Floci does not narrate service events, so stoppedReason and event messages cannot be used for diagnosis here.
 - Tasks do run as real Docker containers (floci-floci-course-ecs-<id>-enrolment-api).
+
+## Verification result
+verify-lab-04.sh: PASS=38 FAIL=1. The single failure is labelled [floci]: describe-security-groups returns UserIdGroupPairs as null for usms-enrolment-sg, so the group source cannot be read back through the API. The same wiring is proven by the rule file (policies/usms-enrolment-sg-ingress.json) naming usms-app-sg, which web-01 carries, and by zero CIDR-sourced rules.
