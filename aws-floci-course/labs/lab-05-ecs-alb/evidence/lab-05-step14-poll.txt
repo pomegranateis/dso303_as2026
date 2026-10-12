@@ -1,0 +1,48 @@
+--- poll 1 17:01:24 ---
+2	2	0	None
+172.20.0.3	healthy
+172.20.0.5	healthy
+--- poll 2 17:01:30 ---
+2	2	0	None
+172.20.0.3	healthy
+172.20.0.5	healthy
+--- poll 3 17:01:37 ---
+2	2	0	None
+172.20.0.3	healthy
+172.20.0.5	healthy
+--- poll 4 17:01:43 ---
+2	2	0	None
+172.20.0.3	healthy
+172.20.0.5	healthy
+--- poll 5 17:01:50 ---
+2	2	0	None
+172.20.0.3	healthy
+172.20.0.5	healthy
+--- poll 6 17:01:56 ---
+2	2	0	None
+172.20.0.3	healthy
+172.20.0.5	healthy
+--- poll 7 17:02:03 ---
+2	2	0	None
+172.20.0.3	healthy
+172.20.0.5	healthy
+--- poll 8 17:02:09 ---
+2	2	0	None
+172.20.0.3	healthy
+172.20.0.5	healthy
+--- poll 9 17:02:15 ---
+2	2	0	None
+172.20.0.3	healthy
+172.20.0.5	healthy
+--- poll 10 17:02:22 ---
+2	2	0	None
+172.20.0.3	healthy
+172.20.0.5	healthy
+--- poll 11 17:02:28 ---
+2	2	0	None
+172.20.0.3	healthy
+172.20.0.5	healthy
+--- poll 12 17:02:35 ---
+2	2	0	None
+172.20.0.3	healthy
+172.20.0.5	healthy

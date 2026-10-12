@@ -1,0 +1,7 @@
+---- extra: stop one task (4c5a2a78) and watch the target group, 1s polls ----
+STOPPED	STOPPED
+t+1s  172.20.0.3:healthy | running=2
+t+3s  172.20.0.3:healthy 172.20.0.4:initial | running=1
+t+5s  172.20.0.3:healthy 172.20.0.4:initial | running=2
+t+23s  172.20.0.3:healthy 172.20.0.4:healthy | running=2
+tasks now: 0cef149b 2897a016 

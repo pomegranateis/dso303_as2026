@@ -1,0 +1,13 @@
+== Elastic Load Balancing v2 ==
+elbv2 describe-load-balancers                    SUPPORTED
+elbv2 create-load-balancer (skeleton)            SUPPORTED
+elbv2 describe-target-groups                     SUPPORTED
+elbv2 create-target-group (skeleton)             SUPPORTED
+elbv2 describe-listeners (bad arn)               SUPPORTED
+elbv2 describe-account-limits                    SUPPORTED
+== ECS integration ==
+ecs update-service (skeleton)                    SUPPORTED
+ecs describe-services                            SUPPORTED
+== Already used in Labs 1 to 4A ==
+ec2 describe-security-groups                     SUPPORTED
+ec2 describe-subnets                             SUPPORTED

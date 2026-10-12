@@ -1,0 +1,18 @@
+---- 1. scale to 0 ----
+check 1: running=2
+check 2: running=0
+---- 2. delete ----
+INACTIVE
+---- 3. recreate, same name/cluster/taskdef/count, with the load balancer ----
+{
+    "Arn": "arn:aws:ecs:us-east-1:000000000000:service/usms-ecs-cluster/usms-enrolment-svc",
+    "LB": [
+        {
+            "targetGroupArn": "arn:aws:elasticloadbalancing:us-east-1:000000000000:targetgroup/usms-enrolment-tg/2414901868f64c56",
+            "containerName": "enrolment-api",
+            "containerPort": 80
+        }
+    ],
+    "Grace": null,
+    "TaskDef": "usms-enrolment:2"
+}

@@ -1,0 +1,31 @@
+== 1. The listener a client would connect to ==
+HTTP	80	forward	arn:aws:elasticloadbalancing:us-east-1:000000000000:targetgroup/usms-enrolment-tg/2414901868f64c56
+
+== 2. The target group that listener forwards to ==
+usms-enrolment-tg	ip	HTTP	80	/	vpc-27ddc682
+
+== 3. The targets in it, and which subnet each address belongs to ==
+172.20.0.3       NOT in a Lab 02 private subnet - investigate
+172.20.0.5       NOT in a Lab 02 private subnet - investigate
+
+== 4. The service that put them there ==
+usms-enrolment-svc	arn:aws:elasticloadbalancing:us-east-1:000000000000:targetgroup/usms-enrolment-tg/2414901868f64c56	enrolment-api	80	None
+
+== 5. The firewall that lets step 1 reach step 3 ==
+   (usms-alb-sg is sg-54033edc16ebffd09)
+
+== 6. Investigation of block 3 and block 5 (added) ==
+block 3: the targets are Docker bridge addresses on floci-course_default (Floci = 172.20.0.2); Floci models no task ENI, so no 10.0.3.x / 10.0.4.x address exists.
+block 5: empty because Floci does not return UserIdGroupPairs; wiring proven from the rule files in outputs/lab-05-step9-wiring.txt:
+   Lab 04 rule file names      : sg-96722a74c4be5da9e
+   Lab 05 rule file names      : sg-54033edc16ebffd09
+   ---- who carries those groups ----
+   usms-web-01 carries         : sg-96722a74c4be5da9e
+   usms-enrolment-alb carries  : sg-54033edc16ebffd09
+   NEW PATH WIRED: usms-alb-sg -> usms-enrolment-sg tcp/80
+
+== 7. Data path (added) ==
+from the host  : usms-enrolment-alb-794a0732ca6d4a09.elb.floci does not resolve; curl http_code=000 (outputs/lab-05-dataPath.txt)
+localhost:4566 with the ALB Host header returned 200, but the body was S3 ListAllMyBucketsResult - a false positive, NOT counted
+inside Floci's network: GET http://172.20.0.2:80/ (Floci's ELB listener) -> 200 Server: nginx; the task log shows:
+   task 172.20.0.5: 172.20.0.2 - - [12/Oct/2026:16:52:34 +0000] "GET / HTTP/1.1" 200 896 "-" "lab05-step12-probe" "-"

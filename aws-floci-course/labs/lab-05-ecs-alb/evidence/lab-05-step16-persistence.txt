@@ -1,0 +1,6 @@
+re-derived:
+  arn:aws:elasticloadbalancing:us-east-1:000000000000:loadbalancer/app/usms-enrolment-alb/794a0732ca6d4a09
+  arn:aws:elasticloadbalancing:us-east-1:000000000000:targetgroup/usms-enrolment-tg/2414901868f64c56
+  arn:aws:elasticloadbalancing:us-east-1:000000000000:listener/app/usms-enrolment-alb/794a0732ca6d4a09/e36e179bfb864fdc
+  sg-54033edc16ebffd09
+PERSISTENCE PROVEN: the load balancer, its two Availability Zones, its security group, the target group with its full health check configuration, the listener, the rule, the service's loadBalancers entry and the grace period are all unchanged

@@ -1,0 +1,49 @@
+---- part 1: the rules on usms-enrolment-sg ----
+-----------------------------------------------------------------------
+|                     DescribeSecurityGroupRules                      |
++-----------+---------+------------+-------------------------+--------+
+|   CIDR    | Egress  | FromGroup  |           Id            | Port   |
++-----------+---------+------------+-------------------------+--------+
+|  0.0.0.0/0|  True   |  None      |  sgr-51999e52b80eb90c5  |  None  |
+|  None     |  False  |  None      |  sgr-34325defd1d1ba040  |  80    |
+|  None     |  False  |  None      |  sgr-8db86d3a75cd980cd  |  80    |
++-----------+---------+------------+-------------------------+--------+
+lab's query (by source group) : None   <- Floci returns no ReferencedGroupInfo
+Step 9 rule (usms-alb-sg)     : sgr-8db86d3a75cd980cd
+by elimination, Lab 04 rule   : sgr-34325defd1d1ba040
+---- part 2: revoke ----
+True
+---- verify ----
+-------------------------------------------
+|       DescribeSecurityGroupRules        |
++------+-------------------------+--------+
+| CIDR |           Id            | Port   |
++------+-------------------------+--------+
+|  None|  sgr-34325defd1d1ba040  |  80    |
+|  None|  sgr-8db86d3a75cd980cd  |  80    |
++------+-------------------------+--------+
+inbound rules remaining       : 2
+remaining rule is Step 9's    : sgr-8db86d3a75cd980cd (usms-alb-sg, policies/usms-enrolment-sg-ingress-alb.json)
+rules with a CIDR source      : 0
+usms-alb-sg = sg-54033edc16ebffd09
+usms-app-sg = sg-96722a74c4be5da9e   (its rule sgr-34325defd1d1ba040 must be gone)
+OLD RULE STILL PRESENT
+---- part 2b: revoke by permission (the Lab 04 rule file) ----
+{
+    "Return": true
+}
+-------------------------------------------
+|       DescribeSecurityGroupRules        |
++------+-------------------------+--------+
+| CIDR |           Id            | Port   |
++------+-------------------------+--------+
+|  None|  sgr-34325defd1d1ba040  |  80    |
+|  None|  sgr-8db86d3a75cd980cd  |  80    |
++------+-------------------------+--------+
+---- part 2c: restore the Step 9 rule (usms-alb-sg), which the file-based revoke also removed ----
+re-authorized from policies/usms-enrolment-sg-ingress-alb.json: sgr-f845a2aee2f620c21
+---- final state ----
+describe-security-groups IpPermissions : 1  (the one written from the usms-alb-sg file)
+describe-security-group-rules inbound  : 3  (stale: revoke never updates this view)
+rules with a CIDR source               : 0
+via listener: http_code=200

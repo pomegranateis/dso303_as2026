@@ -1,0 +1,7 @@
+==== set desired-count 3 ====
+poll 1 r=2 t=2 172.20.0.3:healthy 172.20.0.4:healthy 
+poll 2 r=3 t=3 172.20.0.3:healthy 172.20.0.4:healthy 172.20.0.5:healthy 
+==== set desired-count 2 ====
+poll 1 r=3 t=3 172.20.0.3:healthy 172.20.0.5:healthy 
+poll 2 r=2 t=2 172.20.0.3:healthy 172.20.0.5:healthy 
+register-targets / deregister-targets calls made by me: 0

@@ -1,0 +1,8 @@
+usms-enrolment-alb	internet-facing	application	active	2	1
+usms-enrolment-tg	ip	HTTP	80	/	200	30	2
+80	HTTP	forward
+10	fixed-response
+default	forward
+usms-enrolment-svc	ACTIVE	2	enrolment-api	80	None
+usms-alb-sg	80	0.0.0.0/0
+usms-enrolment-sg	0

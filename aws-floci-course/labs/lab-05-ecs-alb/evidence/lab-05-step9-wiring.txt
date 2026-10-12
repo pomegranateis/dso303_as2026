@@ -1,0 +1,12 @@
+---- usms-enrolment-sg inbound, as the API returns it ----
+inbound rules on tcp/80     : 2
+rules with a CIDR source    : 0
+source group read-back      : (empty = Floci does not return UserIdGroupPairs)
+---- the two rule files ----
+Lab 04 rule file names      : sg-96722a74c4be5da9e
+Lab 05 rule file names      : sg-54033edc16ebffd09
+---- who carries those groups ----
+usms-web-01 carries         : sg-96722a74c4be5da9e
+usms-enrolment-alb carries  : sg-54033edc16ebffd09
+NEW PATH WIRED: usms-alb-sg -> usms-enrolment-sg tcp/80
+OLD PATH STILL PRESENT: usms-app-sg -> usms-enrolment-sg tcp/80 (removed in Step 13)

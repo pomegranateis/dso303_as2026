@@ -1,0 +1,60 @@
+== 1. Who can reach the load balancer? ==
+[
+    {
+        "Port": 80,
+        "FromCIDR": [
+            "0.0.0.0/0"
+        ],
+        "FromGroup": []
+    },
+    {
+        "Port": 443,
+        "FromCIDR": [
+            "0.0.0.0/0"
+        ],
+        "FromGroup": []
+    }
+]
+
+== 2. Who can reach the tasks? ==
+source group: None
+MISMATCH: expected sg-54033edc16ebffd09 (usms-alb-sg), found None - re-read Steps 9 and 13
+
+== 3. And who is the client of the load balancer, in the story? ==
+NOTE: usms-app-sg is carried by None; lab-03.env records i-68c4cb27d85e381e8
+
+== 4. Audit: everything this lab tagged Lab=05 ==
+usms-alb-sg	sg-54033edc16ebffd09
+----------------------------------------------------------------------------------------------------------------------
+|                                                    DescribeTags                                                    |
++------------------------------------------------------------------------------------------------------------+-------+
+|                                                  Resource                                                  | Tags  |
++------------------------------------------------------------------------------------------------------------+-------+
+|  arn:aws:elasticloadbalancing:us-east-1:000000000000:loadbalancer/app/usms-enrolment-alb/794a0732ca6d4a09  |  05   |
+|  arn:aws:elasticloadbalancing:us-east-1:000000000000:targetgroup/usms-enrolment-tg/2414901868f64c56        |  05   |
++------------------------------------------------------------------------------------------------------------+-------+
+== side effect found: Step 16's restart left all four Lab 3 instances stopped; started again with ec2 start-instances ==
+
+== 3 (re-run). Who is the client of the load balancer? ==
+-----------------------------------------------------------
+|                    DescribeInstances                    |
++---------------------+---------------+-------------------+
+|         Id          |     Name      |      Subnet       |
++---------------------+---------------+-------------------+
+|  i-9a2d1283522be5e45|  usms-web-02  |  subnet-8952dc13  |
+|  i-68c4cb27d85e381e8|  usms-web-01  |  subnet-d0e2e873  |
+|  i-4fe69d1237fb2fc6a|  usms-db-01   |  subnet-704e2524  |
+|  i-d1df284410caddffb|  usms-db-02   |  subnet-f9cff6ed  |
++---------------------+---------------+-------------------+
+NOTE: usms-app-sg is carried by i-9a2d1283522be5e45; lab-03.env records i-68c4cb27d85e381e8
+-- client-side check (Floci ignores the instance.group-id filter, Lab 04 Ex 5) --
+    i-68c4cb27d85e381e8 usms-web-01
+    i-9a2d1283522be5e45 usms-web-02
+LOOP CLOSED (client-side): usms-web-01 (i-68c4cb27d85e381e8) is running and carries usms-app-sg; it now calls usms-enrolment-alb-794a0732ca6d4a09.elb.floci instead of a task address
+
+== 2 (stand-in). Who can reach the tasks? (Floci returns no UserIdGroupPairs) ==
+inbound permissions on usms-enrolment-sg : 1   (was 2 before Step 13)
+CIDR-sourced inbound rules               : 0
+the one permission was written from      : policies/usms-enrolment-sg-ingress-alb.json -> sg-54033edc16ebffd09
+usms-enrolment-alb carries               : sg-54033edc16ebffd09
+CUTOVER CONFIRMED (by stand-in): one permission, no CIDR, written from the usms-alb-sg file, which the load balancer carries

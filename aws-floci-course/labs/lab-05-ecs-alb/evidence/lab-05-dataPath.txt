@@ -1,0 +1,5 @@
+==== part 1: the data path ====
+ALB DNS name: usms-enrolment-alb-794a0732ca6d4a09.elb.floci
+does not resolve: [Errno -2] Name or service not known
+http_code=000  time_total=4.969236s
+curl could not connect - expected on many builds; see part 2

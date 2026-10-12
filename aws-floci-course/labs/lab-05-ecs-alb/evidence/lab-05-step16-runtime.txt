@@ -1,0 +1,4 @@
+---- after restart: runtime (not configuration) ----
+check 1: running=2 containers=2 targets: 172.20.0.3:healthy 172.20.0.4:unhealthy 
+/                             [200, 896 bytes, server=nginx/1.30.5]
+/alb-health                   [200, 22 bytes, server=]
