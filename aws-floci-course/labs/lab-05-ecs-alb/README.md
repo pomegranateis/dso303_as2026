@@ -5,7 +5,7 @@
 **Environment:** Floci v1.5.34, AWS CLI v2.31.35, Docker Compose v2.26.1, Pop!_OS (x86_64)
 **Repository:** `~/dso303_as2026/aws-floci-course` (github.com/pomegranateis/dso303_as2026)
 
-> Screenshot placeholders look like `![caption](img/lab05-NN-name.png)`. Save each screenshot under `img/` with that exact name and the image will appear. A checklist is at the end. Command output that was saved as text is linked from [`evidence/`](evidence/) instead of screenshotted.
+> Screenshots are in `img/` (23, listed at the end). Command output that was saved as text is linked from [`evidence/`](evidence/) instead of screenshotted.
 
 ---
 
@@ -198,7 +198,7 @@ Floci was stopped (state kept) and started. Every ARN was re-derived from the AP
 
 ![Checkpoint 7](img/lab05-22-checkpoint7.png)
 
-Two honest caveats: the grace period is `None` on both sides, so "unchanged" means "still not stored"; and the lab's enrolment-group fact counts source groups, which is 0 either way on Floci. After the restart the service started two new tasks; one target read `unhealthy` for about 20 seconds before turning healthy. That early failure is what the grace period exists for, which Floci does not store. Requests through the listener worked again.
+Two honest caveats: the grace period is `None` on both sides, so "unchanged" means "still not stored"; and the lab's enrolment-group fact counts source groups, which is 0 either way on Floci. After the restart the service started two new tasks. The screenshot below is the first check: `172.20.0.4` read `unhealthy` (`Target.FailedHealthChecks`) while requests through the listener already worked again. A follow-up poll, recorded in the notes, showed it turn healthy about 20 seconds later. That early failure is what the grace period exists for, which Floci does not store.
 
 ![Runtime after the restart](img/lab05-23-restart-runtime.png)
 
@@ -274,7 +274,7 @@ Three things stood out. First, the order of Steps 9, 12 and 13 is the whole less
 
 ## 11. Screenshot checklist
 
-`lab05-01-support-probe`, `lab05-02-alb-sg`, `lab05-03-alb`, `lab05-04-target-group`, `lab05-05-matcher`, `lab05-06-tg-attributes`, `lab05-07-listener`, `lab05-08-wiring`, `lab05-09-recreate`, `lab05-10-checkpoint4`, `lab05-11-health-side-by-side`, `lab05-12-scale-yourturn`, `lab05-13-data-path`, `lab05-14-path-proof`, `lab05-15-cutover`, `lab05-16-revoke-test`, `lab05-17-verify04-diff`, `lab05-18-checkpoint5`, `lab05-19-stoptask`, `lab05-20-rules`, `lab05-21-rule-test`, `lab05-22-checkpoint7`, `lab05-23-restart-runtime`, all `.png`, in `labs/lab-05-ecs-alb/img/`. Checkpoints 4, 5 and 7, which the lab requires, are screenshots 10, 18 and 22.
+`lab05-01-support-probe`, `lab05-02-alb-sg`, `lab05-03-alb`, `lab05-04-target-group`, `lab05-05-matcher`, `lab05-06-tg-attributes`, `lab05-07-listener`, `lab05-08-wiring`, `lab05-09-recreate`, `lab05-10-checkpoint4`, `lab05-11-health-side-by-side`, `lab05-12-scale-yourturn`, `lab05-13-data-path`, `lab05-14-path-proof`, `lab05-15-cutover`, `lab05-16-revoke-test`, `lab05-17-verify04-diff`, `lab05-18-checkpoint5`, `lab05-19-stoptask`, `lab05-20-rules`, `lab05-21-rule-test`, `lab05-22-checkpoint7`, `lab05-23-restart-runtime`, all `.png`, in `labs/lab-05-ecs-alb/img/`, all present. Checkpoints 4, 5 and 7, which the lab requires, are screenshots 10, 18 and 22.
 
 ## 12. Commits
 
