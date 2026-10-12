@@ -1,0 +1,27 @@
+# Lab 04 -> Lab 03 linkage, 2026-10-12T16:05:10Z
+source group of usms-enrolment-sg tcp/80 : sg-96722a74c4be5da9e  [rule file: Floci does not return UserIdGroupPairs]
+
+server-side filter instance.group-id returned (UNRELIABLE, it ignored the filter):
+    i-9a2d1283522be5e45	usms-web-02	usms-app-sg
+    i-68c4cb27d85e381e8	usms-web-01	usms-app-sg
+    i-4fe69d1237fb2fc6a	usms-db-01	usms-db-sg
+    i-d1df284410caddffb	usms-db-02	usms-db-sg
+
+client-side check, instances that really carry the group:
+    i-9a2d1283522be5e45	usms-web-02
+    i-68c4cb27d85e381e8	usms-web-01
+USMS_WEB_INSTANCE (configs/lab-03.env)   : i-68c4cb27d85e381e8
+also carrying the group                  : i-9a2d1283522be5e45  (a second web instance, not a mismatch)
+VERDICT: LOOP CLOSED
+This rule is temporary: Lab 05 removes it once the load balancer becomes the only caller of the enrolment service.
+
+== tag audit (Project=USMS) ==
+arn:aws:ecs:us-east-1:000000000000:cluster/usms-ecs-cluster
+    Project	USMS
+    Tier	app
+    Name	usms-ecs-cluster
+arn:aws:ecs:us-east-1:000000000000:service/usms-ecs-cluster/usms-enrolment-svc
+    Project	USMS
+    Tier	app
+    Lab	04
+    Name	usms-enrolment-svc
