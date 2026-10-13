@@ -1,0 +1,5 @@
+=== AFTER RESTART 2026-10-13T02:42:47Z ===
+cluster re-derived from list-clusters: usms-eks-cluster
+usms-eks-cluster	ACTIVE	1.30
+nodegroup re-derived from list-nodegroups: usms-eks-nodes
+--- kubernetes ---

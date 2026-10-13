@@ -1,0 +1,22 @@
+{
+    "Name": "usms-eks-nodes",
+    "Status": "ACTIVE",
+    "Scaling": {
+        "minSize": 2,
+        "maxSize": 4,
+        "desiredSize": 2
+    },
+    "Subnets": [
+        "subnet-704e2524",
+        "subnet-f9cff6ed"
+    ],
+    "Role": "arn:aws:iam::000000000000:role/usms-eks-node-role",
+    "Labels": {
+        "tier": "app",
+        "workload": "usms"
+    },
+    "Ami": "AL2023_x86_64_STANDARD",
+    "Types": [
+        "t3.small"
+    ]
+}

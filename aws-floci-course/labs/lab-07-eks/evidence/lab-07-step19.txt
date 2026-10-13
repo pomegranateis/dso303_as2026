@@ -1,0 +1,54 @@
+== Failure 1: an image that does not exist ==
+deployment.apps/usms-results image updated
+NAME                            READY   STATUS             RESTARTS   AGE
+usms-results-674d97c84d-grs5n   0/1     ImagePullBackOff   0          26s
+usms-results-7fc784c47f-4dhpw   1/1     Running            0          50s
+usms-results-7fc784c47f-shq55   1/1     Running            0          57s
+      Reason:       ImagePullBackOff
+deployment.apps/usms-results rolled back
+deployment "usms-results" successfully rolled out
+image back on: nginx:1.27-alpine
+== Failure 2: a pod that cannot be scheduled ==
+pod/usms-toobig created
+NAME          READY   STATUS    RESTARTS   AGE
+usms-toobig   0/1     Pending   0          10s
+Events:
+  Type     Reason            Age   From               Message
+  ----     ------            ----  ----               -------
+  Warning  FailedScheduling  11s   default-scheduler  0/1 nodes are available: 1 Insufficient cpu, 1 Insufficient memory. no new claims to deallocate, preemption: 0/1 nodes are available: 1 Preemption is not helpful for scheduling.
+pod "usms-toobig" deleted from usms namespace
+== Failure 3: a container that starts and immediately exits ==
+pod/usms-crasher created
+NAME           READY   STATUS             RESTARTS      AGE
+usms-crasher   0/1     CrashLoopBackOff   2 (13s ago)   31s
+usms-crasher starting
+fatal: no database configured
+    Last State:     Terminated
+      Reason:       Error
+      Exit Code:    1
+      Started:      Tue, 13 Oct 2026 08:40:44 +0600
+      Finished:     Tue, 13 Oct 2026 08:40:44 +0600
+-- logs --previous --
+usms-crasher starting
+fatal: no database configured
+pod "usms-crasher" deleted from usms namespace
+== events, last 12 ==
+80s         Normal    SuccessfulCreate    replicaset/usms-results-674d97c84d     Created pod: usms-results-674d97c84d-grs5n
+76s         Normal    BackOff             pod/usms-results-674d97c84d-grs5n      Back-off pulling image "nginx:this-tag-does-not-exist"
+76s         Warning   Failed              pod/usms-results-674d97c84d-grs5n      Error: ImagePullBackOff
+65s         Normal    Pulling             pod/usms-results-674d97c84d-grs5n      Pulling image "nginx:this-tag-does-not-exist"
+63s         Warning   Failed              pod/usms-results-674d97c84d-grs5n      Error: ErrImagePull
+63s         Warning   Failed              pod/usms-results-674d97c84d-grs5n      Failed to pull image "nginx:this-tag-does-not-exist": rpc error: code = NotFound desc = failed to pull and unpack image "docker.io/library/nginx:this-tag-does-not-exist": failed to resolve reference "docker.io/library/nginx:this-tag-does-not-exist": docker.io/library/nginx:this-tag-does-not-exist: not found
+52s         Normal    ScalingReplicaSet   deployment/usms-results                (combined from similar events): Scaled down replica set usms-results-674d97c84d from 1 to 0
+52s         Normal    SuccessfulDelete    replicaset/usms-results-674d97c84d     Deleted pod: usms-results-674d97c84d-grs5n
+19s         Normal    Pulled              pod/usms-crasher                       Container image "busybox:1.36" already present on machine
+19s         Normal    Created             pod/usms-crasher                       Created container: crasher
+18s         Normal    Started             pod/usms-crasher                       Started container crasher
+6s          Warning   BackOff             pod/usms-crasher                       Back-off restarting failed container crasher in pod usms-crasher_usms(3cb6d9c2-a6c3-435b-baa6-9ef73d28d861)
+== end state ==
+NAME                             READY   STATUS    RESTARTS   AGE
+usms-enrolment-cdc5bc8df-c9g72   1/1     Running   0          2m54s
+usms-enrolment-cdc5bc8df-mrggk   1/1     Running   0          2m46s
+usms-gateway-58854c9ffd-m72hr    1/1     Running   0          9m26s
+usms-results-7fc784c47f-4dhpw    1/1     Running   0          105s
+usms-results-7fc784c47f-shq55    1/1     Running   0          112s

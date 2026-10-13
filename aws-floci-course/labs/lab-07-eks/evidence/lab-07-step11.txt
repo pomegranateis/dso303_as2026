@@ -1,0 +1,10 @@
+== Step 11 part 1 (Path A), written to ~/.kube/usms-lab07, not ~/.kube/config ==
+Added new context usms-eks to /home/pomegranateu/.kube/usms-lab07
+usms-eks
+== Step 11 part 2 ==
+Kubernetes control plane is running at https://localhost:6500
+CoreDNS is running at https://localhost:6500/api/v1/namespaces/kube-system/services/kube-dns:dns/proxy
+Metrics-server is running at https://localhost:6500/api/v1/namespaces/kube-system/services/https:metrics-server:https/proxy
+
+NAME           STATUS   ROLES           AGE   VERSION        INTERNAL-IP   EXTERNAL-IP   OS-IMAGE           KERNEL-VERSION                        CONTAINER-RUNTIME
+83a1feb28d4e   Ready    control-plane   27s   v1.34.1+k3s1   172.17.0.3    <none>        K3s v1.34.1+k3s1   6.8.0-76060800daily20240311-generic   containerd://2.1.4-k3s2

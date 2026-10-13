@@ -1,0 +1,60 @@
+== rebuild after the restart lost the k3s container ==
+DELETING
+DELETING
+cluster record gone
+usms-eks-cluster	CREATING
+identity: arn:aws:iam::000000000000:root
+cluster: ACTIVE, endpoint https://localhost:6500
+usms-eks-nodes	ACTIVE
+Updated context usms-eks in /home/pomegranateu/.kube/usms-lab07
+c2b5a5615e74   Ready   control-plane   11s   v1.34.1+k3s1
+== kubectl apply -f manifests/lab-07/ (lexical order: 00 namespace first) ==
+namespace/usms created
+configmap/usms-app-config created
+configmap/usms-enrolment-conf created
+deployment.apps/usms-enrolment created
+service/usms-enrolment created
+configmap/usms-results-conf created
+deployment.apps/usms-results created
+service/usms-results created
+configmap/usms-gateway-conf created
+deployment.apps/usms-gateway created
+service/usms-gateway created
+secret/usms-enrolment-secret created
+serviceaccount/usms-enrolment-sa created
+deployment.apps/usms-enrolment env updated
+Waiting for deployment "usms-enrolment" rollout to finish: 1 out of 2 new replicas have been updated...
+Waiting for deployment "usms-enrolment" rollout to finish: 1 out of 2 new replicas have been updated...
+Waiting for deployment "usms-enrolment" rollout to finish: 1 out of 2 new replicas have been updated...
+Waiting for deployment "usms-enrolment" rollout to finish: 1 out of 2 new replicas have been updated...
+Waiting for deployment "usms-enrolment" rollout to finish: 1 out of 2 new replicas have been updated...
+Waiting for deployment "usms-enrolment" rollout to finish: 1 old replicas are pending termination...
+Waiting for deployment "usms-enrolment" rollout to finish: 1 old replicas are pending termination...
+deployment "usms-enrolment" successfully rolled out
+deployment "usms-results" successfully rolled out
+deployment "usms-gateway" successfully rolled out
+NAME                             READY   UP-TO-DATE   AVAILABLE   AGE
+deployment.apps/usms-enrolment   2/2     2            2           34s
+deployment.apps/usms-gateway     1/1     1            1           34s
+deployment.apps/usms-results     2/2     2            2           34s
+
+NAME                     TYPE        CLUSTER-IP     EXTERNAL-IP   PORT(S)   AGE
+service/usms-enrolment   ClusterIP   10.43.121.90   <none>        80/TCP    34s
+service/usms-gateway     ClusterIP   10.43.249.84   <none>        80/TCP    34s
+service/usms-results     ClusterIP   10.43.80.200   <none>        80/TCP    34s
+
+NAME                            DATA   AGE
+configmap/kube-root-ca.crt      1      34s
+configmap/usms-app-config       4      34s
+configmap/usms-enrolment-conf   1      34s
+configmap/usms-gateway-conf     1      34s
+configmap/usms-results-conf     1      34s
+
+NAME                           TYPE     DATA   AGE
+secret/usms-enrolment-secret   Opaque   2      34s
+
+NAME                               SECRETS   AGE
+serviceaccount/default             0         34s
+serviceaccount/usms-enrolment-sa   0         34s
+{"service":"usms-enrolment","pod":"usms-enrolment-7d8557c58d-76d6j","node":"c2b5a5615e74","env":"laboratory","version":"1.0.0"}
+{"service":"usms-results","pod":"usms-results-7fc784c47f-4lg22","campus":"rtc","version":"1.0.0"}

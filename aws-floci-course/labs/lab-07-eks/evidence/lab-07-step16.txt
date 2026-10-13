@@ -1,0 +1,21 @@
+== Step 16 part 1: DNS ==
+Server:		10.43.0.10
+Address:	10.43.0.10:53
+Name:	usms-enrolment.usms.svc.cluster.local
+Address: 10.43.149.214
+Server:		10.43.0.10
+Address:	10.43.0.10:53
+Name:	usms-results.usms.svc.cluster.local
+Address: 10.43.188.74
+Service ClusterIPs: usms-enrolment=10.43.149.214 usms-gateway=10.43.179.242 usms-results=10.43.188.74 
+== Step 16 part 2: through the gateway ==
+--- gateway root ---
+{"service":"usms-gateway","pod":"usms-gateway-58854c9ffd-m72hr","routes":["/enrolment/","/results/"]}
+--- via /enrolment/ ---
+{"service":"usms-enrolment","pod":"usms-enrolment-6965b8dbbb-qr5dl","node":"83a1feb28d4e","env":"laboratory","version":"1.0.0"}
+--- via /results/ ---
+{"service":"usms-results","pod":"usms-results-7fc784c47f-jrt4v","campus":"rtc","version":"1.0.0"}
+== Step 16 part 3: 12 requests via /enrolment/, tally by pod ==
+      9 "pod":"usms-enrolment-6965b8dbbb-qr5dl"
+      3 "pod":"usms-enrolment-6965b8dbbb-wngwq"
+grep for an IP address in the gateway config: 0 match(es)

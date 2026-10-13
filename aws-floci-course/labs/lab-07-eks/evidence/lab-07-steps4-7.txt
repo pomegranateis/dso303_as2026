@@ -1,0 +1,43 @@
+== Step 4/5: documents ==
+policies/trust-eks-cluster.json : valid JSON
+policies/trust-eks-node.json : valid JSON
+policies/usms-eks-cluster-policy.json : valid JSON
+policies/usms-eks-node-policy.json : valid JSON
+policies/trust-eks-cluster.json -> eks.amazonaws.com sts:AssumeRole
+policies/trust-eks-node.json -> ec2.amazonaws.com sts:AssumeRole
+policies/usms-eks-cluster-policy.json
+   Allow  8  action(s)  ManageNetworkInterfacesForTheClusterEndpoint
+   Allow  7  action(s)  ManageLoadBalancersForServicesOfTypeLoadBalancer
+   Deny   1  action(s)  DenyEverythingOutsideTheCourseRegion
+policies/usms-eks-node-policy.json
+   Allow  3  action(s)  KubeletDescribesTheClusterAndRegisters
+   Allow  11 action(s)  VpcCniAttachesInterfacesAndAssignsPodAddresses
+   Allow  4  action(s)  PullImagesFromEcr
+   Allow  4  action(s)  WriteContainerLogs
+   Deny   1  action(s)  DenyEverythingOutsideTheCourseRegion
+== Step 6: cluster role, policy, security group ==
+arn:aws:iam::000000000000:role/usms-eks-cluster-role
+EKS_CLUSTER_POLICY_ARN = arn:aws:iam::000000000000:policy/USMSEKSClusterPolicy
+EKS_CLUSTER_SG = sg-77d25192a5b480a71
+True
+-- verify --
+USMSEKSClusterPolicy
+eks.amazonaws.com
+{
+    "Id": "sg-77d25192a5b480a71",
+    "Vpc": "vpc-27ddc682",
+    "Ports": [
+        443
+    ],
+    "Cidr": "10.0.0.0/16"
+}
+== Step 7: node role, its policy, and Lab 1's policy ==
+arn:aws:iam::000000000000:role/usms-eks-node-role
+USMSStudentDataReadWrite = arn:aws:iam::000000000000:policy/USMSStudentDataReadWrite
+An error occurred (UnsupportedOperation) when calling the ListEntitiesForPolicy operation: Operation ListEntitiesForPolicy is not supported.
+-- who carries USMSStudentDataReadWrite (asked per role, since list-entities-for-policy is unsupported) --
+  usms-ec2-app-role    USMSStudentDataReadWrite
+  usms-ecs-task-role   USMSStudentDataReadWrite
+  usms-eks-node-role   USMSEKSNodePolicy USMSStudentDataReadWrite
+-- verify --
+ec2.amazonaws.com

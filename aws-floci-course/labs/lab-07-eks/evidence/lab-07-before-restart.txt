@@ -1,0 +1,9 @@
+=== BEFORE RESTART 2026-10-13T02:41:57Z ===
+usms-eks-cluster	ACTIVE	1.30
+usms-eks-nodes	ACTIVE	2
+usms-enrolment   2
+usms-gateway     1
+usms-results     2
+usms-enrolment 10.43.149.214
+usms-gateway 10.43.179.242
+usms-results 10.43.188.74

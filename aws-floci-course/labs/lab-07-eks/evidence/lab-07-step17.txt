@@ -1,0 +1,41 @@
+== Step 17 part 1: Secret manifest generated with --dry-run=client (dummy values) ==
+apiVersion: v1
+data:
+  ENROLMENT_API_TOKEN: ZmxvY2ktZHVtbXktdG9rZW4tbm90LWEtcmVhbC1zZWNyZXQ=
+  ENROLMENT_DB_PASSWORD: ZmxvY2ktZHVtbXktcGFzc3dvcmQ=
+kind: Secret
+metadata:
+  name: usms-enrolment-secret
+  namespace: usms
+secret/usms-enrolment-secret created
+== part 2: base64 is not a lock ==
+ZmxvY2ktZHVtbXktdG9rZW4tbm90LWEtcmVhbC1zZWNyZXQ=
+floci-dummy-token-not-a-real-secret
+== part 3: consume it in usms-enrolment ==
+deployment.apps/usms-enrolment env updated
+Waiting for deployment "usms-enrolment" rollout to finish: 1 out of 2 new replicas have been updated...
+Waiting for deployment "usms-enrolment" rollout to finish: 1 out of 2 new replicas have been updated...
+Waiting for deployment "usms-enrolment" rollout to finish: 1 out of 2 new replicas have been updated...
+Waiting for deployment "usms-enrolment" rollout to finish: 1 old replicas are pending termination...
+Waiting for deployment "usms-enrolment" rollout to finish: 1 old replicas are pending termination...
+deployment "usms-enrolment" successfully rolled out
+[{"configMapRef":{"name":"usms-app-config"}}]
+  env: POD_NAME from ['fieldRef']
+  env: NODE_NAME from ['fieldRef']
+  env: ENROLMENT_API_TOKEN from ['secretKeyRef']
+  env: ENROLMENT_DB_PASSWORD from ['secretKeyRef']
+-- verify --
+    Environment Variables from:
+      usms-app-config  ConfigMap  Optional: false
+    Environment:
+      POD_NAME:                (v1:metadata.name)
+      NODE_NAME:               (v1:spec.nodeName)
+      ENROLMENT_API_TOKEN:    <set to the key 'ENROLMENT_API_TOKEN' in secret 'usms-enrolment-secret'>    Optional: false
+      ENROLMENT_DB_PASSWORD:  <set to the key 'ENROLMENT_DB_PASSWORD' in secret 'usms-enrolment-secret'>  Optional: false
+    Mounts:
+APP_CAMPUS=rtc
+APP_ENVIRONMENT=laboratory
+APP_REGION=us-east-1
+APP_VERSION=1.0.0
+ENROLMENT_API_TOKEN=floci-dummy-token-not-a-real-secret
+ENROLMENT_DB_PASSWORD=floci-dummy-password
