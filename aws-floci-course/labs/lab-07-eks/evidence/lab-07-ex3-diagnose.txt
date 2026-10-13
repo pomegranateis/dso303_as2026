@@ -1,0 +1,18 @@
+== Exercise 3: apply exactly as given ==
+deployment.apps/usms-broken created
+service/usms-broken created
+== 1. the Service: where does it send traffic? ==
+NAME          ENDPOINTS   AGE
+usms-broken   <none>      31s
+Selector:                 app=usms-broken,version=v2
+Endpoints:                
+== 2. which pods match that selector, and what labels do the pods carry? ==
+pods matching app=usms-broken,version=v2: 0
+NAME                           READY   STATUS    RESTARTS   AGE   LABELS
+usms-broken-7c447464c4-9pcbw   0/1     Running   0          33s   app=usms-broken,pod-template-hash=7c447464c4,version=v1
+usms-broken-7c447464c4-hbp8x   0/1     Running   0          33s   app=usms-broken,pod-template-hash=7c447464c4,version=v1
+== 3. the pods are Running but not Ready - why? ==
+    Readiness:      http-get http://:http/healthz delay=0s timeout=1s period=5s #success=1 #failure=3
+what the base nginx image answers inside usms-broken-7c447464c4-9pcbw:
+/healthz ->   HTTP/1.1 404 Not Found
+/        ->   HTTP/1.1 200 OK

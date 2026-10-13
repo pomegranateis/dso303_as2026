@@ -122,3 +122,40 @@ Cleanup script copied from the lab, passes bash -n, NOT run.
 
 ## Step 24: Git
 manifests/lab-07/50-secret.yaml is committed deliberately: its two values are labelled dummies, and the lab keeps it as the example for this check. In any real repository it would be generated into outputs/ or not at all.
+
+## Exercise 5 part 3: which of configs/lab-07.env's 21 variables Lab 08 needs
+- USMS_EKS_CLUSTER - every aws eks call and update-kubeconfig in Lab 08 names the cluster.
+- USMS_EKS_NODEGROUP - Lab 08 changes the node group's scaling from the AWS side (update-nodegroup-config).
+- USMS_EKS_NAMESPACE - every kubectl command in Lab 08 works inside usms.
+- USMS_EKS_ENDPOINT - to confirm kubectl points at this cluster (verify-lab-07.sh now checks it); it is https://localhost:6500 here, not :6443.
+- USMS_EKS_LB_PORTS - Lab 08 reaches its LoadBalancer Service and Ingress on these host ports; here 8081,8083, so "8082" in Lab 08 means 8083.
+- USMS_EKS_CLUSTER_STATUS - a quick check that the cluster is ACTIVE before starting; after a Floci restart it can read ACTIVE with no k3s behind it, so check kubectl too.
+- USMS_EKS_NODE_ROLE_ARN - Lab 08's node scaling adds nodes that assume this role.
+- USMS_K8S_DEPLOY_ENROLMENT - Lab 08 attaches the HorizontalPodAutoscaler to this Deployment.
+- USMS_K8S_CPU_REQUEST - the HPA's utilisation is measured against this 50m; without a request it reads nothing.
+- USMS_K8S_SVC_GATEWAY and USMS_K8S_DEPLOY_GATEWAY - Lab 08 turns the gateway Service into a LoadBalancer and puts an Ingress in front of it.
+- USMS_K8S_MANIFEST_DIR - Lab 08 adds its manifests next to these and re-applies them after a restart (see Step 22).
+Not needed by Lab 08: the cluster ARN, version, cluster role ARN, the two policy ARNs, the cluster security group, and the results Deployment and Service names - they describe what this lab built, and the CloudFormation lab is the one that re-declares them.
+
+## Review questions
+
+**1. ACTIVE cluster, every pod Pending.**
+ACTIVE describes the control plane only - the API server, etcd and the scheduler that AWS runs - while pods run on the data plane, the nodes in my account, and a scheduler with no nodes that fit has nowhere to put them, so it leaves them Pending. Both are true at once because they are different halves of the system with different owners. Two configurations that produce it: a cluster with no node group (or a node group whose nodes never join, for example because the node role lacks eks:DescribeCluster or trusts the wrong principal), and pods whose requests exceed every node - Step 19's usms-toobig, Pending with "0/1 nodes are available: 1 Insufficient cpu, 1 Insufficient memory". A nodeSelector or taint that no node matches does the same.
+
+**2. Swapping the two trust policies.**
+The cluster role would trust ec2.amazonaws.com and the node role eks.amazonaws.com. On real AWS, create-cluster (Step 8) calls sts:AssumeRole on the cluster role as eks.amazonaws.com and fails at once, because that principal is not trusted - you would notice at Step 8. If the cluster somehow existed, the nodes in Step 10 would fail to launch with an instance profile whose role EC2 cannot assume, so the node group would end CREATE_FAILED and kubectl get nodes in Step 11 would be empty. On Floci nothing is assumed or enforced (policies are stored, not evaluated), so both steps succeed and you would not notice at all - which is why Steps 6 and 7 check the trust policy by reading it.
+
+**3. Readiness probe versus liveness probe.**
+A readiness probe answers "should this pod receive traffic now?": failing it removes the pod from the Service's endpoints and nothing else. A liveness probe answers "is this container stuck?": failing it makes the kubelet kill and restart the container. Getting it backwards: a liveness probe on a dependency check (say, "can I reach the database?") restarts every pod in a loop during a database outage - which cannot help and turns a degraded service into a dead one - where a readiness probe would simply take them out of rotation until the database returned. In the other direction, Exercise 3 showed a readiness probe on a path the app does not serve: the pods ran forever, never Ready, and the Service had no endpoints, with nothing in the logs.
+
+**4. After rollback the pod still said 1.1.0.**
+rollout undo restores the previous pod template - the image, environment wiring, probes - by scaling an old ReplicaSet back up, but the ConfigMap is a separate object that the template only refers to by name, and it still held 1.1.0. For "it is not really a rollback": a release is everything that changed, and Kubernetes rolled back only the part stored in the Deployment, so the system ran a combination that never existed as a release. Against: it does exactly what it says - it rolls back the Deployment - and the fault is in treating the ConfigMap as unversioned. The practice that resolves it is versioning configuration with the workload: give each ConfigMap a new name per release (usms-app-config-v2, or a content hash, as Kustomize's configMapGenerator does) and reference it from the template, so the template change and the config change are the same revision and undo restores both.
+
+**5. maxUnavailable 0 against the default, for two replicas.**
+With two replicas they behaved identically in Step 18's "Your turn": the default 25% / 25% rounds maxSurge up to 1 and maxUnavailable down to 0, so both start one new pod, wait for it to be ready, then stop one old pod, peaking at 3. They differ from four replicas up, where the default lets one pod go missing during the roll. maxUnavailable 0 suits a service that must not lose capacity during a deploy, like enrolment in its busy week; the default suits something that can briefly run short and wants faster rolls with less extra capacity, like results or a batch API. Lab 04's ECS defaults (minimumHealthyPercent 100, maximumPercent 200) are the closer match to maxUnavailable 0: never fewer than desired, temporarily more.
+
+**6. "A Secret is encrypted, so it's fine to commit the manifest."**
+A Secret is base64-encoded, not encrypted: Step 17 decoded the token with base64 -d and needed nothing but get access. What it does provide is separation - the value is not in the image or the Deployment, it can be restricted by RBAC separately from ConfigMaps, and describe hides it. It provides no confidentiality in a Git repository, where a committed value is readable by anyone with the repository and stays in history after you delete it, and none at rest in etcd unless encryption is configured. On real EKS I would turn on KMS envelope encryption of Secrets, keep the value in AWS Secrets Manager and bring it in with the Secrets Store CSI driver or External Secrets, give pods AWS access through IRSA or Pod Identity instead of stored keys, and never commit a Secret manifest.
+
+**7. ECS or Kubernetes for USMS.**
+For USMS - a small team, one region, quiet for eight months and busy for two - I would choose ECS on Fargate. This lab made several things harder than Lab 04: two IAM roles and a node group to own instead of one task role; nodes to patch and versions to upgrade in two steps; a second API and tool (kubectl, its own kubeconfig and context); Secrets that need extra machinery to be safe; and, on this build, a control plane whose state did not survive a restart. Kubernetes did give me something ECS could not: one kubectl apply of a directory of portable manifests recreated the whole application on a new cluster in under a minute, and the same files would run on any conformant cluster - on campus or another cloud. For USMS that portability is not worth the operational load; for a team running many services across environments it would be.

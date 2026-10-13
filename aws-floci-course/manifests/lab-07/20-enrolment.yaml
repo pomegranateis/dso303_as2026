@@ -49,6 +49,15 @@ spec:
         project: usms
         tier: app
     spec:
+      # Exercise 4. Spread the replicas across nodes. ScheduleAnyway makes this advisory:
+      # with one node (this Floci build) both pods still schedule, side by side.
+      topologySpreadConstraints:
+        - maxSkew: 1
+          topologyKey: kubernetes.io/hostname
+          whenUnsatisfiable: ScheduleAnyway
+          labelSelector:
+            matchLabels:
+              app: usms-enrolment
       containers:
         - name: enrolment
           image: nginx:1.27-alpine
@@ -111,3 +120,20 @@ spec:
     - name: http
       port: 80
       targetPort: http
+---
+# Exercise 4. Enforced: a voluntary disruption (a node drain, a node group upgrade)
+# may never take usms-enrolment below one ready pod.
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: usms-enrolment-pdb
+  namespace: usms
+  labels:
+    app: usms-enrolment
+    project: usms
+    tier: app
+spec:
+  minAvailable: 1
+  selector:
+    matchLabels:
+      app: usms-enrolment

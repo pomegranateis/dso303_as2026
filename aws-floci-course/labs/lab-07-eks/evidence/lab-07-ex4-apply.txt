@@ -1,0 +1,19 @@
+== Exercise 4: apply the updated 20-enrolment.yaml ==
+server-side dry run OK
+configmap/usms-enrolment-conf unchanged
+deployment.apps/usms-enrolment configured
+service/usms-enrolment unchanged
+poddisruptionbudget.policy/usms-enrolment-pdb created
+Waiting for deployment "usms-enrolment" rollout to finish: 1 out of 2 new replicas have been updated...
+Waiting for deployment "usms-enrolment" rollout to finish: 1 out of 2 new replicas have been updated...
+Waiting for deployment "usms-enrolment" rollout to finish: 1 out of 2 new replicas have been updated...
+Waiting for deployment "usms-enrolment" rollout to finish: 1 old replicas are pending termination...
+Waiting for deployment "usms-enrolment" rollout to finish: 1 old replicas are pending termination...
+deployment "usms-enrolment" successfully rolled out
+NAME                 MIN AVAILABLE   MAX UNAVAILABLE   ALLOWED DISRUPTIONS   AGE
+usms-enrolment-pdb   1               N/A               1                     15s
+-- which node is each pod on (from the cluster) --
+NAME                              READY   STATUS    RESTARTS   AGE   IP           NODE           NOMINATED NODE   READINESS GATES
+usms-enrolment-8549846ddd-bcvr9   1/1     Running   0          15s   10.42.0.23   c2b5a5615e74   <none>           <none>
+usms-enrolment-8549846ddd-hhg6h   1/1     Running   0          8s    10.42.0.24   c2b5a5615e74   <none>           <none>
+POD_NAME NODE_NAME ENROLMENT_API_TOKEN ENROLMENT_DB_PASSWORD  <- Secret env vars kept

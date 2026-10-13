@@ -1,0 +1,28 @@
+== Exercise 2 ==
+history before:
+1         <none>
+
+configmap/usms-gateway-conf configured
+deployment.apps/usms-gateway unchanged
+service/usms-gateway unchanged
+-- after apply (ConfigMap changed, pod template did not): --
+/enrolment/ -> {"service":"usms-enrolment","pod":"usms-enrolment-7d8557c58d-76d6j","node":"c2b5a5615e74","env":"laboratory","version":"1.0.0"}
+/results/ -> {"service":"usms-results","pod":"usms-results-7fc784c47f-4lg22","campus":"rtc","version":"1.0.0"}
+wget: server returned error: HTTP/1.1 404 Not Found
+/timetable/ -> FAILED
+gateway ReplicaSet unchanged: usms-gateway-58854c9ffd
+-- kubectl rollout restart deployment/usms-gateway (writes a timestamp into the pod template) --
+deployment.apps/usms-gateway restarted
+Waiting for deployment "usms-gateway" rollout to finish: 1 old replicas are pending termination...
+Waiting for deployment "usms-gateway" rollout to finish: 1 old replicas are pending termination...
+deployment "usms-gateway" successfully rolled out
+gateway ReplicaSet now:    usms-gateway-6875f67cdd
+restartedAt annotation:    2026-10-13T08:47:33+06:00
+history after:
+1         <none>
+2         <none>
+
+-- all three routes, one command --
+/enrolment/ -> {"service":"usms-enrolment","pod":"usms-enrolment-7d8557c58d-76d6j","node":"c2b5a5615e74","env":"laboratory","version":"1.0.0"}
+/results/ -> {"service":"usms-results","pod":"usms-results-7fc784c47f-4lg22","campus":"rtc","version":"1.0.0"}
+/timetable/ -> {"service":"usms-timetable","pod":"usms-timetable-cf6b9c8fb-gx4sv","campus":"rtc","version":"1.0.0"}

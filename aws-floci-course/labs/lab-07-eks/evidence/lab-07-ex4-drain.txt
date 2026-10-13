@@ -1,0 +1,24 @@
+== Exercise 4 demonstration: drain node c2b5a5615e74, enrolment pods only, under traffic ==
+  drain:  c2b5a5615e74
+  drain: error: unable to drain node "c2b5a5615e74" due to error: error when evicting pods/"usms-enrolment-8549846ddd-bcvr9" -n "usms": global timeout reached: 40s, continuing command...
+  drain: error when evicting pods/"usms-enrolment-8549846ddd-bcvr9" -n "usms": global timeout reached: 40s
+  drain: error when evicting pods/"usms-enrolment-8549846ddd-bcvr9" -n "usms" (will retry after 5s): Cannot evict pod as it would violate the pod's disruption budget.
+  drain: evicting pod usms/usms-enrolment-8549846ddd-bcvr9
+  drain: evicting pod usms/usms-enrolment-8549846ddd-hhg6h
+  drain: node/c2b5a5615e74 cordoned
+  drain: pod/usms-enrolment-8549846ddd-bcvr9
+  drain: pod/usms-enrolment-8549846ddd-hhg6h evicted
+  drain: There are pending nodes to be drained:
+  drain: There are pending pods in node "c2b5a5615e74" when an error occurred: error when evicting pods/"usms-enrolment-8549846ddd-bcvr9" -n "usms": global timeout reached: 40s
+-- during the drain --
+usms-enrolment-pdb   1     N/A   0     74s
+  usms-enrolment-8549846ddd-6nt7h 0/1 Pending <none>
+  usms-enrolment-8549846ddd-bcvr9 1/1 Running c2b5a5615e74
+  node c2b5a5615e74 Ready,SchedulingDisabled
+-- uncordon --
+node/c2b5a5615e74 uncordoned
+Waiting for deployment "usms-enrolment" rollout to finish: 1 of 2 updated replicas are available...
+deployment "usms-enrolment" successfully rolled out
+  usms-enrolment-8549846ddd-6nt7h 1/1 Running c2b5a5615e74
+  usms-enrolment-8549846ddd-bcvr9 1/1 Running c2b5a5615e74
+smoke: ok=60 failed=0
