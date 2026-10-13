@@ -64,6 +64,8 @@ Created from `templates/lab-07-create-cluster.json` as `usms-developer-role`, wi
 
 ![Cluster, node group and nodes](img/lab07-01-cluster-nodes.png)
 
+Taken on the first cluster, before the Step 22 restart (node `83a1feb28d4e`); the rebuilt cluster's single node has a different name.
+
 **Floci limitations:**
 - **One node**, the k3s server itself, rather than two workers in the private subnets, and the node group's labels never reach it.
 - The cluster runs **Kubernetes v1.34**, not the requested 1.30, because Floci starts `rancher/k3s:latest`.
@@ -81,6 +83,8 @@ All three Deployments rolled out: 2/2, 2/2 and 1/1, each with a ClusterIP Servic
 **Your turn:** I deleted an enrolment pod while 40 requests went through the gateway. Result: `ok=40 failed=0`. The ReplicaSet created the replacement in the same second, and its name appears in the tally ([evidence](evidence/lab-07-step16-yourturn.txt)).
 
 ![The application and routing through the gateway](img/lab07-02-app-routing.png)
+
+Also taken before the restart. Pod `…zhxkd` is the replacement the ReplicaSet created in the Your-turn test; the ClusterIPs changed when the cluster was rebuilt.
 
 Pod addresses are `10.42.0.x`, from k3s's own pod network, not VPC addresses as with the real EKS VPC CNI.
 
@@ -165,6 +169,8 @@ What Floci does model well here: the EKS API calls and their errors, `update-kub
 
 ![verify-lab-07](img/lab07-03-verify.png)
 
+Taken on the rebuilt cluster, after the exercises.
+
 ---
 
 ## 7. Independent exercises
@@ -187,7 +193,7 @@ Three things stood out. First, the split between control plane and data plane wa
 
 ## 10. Screenshot checklist
 
-`lab07-01-cluster-nodes`, `lab07-02-app-routing`, `lab07-03-verify`, all `.png`, in `labs/lab-07-eks/img/`.
+`lab07-01-cluster-nodes`, `lab07-02-app-routing`, `lab07-03-verify`, all `.png`, in `labs/lab-07-eks/img/`, all present.
 
 ## 11. Commits
 
