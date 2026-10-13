@@ -1,0 +1,6 @@
+# Lab 07 Exercise 5 part 2 - readiness for Lab 08 (and Lab 10), read from IAM, not from memory
+policy ARN          : arn:aws:iam::000000000000:policy/USMSStudentDataReadWrite (default version v1)
+roles carrying it   : usms-ec2-app-role usms-ecs-task-role usms-eks-node-role 
+bucket ARN          : arn:aws:s3:::usms-student-data  (the bucket itself: ListBucket, GetBucketLocation, and the Deny on DeleteBucket)
+object ARN          : arn:aws:s3:::usms-student-data/*  (the objects inside it: GetObject, PutObject, DeleteObject)
+bucket exists?      : no - head-bucket exit 254: An error occurred (404) when calling the HeadBucket operation: Not Found 

@@ -1,0 +1,33 @@
+== fix 1 (one line): Service selector version: v2 -> v1 ==
+deployment.apps/usms-broken unchanged
+service/usms-broken configured
+Warning: v1 Endpoints is deprecated in v1.33+; use discovery.k8s.io/v1 EndpointSlice
+endpoints after fix 1: 59s   ready pods: 0/1 0/1 
+Warning: v1 Endpoints is deprecated in v1.33+; use discovery.k8s.io/v1 EndpointSlice
+not-ready addresses: 10.42.0.18 10.42.0.19
+== fix 2 (one line): readiness probe path /healthz -> / ==
+deployment.apps/usms-broken configured
+service/usms-broken unchanged
+Waiting for deployment "usms-broken" rollout to finish: 1 out of 2 new replicas have been updated...
+Waiting for deployment "usms-broken" rollout to finish: 1 out of 2 new replicas have been updated...
+Waiting for deployment "usms-broken" rollout to finish: 1 out of 2 new replicas have been updated...
+Waiting for deployment "usms-broken" rollout to finish: 1 old replicas are pending termination...
+Waiting for deployment "usms-broken" rollout to finish: 1 old replicas are pending termination...
+Waiting for deployment "usms-broken" rollout to finish: 1 old replicas are pending termination...
+deployment "usms-broken" successfully rolled out
+Warning: v1 Endpoints is deprecated in v1.33+; use discovery.k8s.io/v1 EndpointSlice
+NAME          ENDPOINTS                     AGE
+usms-broken   10.42.0.20:80,10.42.0.21:80   70s
+  HTTP/1.1 200 OK
+== the two changed lines ==
+25c25
+<               path: /healthz
+---
+>               path: /
+37c37
+<     version: v2
+---
+>     version: v1
+== clean up (Section 15 CLEAN UP item) ==
+deployment.apps "usms-broken" deleted from usms namespace
+service "usms-broken" deleted from usms namespace

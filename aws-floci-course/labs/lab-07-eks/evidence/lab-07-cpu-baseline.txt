@@ -1,0 +1,6 @@
+# Lab 07 Exercise 5 part 1 - CPU baseline of usms-enrolment, 2026-10-13T02:52:21Z
+metrics API: present
+cpu request per pod: 50m
+pod usms-enrolment-8549846ddd-6nt7h  cpu 4m  = 8.0% of the 50m request  memory 14Mi
+pod usms-enrolment-8549846ddd-bcvr9  cpu 1m  = 2.0% of the 50m request  memory 15Mi
+note: idle pods with no traffic; Lab 08's HPA compares this percentage with its target

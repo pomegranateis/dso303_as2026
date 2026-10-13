@@ -1,0 +1,23 @@
+== Exercise 1 ==
+configmap/usms-timetable-conf created (dry run)
+deployment.apps/usms-timetable created (dry run)
+service/usms-timetable created (dry run)
+configmap/usms-timetable-conf created
+deployment.apps/usms-timetable created
+service/usms-timetable created
+Waiting for deployment "usms-timetable" rollout to finish: 0 of 1 updated replicas are available...
+deployment "usms-timetable" successfully rolled out
+NAME                             READY   UP-TO-DATE   AVAILABLE   AGE
+deployment.apps/usms-enrolment   2/2     2            2           3m27s
+deployment.apps/usms-gateway     1/1     1            1           3m27s
+deployment.apps/usms-results     2/2     2            2           3m27s
+deployment.apps/usms-timetable   1/1     1            1           8s
+
+NAME                     TYPE        CLUSTER-IP      EXTERNAL-IP   PORT(S)   AGE
+service/usms-enrolment   ClusterIP   10.43.121.90    <none>        80/TCP    3m27s
+service/usms-gateway     ClusterIP   10.43.249.84    <none>        80/TCP    3m27s
+service/usms-results     ClusterIP   10.43.80.200    <none>        80/TCP    3m27s
+service/usms-timetable   ClusterIP   10.43.200.235   <none>        80/TCP    8s
+NAME             ENDPOINTS       AGE
+usms-timetable   10.42.0.13:80   9s
+{"service":"usms-timetable","pod":"usms-timetable-cf6b9c8fb-gx4sv","campus":"rtc","version":"1.0.0"}
