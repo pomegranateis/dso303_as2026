@@ -1,0 +1,24 @@
+== Step 13 ==
+configmap/usms-app-config created
+{"APP_CAMPUS":"rtc","APP_ENVIRONMENT":"laboratory","APP_REGION":"us-east-1","APP_VERSION":"1.0.0"}
+configmap/usms-enrolment-conf created
+deployment.apps/usms-enrolment created
+service/usms-enrolment created
+Waiting for deployment "usms-enrolment" rollout to finish: 0 of 2 updated replicas are available...
+Waiting for deployment "usms-enrolment" rollout to finish: 1 of 2 updated replicas are available...
+deployment "usms-enrolment" successfully rolled out
+NAME                             READY   UP-TO-DATE   AVAILABLE   AGE   CONTAINERS   IMAGES              SELECTOR
+deployment.apps/usms-enrolment   2/2     2            2           20s   enrolment    nginx:1.27-alpine   app=usms-enrolment
+
+NAME                                        DESIRED   CURRENT   READY   AGE   CONTAINERS   IMAGES              SELECTOR
+replicaset.apps/usms-enrolment-6965b8dbbb   2         2         2       20s   enrolment    nginx:1.27-alpine   app=usms-enrolment,pod-template-hash=6965b8dbbb
+
+NAME                                  READY   STATUS    RESTARTS   AGE   IP          NODE           NOMINATED NODE   READINESS GATES
+pod/usms-enrolment-6965b8dbbb-qr5dl   1/1     Running   0          20s   10.42.0.5   83a1feb28d4e   <none>           <none>
+pod/usms-enrolment-6965b8dbbb-wngwq   1/1     Running   0          20s   10.42.0.6   83a1feb28d4e   <none>           <none>
+
+NAME                     TYPE        CLUSTER-IP      EXTERNAL-IP   PORT(S)   AGE   SELECTOR
+service/usms-enrolment   ClusterIP   10.43.149.214   <none>        80/TCP    20s   app=usms-enrolment
+Warning: v1 Endpoints is deprecated in v1.33+; use discovery.k8s.io/v1 EndpointSlice
+NAME             ENDPOINTS                   AGE
+usms-enrolment   10.42.0.5:80,10.42.0.6:80   20s

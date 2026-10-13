@@ -1,0 +1,30 @@
+=== ECS (Lab 04 / 05 / 06) ===
+--------------------------------------------------
+|                DescribeServices                |
++---------+-----+----------+---------------------+
+| Desired | LB  | Running  |       TaskDef       |
++---------+-----+----------+---------------------+
+|  2      |  1  |  2       |  usms-enrolment:2   |
++---------+-----+----------+---------------------+
+=== EKS (this lab) ===
+NAME                             READY   UP-TO-DATE   AVAILABLE   AGE     CONTAINERS   IMAGES              SELECTOR
+deployment.apps/usms-enrolment   2/2     2            2           10m     enrolment    nginx:1.27-alpine   app=usms-enrolment
+deployment.apps/usms-gateway     1/1     1            1           9m58s   gateway      nginx:1.27-alpine   app=usms-gateway
+deployment.apps/usms-results     2/2     2            2           10m     results      nginx:1.27-alpine   app=usms-results
+
+NAME                     TYPE        CLUSTER-IP      EXTERNAL-IP   PORT(S)   AGE     SELECTOR
+service/usms-enrolment   ClusterIP   10.43.149.214   <none>        80/TCP    10m     app=usms-enrolment
+service/usms-gateway     ClusterIP   10.43.179.242   <none>        80/TCP    9m58s   app=usms-gateway
+service/usms-results     ClusterIP   10.43.188.74    <none>        80/TCP    10m     app=usms-results
+== Step 21 part 1 ==
+OIDC issuer: None
+No OIDC issuer on this build - IRSA is Conceptual / Real AWS here. Record it.
+== Step 21 part 3: the ServiceAccount ==
+serviceaccount/usms-enrolment-sa created
+NAME                SECRETS   AGE
+default             0         12m
+usms-enrolment-sa   0         1s
+metadata:
+  annotations:
+    kubectl.kubernetes.io/last-applied-configuration: |
+      {"apiVersion":"v1","kind":"ServiceAccount","metadata":{"annotations":{},"name":"usms-enrolment-sa","namespace":"usms"}}

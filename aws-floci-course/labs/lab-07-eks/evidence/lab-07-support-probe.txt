@@ -1,0 +1,14 @@
+== Floci ==
+running=true
+
+== Does the eks API answer at all? ==
+eks list-clusters      : OK
+
+== Local tooling ==
+  kubectl  : /usr/local/bin/kubectl
+  k3d      : MISSING
+  docker   : /usr/local/bin/docker
+  python3  : /usr/bin/python3
+
+== Verdict ==
+PATH A  - use aws eks throughout

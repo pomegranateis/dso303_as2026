@@ -1,0 +1,33 @@
+== Step 13: request from inside the cluster ==
+{"service":"usms-enrolment","pod":"usms-enrolment-6965b8dbbb-qr5dl","node":"83a1feb28d4e","env":"laboratory","version":"1.0.0"}
+pod "usms-curl" deleted from usms namespace
+== Step 14: usms-results ==
+configmap/usms-results-conf created
+deployment.apps/usms-results created
+service/usms-results created
+Waiting for deployment "usms-results" rollout to finish: 0 of 2 updated replicas are available...
+Waiting for deployment "usms-results" rollout to finish: 1 of 2 updated replicas are available...
+deployment "usms-results" successfully rolled out
+NAME             READY   DESIRED   STRATEGY        MAXUNAVAIL
+usms-enrolment   2       2         RollingUpdate   0
+usms-results     2       2         RollingUpdate   25%
+NAME             ENDPOINTS                   AGE
+usms-enrolment   10.42.0.5:80,10.42.0.6:80   59s
+usms-results     10.42.0.8:80,10.42.0.9:80   8s
+== Step 15: usms-gateway ==
+configmap/usms-gateway-conf created
+deployment.apps/usms-gateway created
+service/usms-gateway created
+Waiting for deployment "usms-gateway" rollout to finish: 0 of 1 updated replicas are available...
+deployment "usms-gateway" successfully rolled out
+NAME                              READY   STATUS    RESTARTS   AGE   IP           NODE           NOMINATED NODE   READINESS GATES
+usms-enrolment-6965b8dbbb-qr5dl   1/1     Running   0          68s   10.42.0.5    83a1feb28d4e   <none>           <none>
+usms-enrolment-6965b8dbbb-wngwq   1/1     Running   0          68s   10.42.0.6    83a1feb28d4e   <none>           <none>
+usms-gateway-58854c9ffd-m72hr     1/1     Running   0          8s    10.42.0.10   83a1feb28d4e   <none>           <none>
+usms-results-7fc784c47f-7swgv     1/1     Running   0          17s   10.42.0.8    83a1feb28d4e   <none>           <none>
+usms-results-7fc784c47f-jrt4v     1/1     Running   0          17s   10.42.0.9    83a1feb28d4e   <none>           <none>
+2026/10/13 02:31:38 [notice] 1#1: start worker process 58
+2026/10/13 02:31:38 [notice] 1#1: start worker process 59
+2026/10/13 02:31:38 [notice] 1#1: start worker process 60
+2026/10/13 02:31:38 [notice] 1#1: start worker process 61
+10.42.0.1 - - [13/Oct/2026:02:31:44 +0000] "GET /healthz HTTP/1.1" 200 3 "-" "kube-probe/1.34" "-"

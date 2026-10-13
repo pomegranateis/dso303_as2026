@@ -1,0 +1,39 @@
+== Environment ==
+  ok   Floci container running
+  ok   Storage mode is NOT memory
+  ok   AWS CLI reaches Floci
+  ok   Account is 000000000000
+== Earlier-lab dependencies still present ==
+  ok   Lab 01 role usms-developer-role
+  ok   Lab 01 policy USMSStudentDataReadWrite
+  ok   Lab 02 usms-vpc
+  ok   Lab 02 private subnet b exists (two AZs needed)
+== Lab 07 IAM and EC2 ==
+  ok   role usms-eks-cluster-role
+  ok   cluster role trusts eks.amazonaws.com
+  ok   role usms-eks-node-role
+  ok   node role trusts ec2.amazonaws.com
+  ok   node role carries Lab 01's USMSStudentDataReadWrite
+  ok   usms-eks-cluster-sg is in usms-vpc
+== Lab 07 EKS (expect 3 failures on support Path B) ==
+  ok   cluster usms-eks-cluster is ACTIVE
+  ok   cluster carries the _lb_ports_ tag
+  ok   nodegroup usms-eks-nodes is ACTIVE
+== Kubernetes ==
+  ok   kubectl reaches an API server
+  ok   kubectl's server is usms-eks-cluster's endpoint
+  ok   namespace usms exists
+  ok   usms-enrolment has 2 ready replicas
+  ok   usms-results has 2 ready replicas
+  ok   usms-gateway has 1 ready replica
+  ok   service usms-enrolment has at least 2 endpoints
+  ok   usms-enrolment declares a cpu request (Lab 08 needs it)
+== Files and Git hygiene ==
+  ok   configs/lab-07.env exists
+  ok   configs/lab-07.env has no empty values
+  ok   five or more manifests present
+  ok   all four Lab 07 policy documents are valid JSON
+  ok   no secret is tracked by git
+  ok   .gitignore uses outputs/* not outputs/
+
+PASS=31  FAIL=0

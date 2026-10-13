@@ -1,0 +1,16 @@
+== Step 11 verify ==
+1
+yes
+configmaps
+pods
+secrets
+services
+deployments.apps
+node labels workload/tier: absent (the node group's labels are not applied to the k3s node)
+== Step 12 ==
+namespace/usms created
+Context "usms-eks" modified.
+usms
+NAME   STATUS   AGE   LABELS
+usms   Active   1s    kubernetes.io/metadata.name=usms,lab=05a,project=usms,tier=app
+No resources found in usms namespace.

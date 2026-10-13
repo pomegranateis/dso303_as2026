@@ -1,0 +1,19 @@
+== Step 8 (retry, image now local): assume usms-developer-role ==
+arn:aws:sts::000000000000:assumed-role/usms-developer-role/floci-session
+
+An error occurred (ResourceInUseException) when calling the CreateCluster operation: Cluster already exists: usms-eks-cluster
+identity restored: arn:aws:iam::000000000000:root
+== delete the FAILED cluster record from the timed-out first attempt ==
+DELETING
+gone after check 1
+== Step 8 retry: create-cluster as usms-developer-role ==
+arn:aws:sts::000000000000:assumed-role/usms-developer-role/floci-session
+----------------------------------------------------------------------------
+|                               CreateCluster                              |
++---------+----------------------------------------------------------------+
+|  Arn    |  arn:aws:eks:us-east-1:000000000000:cluster/usms-eks-cluster   |
+|  Name   |  usms-eks-cluster                                              |
+|  Status |  CREATING                                                      |
+|  Version|  1.30                                                          |
++---------+----------------------------------------------------------------+
+identity restored: arn:aws:iam::000000000000:root

@@ -1,0 +1,64 @@
+== part 1: ConfigMap 1.0.0 -> 1.1.0 ==
+  APP_VERSION: "1.1.0"
+configmap/usms-app-config configured
+== part 2: running pods still say: "version":"1.0.0"  (ConfigMap changed, pods did not) ==
+== part 3: annotate the Deployment (metadata, not the pod template) ==
+deployment.apps/usms-enrolment annotated
+deployment "usms-enrolment" successfully rolled out
+after annotate, pods say: "version":"1.0.0"
+"version":"1.0.0"  -> no rollout; using rollout restart
+deployment.apps/usms-enrolment restarted
+Waiting for deployment "usms-enrolment" rollout to finish: 1 out of 2 new replicas have been updated...
+Waiting for deployment "usms-enrolment" rollout to finish: 1 out of 2 new replicas have been updated...
+Waiting for deployment "usms-enrolment" rollout to finish: 1 out of 2 new replicas have been updated...
+Waiting for deployment "usms-enrolment" rollout to finish: 1 old replicas are pending termination...
+Waiting for deployment "usms-enrolment" rollout to finish: 1 old replicas are pending termination...
+deployment "usms-enrolment" successfully rolled out
+== part 4: pods now say: "version":"1.1.0" ==
+== part 5: history ==
+deployment.apps/usms-enrolment 
+REVISION  CHANGE-CAUSE
+1         <none>
+2         <none>
+3         <none>
+
+NAME                        DESIRED   REVISION
+usms-enrolment-6965b8dbbb   0         1
+usms-enrolment-7d8557c58d   0         2
+usms-enrolment-b7b8c585c    2         3
+== rollback (danger notice read: pod template reverts, gateway unaffected, reversible) ==
+Warning: resource deployments/usms-enrolment was previously managed with 'kubectl apply'. Rolling back will not update the kubectl.kubernetes.io/last-applied-configuration annotation, which may cause unexpected behavior on future 'kubectl apply' operations. Consider using 'kubectl apply' with your previous configuration file instead.
+deployment.apps/usms-enrolment rolled back
+Waiting for deployment "usms-enrolment" rollout to finish: 1 out of 2 new replicas have been updated...
+Waiting for deployment "usms-enrolment" rollout to finish: 1 out of 2 new replicas have been updated...
+Waiting for deployment "usms-enrolment" rollout to finish: 1 out of 2 new replicas have been updated...
+Waiting for deployment "usms-enrolment" rollout to finish: 1 old replicas are pending termination...
+Waiting for deployment "usms-enrolment" rollout to finish: 1 old replicas are pending termination...
+deployment "usms-enrolment" successfully rolled out
+after undo, pods say: "version":"1.1.0"  (undo reverts the pod template, not the ConfigMap)
+NAME                        DESIRED   REVISION
+usms-enrolment-6965b8dbbb   0         1
+usms-enrolment-7d8557c58d   2         4
+usms-enrolment-b7b8c585c    0         3
+== restore ConfigMap to 1.0.0 ==
+configmap/usms-app-config configured
+deployment.apps/usms-enrolment restarted
+Waiting for deployment "usms-enrolment" rollout to finish: 1 out of 2 new replicas have been updated...
+Waiting for deployment "usms-enrolment" rollout to finish: 1 out of 2 new replicas have been updated...
+Waiting for deployment "usms-enrolment" rollout to finish: 1 out of 2 new replicas have been updated...
+Waiting for deployment "usms-enrolment" rollout to finish: 1 old replicas are pending termination...
+Waiting for deployment "usms-enrolment" rollout to finish: 1 old replicas are pending termination...
+deployment "usms-enrolment" successfully rolled out
+final: "version":"1.0.0"
+deployment.apps/usms-enrolment 
+REVISION  CHANGE-CAUSE
+1         <none>
+3         <none>
+4         <none>
+5         <none>
+
+NAME                        DESIRED   REVISION
+usms-enrolment-6965b8dbbb   0         1
+usms-enrolment-7d8557c58d   0         4
+usms-enrolment-b7b8c585c    0         3
+usms-enrolment-cdc5bc8df    2         5

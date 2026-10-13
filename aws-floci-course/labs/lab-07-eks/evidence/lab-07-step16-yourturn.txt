@@ -1,0 +1,12 @@
+== Your turn (Step 16): delete usms-enrolment-6965b8dbbb-qr5dl while 40 requests go through the gateway ==
+enrolment pods before: usms-enrolment-6965b8dbbb-qr5dl usms-enrolment-6965b8dbbb-wngwq 
+pod "usms-enrolment-6965b8dbbb-qr5dl" deleted from usms namespace
+      1 ok=40 failed=0
+      7 "pod":"usms-enrolment-6965b8dbbb-qr5dl"
+     26 "pod":"usms-enrolment-6965b8dbbb-wngwq"
+      7 "pod":"usms-enrolment-6965b8dbbb-zhxkd"
+enrolment pods after:  usms-enrolment-6965b8dbbb-wngwq usms-enrolment-6965b8dbbb-zhxkd 
+-- who replaced it --
+65s         Normal   SuccessfulCreate    replicaset/usms-gateway-58854c9ffd     Created pod: usms-gateway-58854c9ffd-m72hr
+19s         Normal   Killing             pod/usms-enrolment-6965b8dbbb-qr5dl    Stopping container enrolment
+19s         Normal   SuccessfulCreate    replicaset/usms-enrolment-6965b8dbbb   Created pod: usms-enrolment-6965b8dbbb-zhxkd
