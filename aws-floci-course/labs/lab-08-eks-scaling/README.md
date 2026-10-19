@@ -184,6 +184,17 @@ After the rebuild, the readback is **identical except for the gateway's auto-all
 
 Before committing I checked that nothing under `outputs/` was staged (`.gitignore:7:outputs/*`).
 
+### Section 16: backup before the next lab
+
+([evidence](evidence/lab-08-backup.txt), [rebuild](evidence/lab-08-backup-rebuild.txt))
+
+- **`floci snapshot save lab-08-complete` failed:** the CLI has the command, but the server returned `HTTP 400`; the snapshot API is not available on server 1.5.34.
+- **I used the lab's fallback instead:** `floci-down.sh`, then `tar -czf ~/floci-data-lab-08.tar.gz -C ~ floci-data` (107 KB, 92 files, outside the repository), then `floci-up.sh`.
+- **The archive covers the AWS side only** (IAM, VPC, EC2, ECS, ELB, the EKS records). The Kubernetes objects live in a Docker volume, and their backup is the manifests in Git.
+- **This restart kept the k3s volume**, unlike Step 18. So after recreating the cluster records, the old state returned, including a ghost `NotReady` node holding every pod. I deleted that Node object and the pods rescheduled.
+- **Afterwards:** the smoke test passed, `verify-lab-07.sh` PASS=31 FAIL=0, `verify-lab-08.sh` PASS=34 FAIL=1, and the Lab 3 instances were started again.
+- **Floci limitation:** whether a restart keeps the k3s volume is not predictable on this build (deleted on 13 October and in Step 18, kept this morning and here).
+
 ---
 
 ## 5. Floci limitations found
