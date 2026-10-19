@@ -1,0 +1,20 @@
+{
+    "Name": "usms-eks-nodes",
+    "Status": "ACTIVE",
+    "Scaling": {
+        "minSize": 2,
+        "maxSize": 4,
+        "desiredSize": 2
+    },
+    "Types": [
+        "t3.small"
+    ],
+    "Subnets": [
+        "subnet-704e2524",
+        "subnet-f9cff6ed"
+    ],
+    "Labels": {
+        "tier": "app",
+        "workload": "usms"
+    }
+}

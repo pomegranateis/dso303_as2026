@@ -1,0 +1,39 @@
+== Step 7: metrics pipeline ==
+v1beta1.metrics.k8s.io            kube-system/metrics-server   True        6d1h
+metrics-server           1/1     1            1           6d1h
+metrics API: AVAILABLE
+NAME           CPU(cores)   CPU(%)   MEMORY(bytes)   MEMORY(%)   
+1bb1b7961450   173m         0%       975Mi           6%          
+NAME                              CPU(cores)   MEMORY(bytes)   
+usms-enrolment-8549846ddd-qk4g9   1m           17Mi            
+usms-enrolment-8549846ddd-qntb9   1m           15Mi            
+usms-gateway-6875f67cdd-btgs7     4m           14Mi            
+usms-results-7fc784c47f-wxw86     1m           15Mi            
+usms-results-7fc784c47f-z9c6d     1m           15Mi            
+usms-timetable-cf6b9c8fb-2ghgw    1m           17Mi            
+== Step 8: HPA ==
+horizontalpodautoscaler.autoscaling/usms-enrolment-hpa created
+NAME                 REFERENCE                   TARGETS              MINPODS   MAXPODS   REPLICAS   AGE
+usms-enrolment-hpa   Deployment/usms-enrolment   cpu: <unknown>/50%   2         8         0          1s
+NAME                 REFERENCE                   TARGETS       MINPODS   MAXPODS   REPLICAS   AGE
+usms-enrolment-hpa   Deployment/usms-enrolment   cpu: 2%/50%   2         8         2          47s
+Behavior:
+  Scale Up:
+    Stabilization Window: 0 seconds
+    Select Policy: Max
+    Policies:
+      - Type: Percent  Value: 100  Period: 15 seconds
+      - Type: Pods     Value: 2    Period: 15 seconds
+  Scale Down:
+    Stabilization Window: 300 seconds
+    Select Policy: Min
+    Policies:
+      - Type: Pods  Value: 1  Period: 60 seconds
+Deployment pods:    2 current / 2 desired
+Conditions:
+  Type            Status  Reason               Message
+  ----            ------  ------               -------
+  AbleToScale     True    ScaleDownStabilized  recent recommendations were higher than current one, applying the highest recent recommendation
+  ScalingActive   True    ValidMetricFound     the HPA was able to successfully calculate a replica count from cpu resource utilization (percentage of request)
+  ScalingLimited  False   DesiredWithinRange   the desired count is within the acceptable range
+Events:           <none>

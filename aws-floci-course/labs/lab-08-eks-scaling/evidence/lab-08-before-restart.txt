@@ -1,0 +1,15 @@
+=== BEFORE RESTART 2026-10-19T04:59:12Z ===
+NAME                 MIN   MAX   TARGET
+usms-enrolment-hpa   2     8     50
+NAME                 MINAVAIL   MAXUNAVAIL
+usms-enrolment-pdb   <none>     1
+usms-gateway-pdb     1          <none>
+NAME              TYPE           NODEPORT
+usms-enrolment    ClusterIP      <none>
+usms-gateway      LoadBalancer   31591
+usms-results      ClusterIP      <none>
+usms-results-np   NodePort       30080
+usms-timetable    ClusterIP      <none>
+NAME                  PATHS
+usms-portal-ingress   /enrolment,/results,/
+2	4	2

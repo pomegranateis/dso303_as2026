@@ -1,0 +1,56 @@
+== Step 4: scale by hand ==
+deployment.apps/usms-enrolment scaled
+Waiting for deployment "usms-enrolment" rollout to finish: 2 of 5 updated replicas are available...
+Waiting for deployment "usms-enrolment" rollout to finish: 3 of 5 updated replicas are available...
+Waiting for deployment "usms-enrolment" rollout to finish: 4 of 5 updated replicas are available...
+deployment "usms-enrolment" successfully rolled out
+NAME             READY   UP-TO-DATE   AVAILABLE   AGE
+usms-enrolment   5/5     5            5           6d1h
+NAME             ENDPOINTS                                               AGE
+usms-enrolment   10.42.1.10:80,10.42.1.11:80,10.42.1.12:80 + 2 more...   6d1h
+ReplicaSets before: 3  after: 3  (no new ReplicaSet)
+--- 40 requests through the gateway ---
+     14 "pod":"usms-enrolment-8549846ddd-ml6lw"
+      9 "pod":"usms-enrolment-8549846ddd-k567n"
+      7 "pod":"usms-enrolment-8549846ddd-2vwm2"
+      5 "pod":"usms-enrolment-8549846ddd-qntb9"
+      5 "pod":"usms-enrolment-8549846ddd-qk4g9"
+--- scale back down ---
+deployment.apps/usms-enrolment scaled
+deployment "usms-enrolment" successfully rolled out
+NAME             ENDPOINTS                    AGE
+usms-enrolment   10.42.1.10:80,10.42.1.5:80   6d1h
+--- watch events (ADDED/MODIFIED/DELETED) ---
+EVENT      NAME                              READY   STATUS    RESTARTS   AGE
+ADDED      usms-enrolment-8549846ddd-qk4g9   1/1     Running   0          3m13s
+ADDED      usms-enrolment-8549846ddd-qntb9   1/1     Running   0          3m13s
+ADDED      usms-enrolment-8549846ddd-k567n   0/1     Pending   0          0s
+ADDED      usms-enrolment-8549846ddd-ml6lw   0/1     Pending   0          0s
+ADDED      usms-enrolment-8549846ddd-2vwm2   0/1     Pending   0          0s
+MODIFIED   usms-enrolment-8549846ddd-k567n   0/1     Pending   0          0s
+MODIFIED   usms-enrolment-8549846ddd-2vwm2   0/1     Pending   0          0s
+MODIFIED   usms-enrolment-8549846ddd-ml6lw   0/1     Pending   0          0s
+MODIFIED   usms-enrolment-8549846ddd-k567n   0/1     ContainerCreating   0          0s
+MODIFIED   usms-enrolment-8549846ddd-ml6lw   0/1     ContainerCreating   0          0s
+MODIFIED   usms-enrolment-8549846ddd-2vwm2   0/1     ContainerCreating   0          0s
+MODIFIED   usms-enrolment-8549846ddd-2vwm2   0/1     Running             0          1s
+MODIFIED   usms-enrolment-8549846ddd-ml6lw   0/1     Running             0          1s
+MODIFIED   usms-enrolment-8549846ddd-k567n   0/1     Running             0          1s
+MODIFIED   usms-enrolment-8549846ddd-k567n   1/1     Running             0          7s
+MODIFIED   usms-enrolment-8549846ddd-2vwm2   1/1     Running             0          7s
+MODIFIED   usms-enrolment-8549846ddd-ml6lw   1/1     Running             0          7s
+MODIFIED   usms-enrolment-8549846ddd-ml6lw   1/1     Terminating         0          13s
+MODIFIED   usms-enrolment-8549846ddd-k567n   1/1     Terminating         0          13s
+MODIFIED   usms-enrolment-8549846ddd-2vwm2   1/1     Terminating         0          13s
+MODIFIED   usms-enrolment-8549846ddd-ml6lw   1/1     Terminating         0          13s
+MODIFIED   usms-enrolment-8549846ddd-k567n   1/1     Terminating         0          13s
+MODIFIED   usms-enrolment-8549846ddd-2vwm2   1/1     Terminating         0          13s
+MODIFIED   usms-enrolment-8549846ddd-k567n   0/1     Completed           0          13s
+MODIFIED   usms-enrolment-8549846ddd-2vwm2   0/1     Completed           0          13s
+MODIFIED   usms-enrolment-8549846ddd-ml6lw   0/1     Completed           0          13s
+MODIFIED   usms-enrolment-8549846ddd-2vwm2   0/1     Completed           0          14s
+DELETED    usms-enrolment-8549846ddd-2vwm2   0/1     Completed           0          14s
+MODIFIED   usms-enrolment-8549846ddd-ml6lw   0/1     Completed           0          14s
+DELETED    usms-enrolment-8549846ddd-ml6lw   0/1     Completed           0          14s
+MODIFIED   usms-enrolment-8549846ddd-k567n   0/1     Completed           0          14s
+DELETED    usms-enrolment-8549846ddd-k567n   0/1     Completed           0          14s

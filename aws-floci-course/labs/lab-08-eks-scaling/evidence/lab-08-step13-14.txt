@@ -1,0 +1,41 @@
+== Step 13 Part 1: ClusterIP unroutable from host ==
+NAME             TYPE        CLUSTER-IP      EXTERNAL-IP   PORT(S)   AGE    SELECTOR
+usms-enrolment   ClusterIP   10.43.121.90    <none>        80/TCP    6d1h   app=usms-enrolment
+usms-gateway     ClusterIP   10.43.249.84    <none>        80/TCP    6d1h   app=usms-gateway
+usms-results     ClusterIP   10.43.80.200    <none>        80/TCP    6d1h   app=usms-results
+usms-timetable   ClusterIP   10.43.200.235   <none>        80/TCP    6d1h   app=usms-timetable
+gateway ClusterIP: 10.43.249.84
+as expected: a ClusterIP is not routable from your machine
+== Part 2: port-forward ==
+{"service":"usms-gateway","pod":"usms-gateway-6875f67cdd-7fgms","routes":["/enrolment/","/results/","/timetable/"]}
+
+{"service":"usms-enrolment","pod":"usms-enrolment-7b6dd7cb84-kb7gv","node":"1bb1b7961450","env":"laboratory","version":"1.0.0"}
+
+{"service":"usms-results","pod":"usms-results-7fc784c47f-z9c6d","campus":"rtc","version":"1.0.0"}
+
+Forwarding from 127.0.0.1:18080 -> 80
+Forwarding from [::1]:18080 -> 80
+Handling connection for 18080
+Handling connection for 18080
+Handling connection for 18080
+== Step 14 Part 1: NodePort ==
+service/usms-results-np created
+NAME              TYPE       CLUSTER-IP      EXTERNAL-IP   PORT(S)        AGE   SELECTOR
+usms-results-np   NodePort   10.43.162.179   <none>        80:30080/TCP   1s    app=usms-results
+== Part 3: every node answers (one node on this build) ==
+--- via node 172.17.0.3 ---
+{"service":"usms-results","pod":"usms-results-7fc784c47f-z9c6d","campus":"rtc","version":"1.0.0"}
+{"service":"usms-results","pod":"usms-results-7fc784c47f-wxw86","campus":"rtc","version":"1.0.0"}
+{"service":"usms-results","pod":"usms-results-7fc784c47f-wxw86","campus":"rtc","version":"1.0.0"}
+{"service":"usms-results","pod":"usms-results-7fc784c47f-z9c6d","campus":"rtc","version":"1.0.0"}
+{"service":"usms-results","pod":"usms-results-7fc784c47f-wxw86","campus":"rtc","version":"1.0.0"}
+{"service":"usms-results","pod":"usms-results-7fc784c47f-wxw86","campus":"rtc","version":"1.0.0"}
+pod "usms-debug-22793" deleted from usms namespace
+--- via the node container's docker IP from the host itself ---
+{"service":"usms-results","pod":"usms-results-7fc784c47f-wxw86","campus":"rtc","version":"1.0.0"}
+
+== Part 4: from localhost ==
+localhost:30080: no answer (port not published by the node container)
+--- fallback via port-forward ---
+{"service":"usms-results","pod":"usms-results-7fc784c47f-wxw86","campus":"rtc","version":"1.0.0"}
+

@@ -1,0 +1,27 @@
+== Step 18 Part 2: perturb 05:00:39 ==
+ Container floci  Stopping
+ Container floci  Stopped
+[1;34m==>[0m Floci stopped. State preserved in /home/pomegranateu/floci-data
+floci-floci-course-ecr-registry	Up 54 minutes
+floci-floci-course-ecs-b1aaeafac4844cb99157f68ee6c76654-enrolment-api	Exited (0) 6 days ago
+floci-floci-course-ecs-034c5d839cae43b7b96bbb3c56c51cb8-enrolment-api	Exited (0) 6 days ago
+floci-floci-course-ec2-i-d1df284410caddffb	Exited (255) 5 days ago
+floci-floci-course-ec2-i-9a2d1283522be5e45	Exited (255) 5 days ago
+floci-floci-course-ec2-i-4fe69d1237fb2fc6a	Exited (255) 5 days ago
+floci-floci-course-ec2-i-68c4cb27d85e381e8	Exited (255) 5 days ago
+floci	Exited (143) 5 seconds ago
+ Container floci  Started
+[1;34m==>[0m Waiting for the AWS endpoint to become healthy...
+[1;34m==>[0m Verified /app/data -> /home/pomegranateu/floci-data
+[1;34m==>[0m Floci is up at http://localhost:4566
+floci-floci-course-ecr-registry	Up 55 minutes
+floci-floci-course-ecs-b1aaeafac4844cb99157f68ee6c76654-enrolment-api	Exited (0) 6 days ago
+floci-floci-course-ecs-034c5d839cae43b7b96bbb3c56c51cb8-enrolment-api	Exited (0) 6 days ago
+floci-floci-course-ec2-i-d1df284410caddffb	Exited (255) 5 days ago
+floci-floci-course-ec2-i-9a2d1283522be5e45	Exited (255) 5 days ago
+floci-floci-course-ec2-i-4fe69d1237fb2fc6a	Exited (255) 5 days ago
+floci-floci-course-ec2-i-68c4cb27d85e381e8	Exited (255) 5 days ago
+floci	Up 32 seconds (healthy)
+
+To further debug and diagnose cluster problems, use 'kubectl cluster-info dump'.
+ACTIVE

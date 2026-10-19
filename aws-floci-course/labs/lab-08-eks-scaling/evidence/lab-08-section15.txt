@@ -1,0 +1,10 @@
+No resources found
+no cordoned nodes
+NAME                              READY   STATUS    RESTARTS   AGE
+usms-enrolment-7b6dd7cb84-8f58d   1/1     Running   0          22m
+usms-enrolment-7b6dd7cb84-stpzl   1/1     Running   0          21m
+usms-gateway-88dc87c84-g9fvb      1/1     Running   0          10m
+usms-gateway-88dc87c84-tlggg      1/1     Running   0          9m2s
+usms-results-7fc784c47f-r2c5f     1/1     Running   0          22m
+usms-results-7fc784c47f-wdd82     1/1     Running   0          22m
+usms-timetable-cf6b9c8fb-s72nr    1/1     Running   0          22m

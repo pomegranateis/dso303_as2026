@@ -1,0 +1,39 @@
+== Step 10 Part 1: before ==
+{
+    "Name": "usms-eks-nodes",
+    "Status": "ACTIVE",
+    "Scaling": {
+        "minSize": 2,
+        "maxSize": 4,
+        "desiredSize": 2
+    },
+    "Types": [
+        "t3.small"
+    ],
+    "Subnets": [
+        "subnet-704e2524",
+        "subnet-f9cff6ed"
+    ],
+    "Labels": {
+        "tier": "app",
+        "workload": "usms"
+    }
+}
+== Part 2: update-nodegroup-config ==
+
+An error occurred (400) when calling the UpdateNodegroupConfig operation: <?xml version="1.0" encoding="UTF-8"?><Error><Code>InvalidArgument</Code><Message>POST requires either ?uploads, ?uploadId, ?restore or ?select parameter.</Message><RequestId>db0a060e-e303-48d9-b726-cb221c06cb42</RequestId></Error>
+exit: 254
+list-updates: 
+An error occurred (404) when calling the ListUpdates operation: <?xml version="1.0" encoding="UTF-8"?><Error><Code>NoSuchBucket</Code><Message>The specified bucket does not exist.</Message><RequestId>a9beee10-d665-4153-8bef-d1e7a2c772b0</RequestId></Error>
+
+An error occurred (404) when calling the DescribeUpdate operation: <?xml version="1.0" encoding="UTF-8"?><Error><Code>NoSuchBucket</Code><Message>The specified bucket does not exist.</Message><RequestId>a0dffde8-c1d2-4c97-9ba6-9607c1b5dc5d</RequestId></Error>
+describe-update unsupported on this build
+== Part 3: both sides ==
+{
+    "minSize": 2,
+    "maxSize": 4,
+    "desiredSize": 2
+}
+--- and what Kubernetes actually sees ---
+NAME           STATUS   LABELS
+1bb1b7961450   Ready    <none>

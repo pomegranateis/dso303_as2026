@@ -1,0 +1,36 @@
+== 2026-10-19T04:05:37Z rebuild before Lab 08: record ACTIVE, k3s container absent ==
+dso202-control-plane
+dso202-worker
+dso202-worker2
+DELETING
+DELETING
+cluster record gone
+usms-eks-cluster	CREATING
+cluster: ACTIVE, endpoint https://localhost:6500
+usms-eks-nodes	ACTIVE
+Updated context usms-eks in /home/pomegranateu/.kube/usms-lab07
+1bb1b7961450   Ready   control-plane   1s     v1.34.1+k3s1
+c2b5a5615e74   Ready   control-plane   6d1h   v1.34.1+k3s1
+== k3s state came back from volume floci-floci-course-eks-usms-eks-cluster; old node c2b5a5615e74 is a ghost ==
+NAME           STATUS     ROLES           AGE    VERSION
+1bb1b7961450   Ready      control-plane   101s   v1.34.1+k3s1
+c2b5a5615e74   NotReady   control-plane   6d1h   v1.34.1+k3s1
+node "c2b5a5615e74" deleted
+Context "usms-eks" modified.
+Waiting for deployment "usms-enrolment" rollout to finish: 0 of 2 updated replicas are available...
+Waiting for deployment "usms-enrolment" rollout to finish: 1 out of 2 new replicas have been updated...
+Waiting for deployment "usms-enrolment" rollout to finish: 0 of 2 updated replicas are available...
+Waiting for deployment "usms-enrolment" rollout to finish: 1 of 2 updated replicas are available...
+deployment "usms-enrolment" successfully rolled out
+deployment "usms-results" successfully rolled out
+deployment "usms-gateway" successfully rolled out
+deployment "usms-timetable" successfully rolled out
+NAME                              READY   STATUS    RESTARTS   AGE   IP           NODE           NOMINATED NODE   READINESS GATES
+usms-enrolment-8549846ddd-qk4g9   1/1     Running   0          10s   10.42.1.5    1bb1b7961450   <none>           <none>
+usms-enrolment-8549846ddd-qntb9   1/1     Running   0          10s   10.42.1.10   1bb1b7961450   <none>           <none>
+usms-gateway-6875f67cdd-phl2w     1/1     Running   0          10s   10.42.1.6    1bb1b7961450   <none>           <none>
+usms-results-7fc784c47f-wxw86     1/1     Running   0          10s   10.42.1.9    1bb1b7961450   <none>           <none>
+usms-results-7fc784c47f-z9c6d     1/1     Running   0          10s   10.42.1.7    1bb1b7961450   <none>           <none>
+usms-timetable-cf6b9c8fb-2ghgw    1/1     Running   0          10s   10.42.1.8    1bb1b7961450   <none>           <none>
+--- secret wiring still present on enrolment? ---
+POD_NAME NODE_NAME ENROLMENT_API_TOKEN ENROLMENT_DB_PASSWORD 

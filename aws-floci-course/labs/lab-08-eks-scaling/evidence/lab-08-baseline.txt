@@ -1,0 +1,21 @@
+=== LAB 08 BASELINE 2026-10-19T04:09:40Z ===
+NAME             DESIRED   READY
+usms-enrolment   2         2
+usms-gateway     1         1
+usms-results     2         2
+usms-timetable   1         1
+--- endpoints ---
+NAME             ENDPOINTS                    AGE
+usms-enrolment   10.42.1.10:80,10.42.1.5:80   6d1h
+usms-gateway     10.42.1.6:80                 6d1h
+usms-results     10.42.1.7:80,10.42.1.9:80    6d1h
+usms-timetable   10.42.1.8:80                 6d1h
+--- service types ---
+NAME             TYPE        CLUSTERIP       EXTERNAL
+usms-enrolment   ClusterIP   10.43.121.90    <none>
+usms-gateway     ClusterIP   10.43.249.84    <none>
+usms-results     ClusterIP   10.43.80.200    <none>
+usms-timetable   ClusterIP   10.43.200.235   <none>
+--- nodes ---
+NAME           STATUS   CPU   MEM
+1bb1b7961450   Ready    20    16053556Ki

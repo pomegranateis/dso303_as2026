@@ -1,0 +1,48 @@
+== Environment ==
+  ok   Floci container running
+  ok   Storage mode is NOT memory
+  ok   AWS CLI reaches Floci
+  FAIL kubectl reaches an API server
+== Lab 07 dependencies ==
+  FAIL namespace usms exists
+  FAIL usms-enrolment has at least 2 ready replicas
+  FAIL usms-enrolment declares a cpu request (the HPA's denominator)
+  ok   cluster carries the _lb_ports_ tag (expect FAIL on Path B)
+== Lab 08: autoscaling ==
+  FAIL HorizontalPodAutoscaler usms-enrolment-hpa exists
+  FAIL HPA is autoscaling/v2 with a behavior block
+  FAIL HPA targets Deployment usms-enrolment
+  FAIL HPA minReplicas is 2
+  FAIL HPA maxReplicas is 8
+  FAIL HPA cpu target is 50
+  FAIL HPA scale-in stabilisation window is 300s
+== Lab 08: disruption budgets ==
+  FAIL PodDisruptionBudget usms-gateway-pdb exists
+  FAIL usms-gateway-pdb uses minAvailable 1
+  FAIL usms-enrolment-pdb uses maxUnavailable 1
+== Lab 08: exposure ladder ==
+  FAIL usms-results-np is a NodePort Service
+  FAIL usms-results-np is pinned to node port 30080
+  FAIL usms-results-np selects the same pods as usms-results
+  FAIL usms-gateway is now type LoadBalancer
+  FAIL usms-gateway kept a nodePort (each rung keeps the one below)
+  FAIL Ingress usms-portal-ingress exists
+  FAIL Ingress declares three paths
+  FAIL Ingress carries the ALB target-type annotation
+== Lab 08: data plane (expect FAIL on Path B, and on this build) ==
+  FAIL node group maxSize was raised to 6
+== Files and Git hygiene ==
+  ok   configs/lab-08.env exists
+  ok   configs/lab-08.env records the HPA bounds
+  ok   six or more Lab 08 manifests present
+  FAIL every Lab 08 manifest passes a client-side dry run
+  ok   hpa-watch.sh is executable
+  FAIL no secret is tracked by git
+  ok   .gitignore uses outputs/* not outputs/
+
+PASS=9  FAIL=25
+  ok   cluster carries the _lb_ports_ tag (expect FAIL on Path B)
+== Lab 08: data plane (expect FAIL on Path B, and on this build) ==
+  FAIL node group maxSize was raised to 6
+  FAIL no secret is tracked by git
+PASS=32  FAIL=2
