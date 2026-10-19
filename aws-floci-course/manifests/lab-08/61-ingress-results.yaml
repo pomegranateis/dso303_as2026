@@ -1,0 +1,38 @@
+# Lab 08 Exercise 4. The Examinations Office's results endpoint.
+# A SECOND Ingress object, but NOT a second load balancer: group.name puts its rules on the
+# same ALB as usms-portal-ingress (which carries the same group.name). One ALB, one bill.
+# The source-ip condition admits only the university network to this path, so the results
+# endpoint gets an exposure that /enrolment does not share. 203.0.113.0/24 is a
+# documentation range standing in for the university's real egress CIDR.
+# Rung 4 (Ingress) of the ladder, in front of rung 1 (the usms-results ClusterIP).
+# Inert locally: no AWS Load Balancer Controller runs in this cluster (Step 16).
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: usms-results-ingress
+  namespace: usms
+  labels:
+    app: usms-results
+    project: usms
+    lab: "05b"
+  annotations:
+    alb.ingress.kubernetes.io/group.name: usms-portal
+    alb.ingress.kubernetes.io/group.order: "10"
+    alb.ingress.kubernetes.io/scheme: internet-facing
+    alb.ingress.kubernetes.io/target-type: ip
+    alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80}]'
+    alb.ingress.kubernetes.io/healthcheck-path: /healthz
+    alb.ingress.kubernetes.io/conditions.usms-results: >
+      [{"field":"source-ip","sourceIpConfig":{"values":["203.0.113.0/24"]}}]
+    alb.ingress.kubernetes.io/tags: Project=USMS,Tier=web,Lab=08,Owner=ExaminationsOffice
+spec:
+  rules:
+    - http:
+        paths:
+          - path: /exam-results
+            pathType: Prefix
+            backend:
+              service:
+                name: usms-results
+                port:
+                  number: 80

@@ -1,0 +1,38 @@
+# Lab 08 Exercise 1. A read-mostly service: target 60% (a little more headroom per pod
+# before adding one), a shorter 180s scale-in window, and a gentler scale-up (+2 per 30s).
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: usms-results-hpa
+  namespace: usms
+  labels:
+    app: usms-results
+    project: usms
+    lab: "05b"
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: usms-results
+  minReplicas: 2
+  maxReplicas: 6
+  metrics:
+    - type: Resource
+      resource:
+        name: cpu
+        target:
+          type: Utilization
+          averageUtilization: 60
+  behavior:
+    scaleUp:
+      stabilizationWindowSeconds: 0
+      policies:
+        - type: Pods
+          value: 2
+          periodSeconds: 30
+    scaleDown:
+      stabilizationWindowSeconds: 180
+      policies:
+        - type: Pods
+          value: 1
+          periodSeconds: 60

@@ -1,0 +1,27 @@
+== Ex 1: results declares a cpu request? ==
+{"cpu":"50m","memory":"32Mi"}
+== client-side dry run first ==
+horizontalpodautoscaler.autoscaling/usms-results-hpa created (dry run)
+horizontalpodautoscaler.autoscaling/usms-results-hpa created
+NAME                 REFERENCE                   TARGETS       MINPODS   MAXPODS   REPLICAS   AGE
+usms-enrolment-hpa   Deployment/usms-enrolment   cpu: 2%/50%   2         8         2          11m
+usms-results-hpa     Deployment/usms-results     cpu: 2%/60%   2         6         2          41s
+Behavior:
+  Scale Up:
+    Stabilization Window: 0 seconds
+    Select Policy: Max
+    Policies:
+      - Type: Pods  Value: 2  Period: 30 seconds
+  Scale Down:
+    Stabilization Window: 180 seconds
+    Select Policy: Max
+    Policies:
+      - Type: Pods  Value: 1  Period: 60 seconds
+Deployment pods:    2 current / 2 desired
+Conditions:
+  Type            Status  Reason               Message
+  ----            ------  ------               -------
+  AbleToScale     True    ScaleDownStabilized  recent recommendations were higher than current one, applying the highest recent recommendation
+  ScalingActive   True    ValidMetricFound     the HPA was able to successfully calculate a replica count from cpu resource utilization (percentage of request)
+  ScalingLimited  False   DesiredWithinRange   the desired count is within the acceptable range
+Events:           <none>

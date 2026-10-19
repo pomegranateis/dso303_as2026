@@ -1,0 +1,91 @@
+== Ex 2: before ==
+NAME               MIN AVAILABLE   MAX UNAVAILABLE   ALLOWED DISRUPTIONS   AGE
+usms-gateway-pdb   1               N/A               0                     11m
+== diff before apply ==
+-  generation: 1
++  generation: 2
+-  replicas: 1
++  replicas: 2
++      topologySpreadConstraints:
++      - labelSelector:
++          matchLabels:
++            app: usms-gateway
++        maxSkew: 1
++        topologyKey: kubernetes.io/hostname
++        whenUnsatisfiable: ScheduleAnyway
+-    service.beta.kubernetes.io/aws-load-balancer-nlb-target-type: ip
+-    service.beta.kubernetes.io/aws-load-balancer-scheme: internet-facing
+-    service.beta.kubernetes.io/aws-load-balancer-type: external
+-    lab: 05b
+-    project: usms
+-  allocateLoadBalancerNodePorts: true
+-  externalTrafficPolicy: Cluster
+-    nodePort: 32473
+-  type: LoadBalancer
++  type: ClusterIP
+-  loadBalancer:
+-    ingress:
+-    - ip: 172.17.0.3
+-      ipMode: VIP
++  loadBalancer: {}
+configmap/usms-gateway-conf unchanged
+deployment.apps/usms-gateway configured
+service/usms-gateway configured
+--- re-apply Lab 08's Service so the gateway stays LoadBalancer (40-gateway.yaml also declares it as ClusterIP) ---
+service/usms-gateway configured
+Waiting for deployment "usms-gateway" rollout to finish: 1 out of 2 new replicas have been updated...
+Waiting for deployment "usms-gateway" rollout to finish: 1 out of 2 new replicas have been updated...
+Waiting for deployment "usms-gateway" rollout to finish: 1 out of 2 new replicas have been updated...
+Waiting for deployment "usms-gateway" rollout to finish: 1 out of 2 new replicas have been updated...
+Waiting for deployment "usms-gateway" rollout to finish: 1 old replicas are pending termination...
+Waiting for deployment "usms-gateway" rollout to finish: 1 old replicas are pending termination...
+deployment "usms-gateway" successfully rolled out
+== after ==
+NAME               MIN AVAILABLE   MAX UNAVAILABLE   ALLOWED DISRUPTIONS   AGE
+usms-gateway-pdb   1               N/A               1                     12m
+NAME                           READY   STATUS    RESTARTS   AGE   IP           NODE           NOMINATED NODE   READINESS GATES
+usms-gateway-88dc87c84-99b7q   1/1     Running   0          12s   10.42.0.18   4d622ea57c95   <none>           <none>
+usms-gateway-88dc87c84-g9fvb   1/1     Running   0          18s   10.42.0.16   4d622ea57c95   <none>           <none>
+usms-gateway   LoadBalancer   10.43.69.199   172.17.0.3   80:30697/TCP   12m
+== clean diff (both files) ==
+40-gateway.yaml diff exit: 1  (1 expected: its Service says ClusterIP)
+-    service.beta.kubernetes.io/aws-load-balancer-nlb-target-type: ip
+-    service.beta.kubernetes.io/aws-load-balancer-scheme: internet-facing
+-    service.beta.kubernetes.io/aws-load-balancer-type: external
+-    lab: 05b
+-    project: usms
+-  allocateLoadBalancerNodePorts: true
+-  externalTrafficPolicy: Cluster
+-    nodePort: 30697
+-  type: LoadBalancer
++  type: ClusterIP
+-  loadBalancer:
+-    ingress:
+-    - ip: 172.17.0.3
+-      ipMode: VIP
++  loadBalancer: {}
+== Ex 2: clean diffs after moving the Service ==
+40-gateway.yaml diff exit: 0
+50-service-loadbalancer.yaml diff exit: 0
+NAME               MIN AVAILABLE   MAX UNAVAILABLE   ALLOWED DISRUPTIONS   AGE
+usms-gateway-pdb   1               N/A               1                     12m
+NAME                           READY   STATUS    RESTARTS   AGE   IP           NODE           NOMINATED NODE   READINESS GATES
+usms-gateway-88dc87c84-99b7q   1/1     Running   0          43s   10.42.0.18   4d622ea57c95   <none>           <none>
+usms-gateway-88dc87c84-g9fvb   1/1     Running   0          49s   10.42.0.16   4d622ea57c95   <none>           <none>
+usms-gateway   LoadBalancer   10.43.69.199   172.17.0.3   80:30697/TCP   12m
+== prove it: a real drain now completes (single node, so pods go Pending and come back on uncordon) ==
+== Ex 2 proof: the same eviction API call Step 12 refused ==
+{"kind":"Status","apiVersion":"v1","metadata":{},"status":"Success","code":201}
+
+eviction exit: 0
+NAME               MIN AVAILABLE   MAX UNAVAILABLE   ALLOWED DISRUPTIONS   AGE
+usms-gateway-pdb   1               N/A               0                     13m
+--- a second eviction straight away is refused: the floor of 1 is still enforced ---
+Error from server (TooManyRequests): Cannot evict pod as it would violate the pod's disruption budget.
+Waiting for deployment "usms-gateway" rollout to finish: 1 of 2 updated replicas are available...
+deployment "usms-gateway" successfully rolled out
+NAME                           READY   STATUS    RESTARTS   AGE
+usms-gateway-88dc87c84-g9fvb   1/1     Running   0          88s
+usms-gateway-88dc87c84-tlggg   1/1     Running   0          8s
+NAME               MIN AVAILABLE   MAX UNAVAILABLE   ALLOWED DISRUPTIONS   AGE
+usms-gateway-pdb   1               N/A               1                     13m

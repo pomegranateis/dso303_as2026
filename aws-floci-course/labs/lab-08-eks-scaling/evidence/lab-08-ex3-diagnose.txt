@@ -1,0 +1,26 @@
+deployment.apps/usms-reports created
+horizontalpodautoscaler.autoscaling/usms-reports-hpa created
+== 1. what does the HPA report? ==
+NAME               REFERENCE                 TARGETS       MINPODS   MAXPODS   REPLICAS   AGE
+usms-reports-hpa   Deployment/usms-reports   cpu: 0%/70%   4         4         4          61s
+== 2. its conditions, all three ==
+Conditions:
+  Type            Status  Reason               Message
+  ----            ------  ------               -------
+  AbleToScale     True    ScaleDownStabilized  recent recommendations were higher than current one, applying the highest recent recommendation
+  ScalingActive   True    ValidMetricFound     the HPA was able to successfully calculate a replica count from cpu resource utilization (percentage of request)
+  ScalingLimited  True    TooFewReplicas       the desired replica count is less than the minimum replica count
+Events:
+  Type    Reason             Age   From                       Message
+  ----    ------             ----  ----                       -------
+  Normal  SuccessfulRescale  46s   horizontal-pod-autoscaler  New size: 4; reason: Current number of replicas below Spec.MinReplicas
+== 3. what did the pods actually get? (no limits-only shortcut) ==
+POD                            QOS          REQ                          LIM
+usms-reports-89c744c64-9wdsf   Guaranteed   map[cpu:200m memory:128Mi]   map[cpu:200m memory:128Mi]
+usms-reports-89c744c64-brnvf   Guaranteed   map[cpu:200m memory:128Mi]   map[cpu:200m memory:128Mi]
+usms-reports-89c744c64-nhkm6   Guaranteed   map[cpu:200m memory:128Mi]   map[cpu:200m memory:128Mi]
+usms-reports-89c744c64-tdpss   Guaranteed   map[cpu:200m memory:128Mi]   map[cpu:200m memory:128Mi]
+deployment template requests: 
+== 4. replicas vs the clamp ==
+deployment spec.replicas=4
+min=4 max=4

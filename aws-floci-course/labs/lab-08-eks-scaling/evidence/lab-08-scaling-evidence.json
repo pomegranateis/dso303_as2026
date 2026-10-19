@@ -1,0 +1,118 @@
+{
+  "generatedAt": "2026-10-19T05:23:55Z",
+  "source": "live kubectl and aws calls against Floci 1.5.34 (usms-eks-cluster)",
+  "hpa": {
+    "name": "usms-enrolment-hpa",
+    "apiVersion": "autoscaling/v2",
+    "spec": {
+      "behavior": {
+        "scaleDown": {
+          "policies": [
+            {
+              "periodSeconds": 60,
+              "type": "Pods",
+              "value": 1
+            }
+          ],
+          "selectPolicy": "Min",
+          "stabilizationWindowSeconds": 300
+        },
+        "scaleUp": {
+          "policies": [
+            {
+              "periodSeconds": 15,
+              "type": "Percent",
+              "value": 100
+            },
+            {
+              "periodSeconds": 15,
+              "type": "Pods",
+              "value": 2
+            }
+          ],
+          "selectPolicy": "Max",
+          "stabilizationWindowSeconds": 0
+        }
+      },
+      "maxReplicas": 8,
+      "metrics": [
+        {
+          "resource": {
+            "name": "cpu",
+            "target": {
+              "averageUtilization": 50,
+              "type": "Utilization"
+            }
+          },
+          "type": "Resource"
+        }
+      ],
+      "minReplicas": 2,
+      "scaleTargetRef": {
+        "apiVersion": "apps/v1",
+        "kind": "Deployment",
+        "name": "usms-enrolment"
+      }
+    },
+    "status": {
+      "conditions": [
+        {
+          "lastTransitionTime": "2026-10-19T05:02:32Z",
+          "message": "recommended size matches current size",
+          "reason": "ReadyForNewScale",
+          "status": "True",
+          "type": "AbleToScale"
+        },
+        {
+          "lastTransitionTime": "2026-10-19T05:03:32Z",
+          "message": "the HPA was able to successfully calculate a replica count from cpu resource utilization (percentage of request)",
+          "reason": "ValidMetricFound",
+          "status": "True",
+          "type": "ScalingActive"
+        },
+        {
+          "lastTransitionTime": "2026-10-19T05:07:32Z",
+          "message": "the desired replica count is less than the minimum replica count",
+          "reason": "TooFewReplicas",
+          "status": "True",
+          "type": "ScalingLimited"
+        }
+      ],
+      "currentMetrics": [
+        {
+          "resource": {
+            "current": {
+              "averageUtilization": 2,
+              "averageValue": "1m"
+            },
+            "name": "cpu"
+          },
+          "type": "Resource"
+        }
+      ],
+      "currentReplicas": 2,
+      "desiredReplicas": 2
+    }
+  },
+  "deployment": {
+    "name": "usms-enrolment",
+    "specReplicas": 2,
+    "readyReplicas": 2,
+    "cpuRequest": "50m",
+    "nodeSelector": {
+      "workload": "usms"
+    }
+  },
+  "nodegroup": {
+    "name": "usms-eks-nodes",
+    "scalingConfig": {
+      "minSize": 2,
+      "maxSize": 4,
+      "desiredSize": 2
+    },
+    "note": "maxSize 6 / desired 3 was requested in Step 10 but update-nodegroup-config is not implemented on this build (HTTP 400 InvalidArgument from the S3 handler), so this is still Lab 07's 2/4/2. No node was added."
+  },
+  "kubernetesNodes": [
+    "4d622ea57c95"
+  ]
+}

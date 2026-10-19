@@ -1,0 +1,29 @@
+== Ex 4 ==
+ingress.networking.k8s.io/usms-results-ingress created (dry run)
+ingress.networking.k8s.io/usms-portal-ingress configured
+ingress.networking.k8s.io/usms-results-ingress created
+NAME                   CLASS    HOSTS   ADDRESS   PORTS   AGE
+usms-portal-ingress    <none>   *                 80      20m
+usms-results-ingress   <none>   *                 80      6s
+Rules:
+  Host        Path  Backends
+  ----        ----  --------
+  *           
+              /exam-results   usms-results:80 (10.42.0.4:80,10.42.0.5:80)
+Annotations:  alb.ingress.kubernetes.io/conditions.usms-results: [{"field":"source-ip","sourceIpConfig":{"values":["203.0.113.0/24"]}}]
+              alb.ingress.kubernetes.io/group.name: usms-portal
+              alb.ingress.kubernetes.io/group.order: 10
+              alb.ingress.kubernetes.io/healthcheck-path: /healthz
+              alb.ingress.kubernetes.io/listen-ports: [{"HTTP": 80}]
+              alb.ingress.kubernetes.io/scheme: internet-facing
+              alb.ingress.kubernetes.io/tags: Project=USMS,Tier=web,Lab=08,Owner=ExaminationsOffice
+              alb.ingress.kubernetes.io/target-type: ip
+Events:       <none>
+--- what the build CAN show: results at a stable address, on port 80, today (rung 3) ---
+{"service":"usms-results","pod":"usms-results-7fc784c47f-r2c5f","campus":"rtc","version":"1.0.0"}
+--- and that the Ingress backend itself answers under its own path (in-cluster, ClusterIP) ---
+{"service":"usms-results","pod":"usms-results-7fc784c47f-wdd82","campus":"rtc","version":"1.0.0"}
+pod "usms-debug" deleted from usms namespace
+NAME                   GROUP         ORDER   PATHS
+usms-portal-ingress    usms-portal   20      /enrolment,/results,/
+usms-results-ingress   usms-portal   10      /exam-results

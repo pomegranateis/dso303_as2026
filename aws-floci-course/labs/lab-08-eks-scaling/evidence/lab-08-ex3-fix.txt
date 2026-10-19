@@ -1,0 +1,26 @@
+== apply the fixed manifest ==
+deployment.apps/usms-reports configured
+horizontalpodautoscaler.autoscaling/usms-reports-hpa configured
+POD                             QOS         REQ   LIM
+usms-reports-6cc5dfbc65-ddzhp   Burstable   50m   200m
+usms-reports-6cc5dfbc65-xg8gf   Burstable   50m   200m
+NAME               REFERENCE                 TARGETS       MINPODS   MAXPODS   REPLICAS   AGE
+usms-reports-hpa   Deployment/usms-reports   cpu: 0%/70%   2         4         2          3m19s
+Conditions:
+  Type            Status  Reason               Message
+  ----            ------  ------               -------
+  AbleToScale     True    ScaleDownStabilized  recent recommendations were higher than current one, applying the highest recent recommendation
+  ScalingActive   True    ValidMetricFound     the HPA was able to successfully calculate a replica count from cpu resource utilization (percentage of request)
+  ScalingLimited  False   DesiredWithinRange   the desired count is within the acceptable range
+Events:
+deployment.apps "usms-reports" deleted from usms namespace
+horizontalpodautoscaler.autoscaling "usms-reports-hpa" deleted from usms namespace
+NAME                             READY   UP-TO-DATE   AVAILABLE   AGE
+deployment.apps/usms-enrolment   2/2     2            2           20m
+deployment.apps/usms-gateway     2/2     2            2           20m
+deployment.apps/usms-results     2/2     2            2           20m
+deployment.apps/usms-timetable   1/1     1            1           20m
+
+NAME                                                     REFERENCE                   TARGETS       MINPODS   MAXPODS   REPLICAS   AGE
+horizontalpodautoscaler.autoscaling/usms-enrolment-hpa   Deployment/usms-enrolment   cpu: 2%/50%   2         8         2          20m
+horizontalpodautoscaler.autoscaling/usms-results-hpa     Deployment/usms-results     cpu: 2%/60%   2         6         2          9m24s

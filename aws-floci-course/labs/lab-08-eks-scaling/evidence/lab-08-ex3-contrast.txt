@@ -1,0 +1,10 @@
+== contrast: the same Deployment with NO resources at all (BestEffort) ==
+deployment.apps/usms-reports patched
+POD                             QOS
+usms-reports-5d948cf458-7mx7f   BestEffort
+usms-reports-5d948cf458-qn6t5   BestEffort
+NAME               REFERENCE                 TARGETS              MINPODS   MAXPODS   REPLICAS   AGE
+usms-reports-hpa   Deployment/usms-reports   cpu: <unknown>/70%   4         4         4          2m13s
+  ScalingActive   False   FailedGetResourceMetric  the HPA was unable to compute the replica count: failed to get cpu utilization: missing request for cpu in container reports of Pod usms-reports-5d948cf458-sg8ds
+  Warning  FailedGetResourceMetric       29s   horizontal-pod-autoscaler  failed to get cpu utilization: missing request for cpu in container reports of Pod usms-reports-5d948cf458-7mx7f
+  Warning  FailedComputeMetricsReplicas  29s   horizontal-pod-autoscaler  invalid metrics (1 invalid out of 1), first error is: failed to get cpu resource metric value: failed to get cpu utilization: missing request for cpu in container reports of Pod usms-reports-5d948cf458-7mx7f

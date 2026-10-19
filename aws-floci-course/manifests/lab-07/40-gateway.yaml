@@ -50,7 +50,9 @@ metadata:
     project: usms
     tier: web
 spec:
-  replicas: 1
+  # Lab 08 Exercise 2. Two replicas, so usms-gateway-pdb (minAvailable 1) allows one
+  # voluntary disruption and a node drain can finish. The PDB is unchanged.
+  replicas: 2
   revisionHistoryLimit: 5
   selector:
     matchLabels:
@@ -62,6 +64,15 @@ spec:
         project: usms
         tier: web
     spec:
+      # Lab 08 Exercise 2. Prefer different nodes, so one drain or node loss never
+      # takes both. ScheduleAnyway: with one node (this build) both still schedule.
+      topologySpreadConstraints:
+        - maxSkew: 1
+          topologyKey: kubernetes.io/hostname
+          whenUnsatisfiable: ScheduleAnyway
+          labelSelector:
+            matchLabels:
+              app: usms-gateway
       containers:
         - name: gateway
           image: nginx:1.27-alpine
@@ -97,18 +108,6 @@ spec:
           configMap:
             name: usms-gateway-conf
 ---
-apiVersion: v1
-kind: Service
-metadata:
-  name: usms-gateway
-  namespace: usms
-  labels:
-    app: usms-gateway
-spec:
-  type: ClusterIP
-  selector:
-    app: usms-gateway
-  ports:
-    - name: http
-      port: 80
-      targetPort: http
+# The usms-gateway Service (ClusterIP in Lab 07) moved to
+# manifests/lab-08/50-service-loadbalancer.yaml in Lab 08, which redefines it as type
+# LoadBalancer. One object, one file: re-applying this file used to turn it back into ClusterIP.
