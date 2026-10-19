@@ -1,0 +1,12 @@
+# Lab 08 Exercise 5 part 2 - readiness for Lab 10, re-derived from IAM, S3 and the cluster 2026-10-19T05:24:23Z
+policy ARN          : arn:aws:iam::000000000000:policy/USMSStudentDataReadWrite (default version v1)
+roles carrying it   : usms-ec2-app-role usms-ecs-task-role usms-eks-node-role   (found role by role: list-entities-for-policy is unsupported on this build)
+bucket ARN          : arn:aws:s3:::usms-student-data   (read out of the policy document's Resource, not copied from Lab 07)
+bucket exists?      : no - head-bucket exit 254: An error occurred (404) when calling the HeadBucket operation: Not Found
+ServiceAccount      : usms/usms-enrolment-sa   (Lab 07 Step 21; kubectl get sa answered: usms-enrolment-sa)
+IRSA annotation     : eks.amazonaws.com/role-arn: arn:aws:iam::000000000000:role/usms-enrolment-irsa-role
+  - a NEW role, created for this one ServiceAccount, trusting the cluster's OIDC provider with the condition
+    sub = system:serviceaccount:usms:usms-enrolment-sa, carrying USMSStudentDataReadWrite.
+  - NOT usms-eks-node-role: that role belongs to the node, so every pod on the node inherits it today.
+    IRSA's point is to narrow access from "every pod on the node" to "pods running as this one ServiceAccount".
+  - not created on this build: the cluster's OIDC issuer is "None", so no IAM OIDC provider can be registered.
