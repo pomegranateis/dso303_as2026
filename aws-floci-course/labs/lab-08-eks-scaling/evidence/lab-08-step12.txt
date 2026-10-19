@@ -1,0 +1,22 @@
+== Step 12 Part 1 ==
+poddisruptionbudget.policy/usms-gateway-pdb created
+poddisruptionbudget.policy/usms-enrolment-pdb configured
+NAME                 MIN AVAILABLE   MAX UNAVAILABLE   ALLOWED DISRUPTIONS   AGE
+usms-enrolment-pdb   N/A             1                 1                     6d1h
+usms-gateway-pdb     1               N/A               0                     4s
+enrolment-pdb spec: {"maxUnavailable":1,"selector":{"matchLabels":{"app":"usms-enrolment"}}}
+== Part 2: eviction API ==
+gateway is on node: 1bb1b7961450
+Error from server (TooManyRequests): Cannot evict pod as it would violate the pod's disruption budget.
+--- plain delete, which a PDB does NOT govern ---
+pod "usms-gateway-6875f67cdd-btgs7" deleted from usms namespace
+NAME                            READY   STATUS    RESTARTS   AGE
+usms-gateway-6875f67cdd-7fgms   0/1     Running   0          2s
+== Part 3: drain dry run ==
+evicting pod usms/usms-gateway-6875f67cdd-7fgms (dry run)
+evicting pod usms/usms-results-7fc784c47f-wxw86 (dry run)
+evicting pod usms/usms-results-7fc784c47f-z9c6d (dry run)
+evicting pod usms/usms-timetable-cf6b9c8fb-2ghgw (dry run)
+node/1bb1b7961450 drained (dry run)
+NAME           STATUS   ROLES           AGE   VERSION
+1bb1b7961450   Ready    control-plane   24m   v1.34.1+k3s1

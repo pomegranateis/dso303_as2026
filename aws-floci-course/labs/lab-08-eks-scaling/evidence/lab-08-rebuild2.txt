@@ -1,0 +1,74 @@
+== rebuild after Step 18 restart 05:01:53 ==
+DELETING
+DELETING
+cluster record gone
+usms-eks-cluster	CREATING
+cluster: ACTIVE
+usms-eks-nodes	ACTIVE
+Updated context usms-eks in /home/pomegranateu/.kube/usms-lab07
+NAME           STATUS   ROLES           AGE   VERSION
+4d622ea57c95   Ready    control-plane   9s    v1.34.1+k3s1
+node/4d622ea57c95 labeled
+== kubectl apply -f manifests/lab-07/ ==
+namespace/usms created
+configmap/usms-app-config created
+configmap/usms-enrolment-conf created
+deployment.apps/usms-enrolment created
+service/usms-enrolment created
+configmap/usms-results-conf created
+deployment.apps/usms-results created
+service/usms-results created
+configmap/usms-gateway-conf created
+deployment.apps/usms-gateway created
+service/usms-gateway created
+secret/usms-enrolment-secret created
+serviceaccount/usms-enrolment-sa created
+configmap/usms-timetable-conf created
+deployment.apps/usms-timetable created
+service/usms-timetable created
+Context "usms-eks" modified.
+deployment.apps/usms-enrolment env updated
+== kubectl apply manifests/lab-08 (all except 20-loadgen) ==
+horizontalpodautoscaler.autoscaling/usms-enrolment-hpa created
+skipped manifests/lab-08/20-loadgen.yaml (would start load)
+poddisruptionbudget.policy/usms-gateway-pdb created
+poddisruptionbudget.policy/usms-enrolment-pdb created
+service/usms-results-np created
+service/usms-gateway configured
+ingress.networking.k8s.io/usms-portal-ingress created
+Waiting for deployment "usms-enrolment" rollout to finish: 1 out of 2 new replicas have been updated...
+Waiting for deployment "usms-enrolment" rollout to finish: 1 out of 2 new replicas have been updated...
+Waiting for deployment "usms-enrolment" rollout to finish: 1 out of 2 new replicas have been updated...
+Waiting for deployment "usms-enrolment" rollout to finish: 1 out of 2 new replicas have been updated...
+Waiting for deployment "usms-enrolment" rollout to finish: 1 old replicas are pending termination...
+Waiting for deployment "usms-enrolment" rollout to finish: 1 old replicas are pending termination...
+deployment "usms-enrolment" successfully rolled out
+deployment "usms-results" successfully rolled out
+deployment "usms-gateway" successfully rolled out
+deployment "usms-timetable" successfully rolled out
+NAME                             READY   UP-TO-DATE   AVAILABLE   AGE
+deployment.apps/usms-enrolment   2/2     2            2           51s
+deployment.apps/usms-gateway     1/1     1            1           51s
+deployment.apps/usms-results     2/2     2            2           51s
+deployment.apps/usms-timetable   1/1     1            1           51s
+
+NAME                      TYPE           CLUSTER-IP     EXTERNAL-IP   PORT(S)        AGE
+service/usms-enrolment    ClusterIP      10.43.226.70   <none>        80/TCP         51s
+service/usms-gateway      LoadBalancer   10.43.69.199   172.17.0.3    80:32473/TCP   51s
+service/usms-results      ClusterIP      10.43.116.30   <none>        80/TCP         51s
+service/usms-results-np   NodePort       10.43.143.2    <none>        80:30080/TCP   48s
+service/usms-timetable    ClusterIP      10.43.60.253   <none>        80/TCP         51s
+
+NAME                                                     REFERENCE                   TARGETS              MINPODS   MAXPODS   REPLICAS   AGE
+horizontalpodautoscaler.autoscaling/usms-enrolment-hpa   Deployment/usms-enrolment   cpu: <unknown>/50%   2         8         2          49s
+
+NAME                                            MIN AVAILABLE   MAX UNAVAILABLE   ALLOWED DISRUPTIONS   AGE
+poddisruptionbudget.policy/usms-enrolment-pdb   N/A             1                 1                     48s
+poddisruptionbudget.policy/usms-gateway-pdb     1               N/A               0                     48s
+
+NAME                                            CLASS    HOSTS   ADDRESS   PORTS   AGE
+ingress.networking.k8s.io/usms-portal-ingress   <none>   *                 80      46s
+usms-web-02	running
+usms-web-01	running
+usms-db-01	running
+usms-db-02	running

@@ -1,0 +1,50 @@
+=============== ECS / ALB / Application Auto Scaling ===============
+{
+    "Desired": 2,
+    "Running": 2,
+    "TaskDef": "usms-enrolment:2",
+    "LB": "arn:aws:elasticloadbalancing:us-east-1:000000000000:targetgroup/usms-enrolment-tg/2414901868f64c56",
+    "Grace": null
+}
+
+An error occurred (UnknownOperationException) when calling the DescribeScalableTargets operation: Unknown operation: AnyScaleFrontendService.DescribeScalableTargets
+
+An error occurred (UnknownOperationException) when calling the DescribeScalingPolicies operation: Unknown operation: AnyScaleFrontendService.DescribeScalingPolicies
+{
+    "Type": "ip",
+    "Port": 80,
+    "HC": "/"
+}
+---------------------
+|   DescribeRules   |
++----------+--------+
+|     P    | Path   |
++----------+--------+
+|  10      |  None  |
+|  default |  None  |
++----------+--------+
+
+=============== EKS / Ingress / HorizontalPodAutoscaler ===============
+NAME                             READY   UP-TO-DATE   AVAILABLE   AGE
+deployment.apps/usms-enrolment   2/2     2            2           6d2h
+deployment.apps/usms-gateway     1/1     1            1           6d2h
+deployment.apps/usms-loadgen     0/0     0            0           31m
+deployment.apps/usms-results     2/2     2            2           6d2h
+deployment.apps/usms-timetable   1/1     1            1           6d2h
+
+NAME                                                     REFERENCE                   TARGETS       MINPODS   MAXPODS   REPLICAS   AGE
+horizontalpodautoscaler.autoscaling/usms-enrolment-hpa   Deployment/usms-enrolment   cpu: 2%/50%   2         8         2          32m
+
+NAME                      TYPE           CLUSTER-IP      EXTERNAL-IP   PORT(S)        AGE
+service/usms-enrolment    ClusterIP      10.43.121.90    <none>        80/TCP         6d2h
+service/usms-gateway      LoadBalancer   10.43.249.84    172.17.0.3    80:31591/TCP   6d2h
+service/usms-results      ClusterIP      10.43.80.200    <none>        80/TCP         6d2h
+service/usms-results-np   NodePort       10.43.162.179   <none>        80:30080/TCP   13m
+service/usms-timetable    ClusterIP      10.43.200.235   <none>        80/TCP         6d2h
+
+NAME                                            CLASS    HOSTS   ADDRESS   PORTS   AGE
+ingress.networking.k8s.io/usms-portal-ingress   <none>   *                 80      12m
+
+NAME                                            MIN AVAILABLE   MAX UNAVAILABLE   ALLOWED DISRUPTIONS   AGE
+poddisruptionbudget.policy/usms-enrolment-pdb   N/A             1                 1                     6d1h
+poddisruptionbudget.policy/usms-gateway-pdb     1               N/A               0                     17m

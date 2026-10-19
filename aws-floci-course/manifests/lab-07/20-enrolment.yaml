@@ -49,6 +49,9 @@ spec:
         project: usms
         tier: app
     spec:
+      # Lab 08 Step 11. Hard constraint, using the node group's label workload=usms.
+      nodeSelector:
+        workload: usms
       # Exercise 4. Spread the replicas across nodes. ScheduleAnyway makes this advisory:
       # with one node (this Floci build) both pods still schedule, side by side.
       topologySpreadConstraints:
@@ -120,20 +123,6 @@ spec:
     - name: http
       port: 80
       targetPort: http
----
-# Exercise 4. Enforced: a voluntary disruption (a node drain, a node group upgrade)
-# may never take usms-enrolment below one ready pod.
-apiVersion: policy/v1
-kind: PodDisruptionBudget
-metadata:
-  name: usms-enrolment-pdb
-  namespace: usms
-  labels:
-    app: usms-enrolment
-    project: usms
-    tier: app
-spec:
-  minAvailable: 1
-  selector:
-    matchLabels:
-      app: usms-enrolment
+# Exercise 4's PodDisruptionBudget usms-enrolment-pdb (minAvailable 1) moved to
+# manifests/lab-08/30-pdb-gateway.yaml in Lab 08 Step 12, which redefines it as
+# maxUnavailable 1. One object, one file: two files declaring it would undo each other.

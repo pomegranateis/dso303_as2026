@@ -1,0 +1,50 @@
+== Step 6 Part 1: QoS classes ==
+NAME                              QOS         CPUREQ   CPULIM   MEMREQ   MEMLIM
+usms-enrolment-8549846ddd-qk4g9   Burstable   50m      200m     32Mi     128Mi
+usms-enrolment-8549846ddd-qntb9   Burstable   50m      200m     32Mi     128Mi
+usms-gateway-6875f67cdd-phl2w     Burstable   50m      200m     32Mi     128Mi
+usms-results-7fc784c47f-wxw86     Burstable   50m      200m     32Mi     128Mi
+usms-results-7fc784c47f-z9c6d     Burstable   50m      200m     32Mi     128Mi
+usms-timetable-cf6b9c8fb-2ghgw    Burstable   50m      200m     32Mi     128Mi
+== Part 2: scheduler arithmetic ==
+inspecting node: 1bb1b7961450
+Capacity:
+  cpu:                20
+  ephemeral-storage:  481844084Ki
+  hugepages-1Gi:      0
+  hugepages-2Mi:      0
+  memory:             16053556Ki
+  pods:               110
+Allocatable:
+  cpu:                20
+  ephemeral-storage:  468737924548
+  hugepages-1Gi:      0
+  hugepages-2Mi:      0
+  memory:             16053556Ki
+  pods:               110
+System Info:
+Allocated resources:
+  (Total limits may be over 100 percent, i.e., overcommitted.)
+  Resource           Requests    Limits
+  --------           --------    ------
+  cpu                500m (2%)   1200m (6%)
+  memory             332Mi (2%)  938Mi (5%)
+  ephemeral-storage  0 (0%)      0 (0%)
+  hugepages-1Gi      0 (0%)      0 (0%)
+  hugepages-2Mi      0 (0%)      0 (0%)
+Events:
+== Part 3: the denominator ==
+request        : 50m
+HPA target 50% : 50% of 50m per pod, i.e. 25m average across all pods
+== Your turn: gateway Burstable -> Guaranteed -> Burstable ==
+before:
+usms-gateway-6875f67cdd-phl2w   Burstable   map[cpu:50m memory:32Mi]   map[cpu:200m memory:128Mi]
+deployment.apps/usms-gateway resource requirements updated
+guaranteed (requests = limits):
+usms-gateway-568f89d6-9qcmp   Guaranteed   map[cpu:200m memory:128Mi]   map[cpu:200m memory:128Mi]
+restored from manifests/lab-07/40-gateway.yaml:
+usms-gateway-6875f67cdd-btgs7   Burstable   map[cpu:50m memory:32Mi]   map[cpu:200m memory:128Mi]
+1         <none>
+3         <none>
+4         <none>
+

@@ -1,0 +1,37 @@
+== Step 15 ==
+service/usms-gateway configured
+NAME           TYPE           CLUSTER-IP     EXTERNAL-IP   PORT(S)        AGE    SELECTOR
+usms-gateway   LoadBalancer   10.43.249.84   <pending>     80:31591/TCP   6d1h   app=usms-gateway
+NAME           TYPE           CLUSTER-IP     EXTERNAL-IP   PORT(S)        AGE
+usms-gateway   LoadBalancer   10.43.249.84   <pending>     80:31591/TCP   6d1h
+usms-gateway   LoadBalancer   10.43.249.84   172.17.0.3    80:31591/TCP   6d1h
+--- reach it ---
+  localhost:8081: no answer
+
+  localhost:8083: no answer
+
+EXTERNAL-IP = 172.17.0.3
+--- the auto-allocated nodePort 31591 on the node address ---
+{"service":"usms-gateway","pod":"usms-gateway-6875f67cdd-7fgms","routes":["/enrolment/","/results/","/timetable/"]}
+
+Events:
+  Type    Reason                Age   From                   Message
+  ----    ------                ----  ----                   -------
+  Normal  EnsuringLoadBalancer  63s   service-controller     Ensuring load balancer
+  Normal  AppliedDaemonSet      63s   service-lb-controller  Applied LoadBalancer DaemonSet kube-system/svclb-usms-gateway-0759fc3f
+  Normal  UpdatedLoadBalancer   46s   service-lb-controller  Updated LoadBalancer with new IPs: [] -> [172.17.0.3]
+no servicelb / cloud-controller pods
+--- the ladder in one line ---
+type=LoadBalancer  clusterIP=10.43.249.84  nodePort=31591  external=172.17.0.3
+--- does the gateway still route by name? ---
+{"service":"usms-results","pod":"usms-results-7fc784c47f-wxw86","campus":"rtc","version":"1.0.0"}
+pod "usms-debug" deleted from usms namespace
+--- svclb pods ---
+svclb-usms-gateway-0759fc3f-6ws8l         1/1     Running   0          75s   10.42.1.37   1bb1b7961450   <none>           <none>
+--- from the host, to EXTERNAL-IP:80 (the load balancer, no nodePort) ---
+{"service":"usms-gateway","pod":"usms-gateway-6875f67cdd-7fgms","routes":["/enrolment/","/results/","/timetable/"]}
+{"service":"usms-enrolment","pod":"usms-enrolment-7b6dd7cb84-kb7gv","node":"1bb1b7961450","env":"laboratory","version":"1.0.0"}
+{"service":"usms-results","pod":"usms-results-7fc784c47f-wxw86","campus":"rtc","version":"1.0.0"}
+--- host ports published by the k3s container ---
+6443/tcp -> 0.0.0.0:6500
+6443/tcp -> [::]:6500

@@ -1,0 +1,7 @@
+=== AFTER RESTART (raw) 2026-10-19T05:01:31Z ===
+2	4	2
+NAME   MINAVAIL   MAXUNAVAIL
+NAME   MIN   MAX   TARGET
+NAME   PATHS
+NAME   TYPE   NODEPORT
+The connection to the server localhost:6500 was refused - did you specify the right host or port?

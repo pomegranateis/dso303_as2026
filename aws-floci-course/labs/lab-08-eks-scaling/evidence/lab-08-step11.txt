@@ -1,0 +1,37 @@
+== Step 11 Part 1: do the labels exist? ==
+node group labels did not reach the nodes
+== Part 2: apply by hand ==
+node/1bb1b7961450 labeled
+NAME           STATUS   ROLES           AGE   VERSION        WORKLOAD   TIER
+1bb1b7961450   Ready    control-plane   23m   v1.34.1+k3s1   usms       app
+== Part 3: require the label ==
+deployment.apps/usms-enrolment patched
+Waiting for deployment "usms-enrolment" rollout to finish: 1 out of 2 new replicas have been updated...
+Waiting for deployment "usms-enrolment" rollout to finish: 1 out of 2 new replicas have been updated...
+Waiting for deployment "usms-enrolment" rollout to finish: 1 out of 2 new replicas have been updated...
+Waiting for deployment "usms-enrolment" rollout to finish: 1 old replicas are pending termination...
+Waiting for deployment "usms-enrolment" rollout to finish: 1 old replicas are pending termination...
+deployment "usms-enrolment" successfully rolled out
+NAME                              READY   STATUS      RESTARTS   AGE   IP           NODE           NOMINATED NODE   READINESS GATES
+usms-enrolment-7b6dd7cb84-5p6ht   1/1     Running     0          14s   10.42.1.33   1bb1b7961450   <none>           <none>
+usms-enrolment-7b6dd7cb84-kb7gv   1/1     Running     0          8s    10.42.1.34   1bb1b7961450   <none>           <none>
+usms-enrolment-8549846ddd-qntb9   0/1     Completed   0          21m   10.42.1.10   1bb1b7961450   <none>           <none>
+== Part 4: prove enforcement with a bad value ==
+deployment.apps/usms-enrolment patched
+NAME                              READY   STATUS    RESTARTS   AGE
+usms-enrolment-5dcf74f85f-94jtb   0/1     Pending   0          16s
+usms-enrolment-7b6dd7cb84-5p6ht   1/1     Running   0          31s
+usms-enrolment-7b6dd7cb84-kb7gv   1/1     Running   0          25s
+error: there is no need to specify a resource type as a separate argument when passing arguments in resource/name form (e.g. 'kubectl get resource/<resource_name>' instead of 'kubectl get resource resource/<resource_name>'
+--- the old pods still serve ---
+NAME             ENDPOINTS                     AGE
+usms-enrolment   10.42.1.33:80,10.42.1.34:80   6d1h
+== Part 5: put it back ==
+deployment.apps/usms-enrolment patched
+deployment "usms-enrolment" successfully rolled out
+NAME                              READY   STATUS    RESTARTS   AGE   IP           NODE           NOMINATED NODE   READINESS GATES
+usms-enrolment-7b6dd7cb84-5p6ht   1/1     Running   0          35s   10.42.1.33   1bb1b7961450   <none>           <none>
+usms-enrolment-7b6dd7cb84-kb7gv   1/1     Running   0          29s   10.42.1.34   1bb1b7961450   <none>           <none>
+--- FailedScheduling event for the bad-selector pod ---
+AGE     OBJECT                            REASON             MESSAGE
+<nil>   usms-enrolment-5dcf74f85f-94jtb   FailedScheduling   0/1 nodes are available: 1 node(s) didn't match Pod's node affinity/selector. no new claims to deallocate, preemption: 0/1 nodes are available: 1 Preemption is not helpful for scheduling.

@@ -1,0 +1,51 @@
+== Step 5 Part 1: create drift ==
+deployment.apps/usms-enrolment scaled
+6
+35:  replicas: 2
+== Part 2: apply silently undoes it ==
+configmap/usms-enrolment-conf unchanged
+deployment.apps/usms-enrolment configured
+service/usms-enrolment unchanged
+poddisruptionbudget.policy/usms-enrolment-pdb configured
+2
+== Part 3: change the file, diff, apply ==
+diff -u -N /tmp/LIVE-1882538772/apps.v1.Deployment.usms.usms-enrolment /tmp/MERGED-27729471/apps.v1.Deployment.usms.usms-enrolment
+--- /tmp/LIVE-1882538772/apps.v1.Deployment.usms.usms-enrolment	2026-10-19 10:12:53.989325395 +0600
++++ /tmp/MERGED-27729471/apps.v1.Deployment.usms.usms-enrolment	2026-10-19 10:12:53.989325395 +0600
+@@ -6,7 +6,7 @@
+     kubectl.kubernetes.io/last-applied-configuration: |
+       {"apiVersion":"apps/v1","kind":"Deployment","metadata":{"annotations":{},"labels":{"app":"usms-enrolment","project":"usms","tier":"app"},"name":"usms-enrolment","namespace":"usms"},"spec":{"replicas":2,"revisionHistoryLimit":5,"selector":{"matchLabels":{"app":"usms-enrolment"}},"strategy":{"rollingUpdate":{"maxSurge":1,"maxUnavailable":0},"type":"RollingUpdate"},"template":{"metadata":{"labels":{"app":"usms-enrolment","project":"usms","tier":"app"}},"spec":{"containers":[{"env":[{"name":"POD_NAME","valueFrom":{"fieldRef":{"fieldPath":"metadata.name"}}},{"name":"NODE_NAME","valueFrom":{"fieldRef":{"fieldPath":"spec.nodeName"}}}],"envFrom":[{"configMapRef":{"name":"usms-app-config"}}],"image":"nginx:1.27-alpine","livenessProbe":{"failureThreshold":3,"httpGet":{"path":"/healthz","port":"http"},"initialDelaySeconds":15,"periodSeconds":20},"name":"enrolment","ports":[{"containerPort":80,"name":"http"}],"readinessProbe":{"failureThreshold":3,"httpGet":{"path":"/healthz","port":"http"},"initialDelaySeconds":3,"periodSeconds":5},"resources":{"limits":{"cpu":"200m","memory":"128Mi"},"requests":{"cpu":"50m","memory":"32Mi"}},"volumeMounts":[{"mountPath":"/etc/nginx/templates","name":"conf"}]}],"topologySpreadConstraints":[{"labelSelector":{"matchLabels":{"app":"usms-enrolment"}},"maxSkew":1,"topologyKey":"kubernetes.io/hostname","whenUnsatisfiable":"ScheduleAnyway"}],"volumes":[{"configMap":{"name":"usms-enrolment-conf"},"name":"conf"}]}}}}
+   creationTimestamp: "2026-10-13T02:43:43Z"
+-  generation: 7
++  generation: 8
+   labels:
+     app: usms-enrolment
+     project: usms
+@@ -17,7 +17,7 @@
+   uid: 59482d45-0997-490a-8714-ed66d075f544
+ spec:
+   progressDeadlineSeconds: 600
+-  replicas: 2
++  replicas: 3
+   revisionHistoryLimit: 5
+   selector:
+     matchLabels:
+kubectl diff exit code: 1
+configmap/usms-enrolment-conf unchanged
+deployment.apps/usms-enrolment configured
+service/usms-enrolment unchanged
+poddisruptionbudget.policy/usms-enrolment-pdb configured
+3
+== Part 4: restore ==
+configmap/usms-enrolment-conf unchanged
+deployment.apps/usms-enrolment configured
+service/usms-enrolment unchanged
+poddisruptionbudget.policy/usms-enrolment-pdb configured
+deployment "usms-enrolment" successfully rolled out
+no .bak files
+(empty = file restored)
+NAME             READY   UP-TO-DATE   AVAILABLE   AGE
+usms-enrolment   2/2     2            2           6d1h
+usms-gateway     1/1     1            1           6d1h
+usms-results     2/2     2            2           6d1h
+usms-timetable   1/1     1            1           6d1h

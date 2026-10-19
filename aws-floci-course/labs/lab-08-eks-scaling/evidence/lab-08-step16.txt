@@ -1,0 +1,36 @@
+== Step 16 Part 1: is there a controller? ==
+no IngressClass registered
+no ingress controller pod found
+== Part 2 ==
+ingress.networking.k8s.io/usms-portal-ingress created
+NAME                  CLASS    HOSTS   ADDRESS   PORTS   AGE
+usms-portal-ingress   <none>   *                 80      21s
+Name:             usms-portal-ingress
+Labels:           lab=05b
+                  project=usms
+Namespace:        usms
+Address:          
+Ingress Class:    <none>
+Default backend:  <default>
+Rules:
+  Host        Path  Backends
+  ----        ----  --------
+  *           
+              /enrolment   usms-enrolment:80 (10.42.1.33:80,10.42.1.34:80)
+              /results     usms-results:80 (10.42.1.7:80,10.42.1.9:80)
+              /            usms-gateway:80 (10.42.1.35:80)
+Annotations:  alb.ingress.kubernetes.io/healthcheck-path: /healthz
+              alb.ingress.kubernetes.io/listen-ports: [{"HTTP": 80}]
+              alb.ingress.kubernetes.io/scheme: internet-facing
+              alb.ingress.kubernetes.io/tags: Project=USMS,Tier=web,Lab=08
+              alb.ingress.kubernetes.io/target-type: ip
+Events:       <none>
+== Part 3 ==
+--- / ---
+  (no answer on 8081)
+--- /enrolment/ ---
+  (no answer on 8081)
+--- /results/ ---
+  (no answer on 8081)
+ingress address: none
+No ingress address: no controller is implementing this object. The Ingress is a valid, stored, correct object with nothing acting on it.

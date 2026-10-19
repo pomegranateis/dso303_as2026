@@ -1,0 +1,40 @@
+load removed at 04:21:42
+04:21:01  50%/50%        3          3        3       
+04:21:15  50%/50%        3          3        3       
+04:21:29  50%/50%        3          3        3       
+04:21:43  50%/50%        3          3        3       
+04:21:57  51%/50%        3          3        3       
+04:22:11  50%/50%        3          3        3       
+04:22:24  50%/50%        3          3        3       
+04:22:38  18%/50%        3          3        3       
+04:22:52  6%/50%         3          3        3       
+04:23:06  2%/50%         3          3        3       
+04:23:19  2%/50%         3          3        3       
+04:23:33  2%/50%         3          3        3       
+04:23:47  2%/50%         3          3        3       
+04:24:01  2%/50%         3          3        3       
+04:24:14  2%/50%         3          3        3       
+04:24:28  2%/50%         3          3        3       
+04:24:42  2%/50%         3          3        3       
+04:24:56  2%/50%         3          3        3       
+04:25:09  2%/50%         3          3        3       
+04:25:23  2%/50%         3          3        3       
+04:25:37  2%/50%         3          3        3       
+04:25:51  2%/50%         3          3        3       
+04:26:04  2%/50%         3          3        3       
+04:26:18  2%/50%         3          3        3       
+04:26:32  2%/50%         3          3        3       
+04:26:46  2%/50%         3          3        3       
+04:26:59  2%/50%         3          3        3       
+04:27:13  2%/50%         3          3        3       
+04:27:27  2%/50%         2          2        2       
+04:27:41  2%/50%         2          2        2       
+04:27:54  2%/50%         2          2        2       
+04:28:08  2%/50%         2          2        2       
+NAME                 REFERENCE                   TARGETS       MINPODS   MAXPODS   REPLICAS   AGE
+usms-enrolment-hpa   Deployment/usms-enrolment   cpu: 2%/50%   2         8         2          13m
+Events:
+  Type    Reason             Age    From                       Message
+  ----    ------             ----   ----                       -------
+  Normal  SuccessfulRescale  9m52s  horizontal-pod-autoscaler  New size: 3; reason: cpu resource utilization (percentage of request) above target
+  Normal  SuccessfulRescale  66s    horizontal-pod-autoscaler  New size: 2; reason: All metrics below target

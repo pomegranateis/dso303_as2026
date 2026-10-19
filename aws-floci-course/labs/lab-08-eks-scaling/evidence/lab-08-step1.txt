@@ -1,0 +1,47 @@
+AWS_PROFILE         = floci
+AWS_ENDPOINT_URL    = <unset, using profile>
+configured endpoint = http://localhost:4566
+configured region   = us-east-1
+---
+--------------------------------------------------------------------
+|                         GetCallerIdentity                        |
++--------------+----------------------------------+----------------+
+|    Account   |               Arn                |    UserId      |
++--------------+----------------------------------+----------------+
+|  000000000000|  arn:aws:iam::000000000000:root  |  000000000000  |
++--------------+----------------------------------+----------------+
+[1;32m[ok] Account 000000000000 — this is Floci, not real AWS.[0m
+usms-eks
+--- 1. does usms-enrolment declare a CPU request? ---
+{"cpu":"50m","memory":"32Mi"}
+--- 2. is the _lb_ports_ tag on the cluster? ---
+from configs/lab-07.env : 8081,8083
+8081,8083
+--- verify-lab-07 ---
+  ok   no secret is tracked by git
+  ok   .gitignore uses outputs/* not outputs/
+
+PASS=31  FAIL=0
+NAME                             READY   UP-TO-DATE   AVAILABLE   AGE
+deployment.apps/usms-enrolment   2/2     2            2           6d1h
+deployment.apps/usms-gateway     1/1     1            1           6d1h
+deployment.apps/usms-results     2/2     2            2           6d1h
+deployment.apps/usms-timetable   1/1     1            1           6d1h
+
+NAME                     TYPE        CLUSTER-IP      EXTERNAL-IP   PORT(S)   AGE
+service/usms-enrolment   ClusterIP   10.43.121.90    <none>        80/TCP    6d1h
+service/usms-gateway     ClusterIP   10.43.249.84    <none>        80/TCP    6d1h
+service/usms-results     ClusterIP   10.43.80.200    <none>        80/TCP    6d1h
+service/usms-timetable   ClusterIP   10.43.200.235   <none>        80/TCP    6d1h
+
+NAME                            DATA   AGE
+configmap/kube-root-ca.crt      1      6d1h
+configmap/usms-app-config       4      6d1h
+configmap/usms-enrolment-conf   1      6d1h
+configmap/usms-gateway-conf     1      6d1h
+configmap/usms-results-conf     1      6d1h
+configmap/usms-timetable-conf   1      6d1h
+
+NAME                           TYPE     DATA   AGE
+secret/usms-enrolment-secret   Opaque   2      6d1h
+1.5.34
