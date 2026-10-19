@@ -1,0 +1,70 @@
+== rebuild after backup restart ==
+k3s container still present
+DELETING
+DELETING
+CREATING
+cluster: ACTIVE
+ACTIVE
+Updated context usms-eks in /home/pomegranateu/.kube/usms-lab07
+node/3fb0d0087ec2 labeled
+node/4d622ea57c95 not labeled
+lab-07 manifests applied
+lab-08 manifests applied (except 20-loadgen)
+Waiting for deployment "usms-enrolment" rollout to finish: 0 of 2 updated replicas are available...
+error: timed out waiting for the condition
+Waiting for deployment "usms-results" rollout to finish: 0 of 2 updated replicas are available...
+Waiting for deployment "usms-results" rollout to finish: 1 out of 2 new replicas have been updated...
+Waiting for deployment "usms-results" rollout to finish: 0 of 2 updated replicas are available...
+Waiting for deployment "usms-results" rollout to finish: 1 of 2 updated replicas are available...
+deployment "usms-results" successfully rolled out
+Waiting for deployment "usms-gateway" rollout to finish: 1 of 2 updated replicas are available...
+deployment "usms-gateway" successfully rolled out
+deployment "usms-timetable" successfully rolled out
+pending	pending	pending	pending
+NAME           STATUS     ROLES           AGE     VERSION
+3fb0d0087ec2   Ready      control-plane   6m13s   v1.34.1+k3s1
+4d622ea57c95   NotReady   control-plane   38m     v1.34.1+k3s1
+node "4d622ea57c95" deleted
+deployment "usms-enrolment" successfully rolled out
+deployment "usms-results" successfully rolled out
+deployment "usms-gateway" successfully rolled out
+deployment "usms-timetable" successfully rolled out
+NAME                              READY   STATUS        RESTARTS   AGE   IP           NODE           NOMINATED NODE   READINESS GATES
+usms-enrolment-7b6dd7cb84-8f58d   1/1     Terminating   0          38m   10.42.0.8    4d622ea57c95   <none>           <none>
+usms-enrolment-7b6dd7cb84-g65d8   1/1     Running       0          24s   10.42.1.12   3fb0d0087ec2   <none>           <none>
+usms-enrolment-7b6dd7cb84-jpj5r   1/1     Running       0          25s   10.42.1.9    3fb0d0087ec2   <none>           <none>
+usms-enrolment-7b6dd7cb84-stpzl   1/1     Terminating   0          37m   10.42.0.13   4d622ea57c95   <none>           <none>
+usms-gateway-88dc87c84-ffx54      1/1     Running       0          25s   10.42.1.11   3fb0d0087ec2   <none>           <none>
+usms-gateway-88dc87c84-g9fvb      1/1     Terminating   0          26m   10.42.0.16   4d622ea57c95   <none>           <none>
+usms-gateway-88dc87c84-svbj2      1/1     Running       0          25s   10.42.1.6    3fb0d0087ec2   <none>           <none>
+usms-gateway-88dc87c84-tlggg      1/1     Terminating   0          25m   10.42.0.19   4d622ea57c95   <none>           <none>
+usms-results-7fc784c47f-bcwgp     1/1     Running       0          25s   10.42.1.10   3fb0d0087ec2   <none>           <none>
+usms-results-7fc784c47f-f7xrh     1/1     Running       0          25s   10.42.1.7    3fb0d0087ec2   <none>           <none>
+usms-results-7fc784c47f-r2c5f     1/1     Terminating   0          38m   10.42.0.5    4d622ea57c95   <none>           <none>
+usms-results-7fc784c47f-wdd82     1/1     Terminating   0          38m   10.42.0.4    4d622ea57c95   <none>           <none>
+usms-timetable-cf6b9c8fb-ch5pz    1/1     Running       0          25s   10.42.1.5    3fb0d0087ec2   <none>           <none>
+usms-timetable-cf6b9c8fb-s72nr    1/1     Terminating   0          38m   10.42.0.7    4d622ea57c95   <none>           <none>
+POD_NAME NODE_NAME ENROLMENT_API_TOKEN ENROLMENT_DB_PASSWORD 
+NAME                                                     REFERENCE                   TARGETS              MINPODS   MAXPODS   REPLICAS   AGE
+horizontalpodautoscaler.autoscaling/usms-enrolment-hpa   Deployment/usms-enrolment   cpu: <unknown>/50%   2         8         2          38m
+horizontalpodautoscaler.autoscaling/usms-results-hpa     Deployment/usms-results     cpu: <unknown>/60%   2         6         2          27m
+
+NAME                                            MIN AVAILABLE   MAX UNAVAILABLE   ALLOWED DISRUPTIONS   AGE
+poddisruptionbudget.policy/usms-enrolment-pdb   N/A             1                 1                     38m
+poddisruptionbudget.policy/usms-gateway-pdb     1               N/A               1                     38m
+
+NAME                      TYPE           CLUSTER-IP     EXTERNAL-IP   PORT(S)        AGE
+service/usms-enrolment    ClusterIP      10.43.226.70   <none>        80/TCP         38m
+service/usms-gateway      LoadBalancer   10.43.69.199   172.17.0.3    80:30697/TCP   38m
+service/usms-results      ClusterIP      10.43.116.30   <none>        80/TCP         38m
+service/usms-results-np   NodePort       10.43.143.2    <none>        80:30080/TCP   38m
+service/usms-timetable    ClusterIP      10.43.60.253   <none>        80/TCP         38m
+
+NAME                                             CLASS    HOSTS   ADDRESS   PORTS   AGE
+ingress.networking.k8s.io/usms-portal-ingress    <none>   *                 80      38m
+ingress.networking.k8s.io/usms-results-ingress   <none>   *                 80      17m
+{"service":"usms-gateway","pod":"usms-gateway-88dc87c84-ffx54","routes":["/enrolment/","/results/","/timetable/"]}
+{"service":"usms-enrolment","pod":"usms-enrolment-7b6dd7cb84-jpj5r","node":"3fb0d0087ec2","env":"laboratory","version":"1.0.0"}
+{"service":"usms-results","pod":"usms-results-7fc784c47f-bcwgp","campus":"rtc","version":"1.0.0"}
+pod "usms-smoke" deleted from usms namespace
+SMOKE TEST PASSED
