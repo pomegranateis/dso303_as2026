@@ -1,0 +1,5 @@
+== allow-all egress count, corrected query (string '-1') ==
+usms-app-sg          lab query: 0   corrected: 1
+usms-alb-sg          lab query: 0   corrected: 0
+usms-enrolment-sg    lab query: 0   corrected: 0
+usms-db-sg           lab query: 0   corrected: 0

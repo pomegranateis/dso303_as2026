@@ -1,0 +1,51 @@
+== Step 13 Part 1: the S3 prefix list ==
+from describe-prefix-lists: pl-63a5400a
+route table check: None
+S3_PREFIX_LIST = pl-63a5400a
+policies/usms-enrolment-sg-egress.json valid JSON, unexpanded $: 0
+policies/usms-egress-allow-all.json valid JSON, unexpanded $: 0
+== Part 3: authorise the replacement FIRST, then revoke the default ==
+sgr-e69f5f52f16d9a03a	sgr-2e4bedef23a4cf9da
+True
+== verify (describe-security-group-rules) ==
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+|                                                                           DescribeSecurityGroupRules                                                                            |
++-----------+------------------------------------------------------------------------------------------------------------------+------------------------+-------+-------+---------+
+|   Cidr    |                                                      Desc                                                        |          Id            |  PL   | Port  |  Proto  |
++-----------+------------------------------------------------------------------------------------------------------------------+------------------------+-------+-------+---------+
+|  0.0.0.0/0|  None                                                                                                            |  sgr-51999e52b80eb90c5 |  None |  None |  -1     |
+|  None     |  None                                                                                                            |  sgr-e69f5f52f16d9a03a |  None |  443  |  tcp    |
+|  0.0.0.0/0|  HTTPS out for the container image pull and the awslogs driver - narrow this to interface endpoints on real AWS  |  sgr-2e4bedef23a4cf9da |  None |  443  |  tcp    |
++-----------+------------------------------------------------------------------------------------------------------------------+------------------------+-------+-------+---------+
+allow-all egress remaining (describe-security-groups): 0
+ingress rules unchanged: 3 (3 tcp/80, as before)
+== revoke the default egress rule by ID ==
+True
+rules API, egress:
+sgr-51999e52b80eb90c5	-1	None	0.0.0.0/0	None
+sgr-e69f5f52f16d9a03a	tcp	443	None	None
+sgr-2e4bedef23a4cf9da	tcp	443	0.0.0.0/0	None
+groups API, egress:
+[
+    {
+        "IpProtocol": "tcp",
+        "FromPort": 443,
+        "ToPort": 443,
+        "UserIdGroupPairs": [],
+        "IpRanges": [],
+        "Ipv6Ranges": []
+    },
+    {
+        "IpProtocol": "tcp",
+        "FromPort": 443,
+        "ToPort": 443,
+        "UserIdGroupPairs": [],
+        "IpRanges": [
+            {
+                "Description": "HTTPS out for the container image pull and the awslogs driver - narrow this to interface endpoints on real AWS",
+                "CidrIp": "0.0.0.0/0"
+            }
+        ],
+        "Ipv6Ranges": []
+    }
+]

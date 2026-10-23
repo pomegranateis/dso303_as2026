@@ -1,0 +1,21 @@
+== boundary retry ==
+put-role-permissions-boundary exit: 0
+null
+1
+[]
+== does the simulator honour a boundary? (identity policy allows ecs:UpdateService; boundary allows ecs:*) ==
+ecs:UpdateService        allowed
+iam:CreateUser           explicitDeny
+ec2:TerminateInstances   implicitDeny
+== PassRole, scoped: task role to ECS, task role to EC2, ec2-app-role to ECS ==
+usms-ecs-task-role     -> ecs-tasks.amazonaws.com  allowed
+usms-ecs-task-role     -> ec2.amazonaws.com        explicitDeny
+usms-ec2-app-role      -> ecs-tasks.amazonaws.com  implicitDeny
+== is the boundary evaluated though not read back? ==
+usms-deploy-role               iam:CreateUser         explicitDeny	0
+usms-deploy-role               ec2:DeleteVpc          explicitDeny	0
+usms-deploy-role               iam:AttachRolePolicy   explicitDeny	0
+usms-transcripts-reader-role   iam:CreateUser         implicitDeny	0
+usms-transcripts-reader-role   ec2:DeleteVpc          implicitDeny	0
+usms-transcripts-reader-role   iam:AttachRolePolicy   implicitDeny	0
+[]

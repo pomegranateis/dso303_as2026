@@ -1,0 +1,10 @@
+2
+None
+usms-transcripts-reader-role
+USMSStudentDataReadOnly
+1
+0
+0
+0
+0
+optional

@@ -1,0 +1,10 @@
+== Step 11 alternative (known issues, Lab 09) ==
+
+--- security ---
+Teaching policy model: identity allow INTERSECT boundary allow; explicit deny wins.
+s3:GetObject: ALLOW
+s3:PutObject: DENY
+s3:DeleteObject: DENY
+Without token: HTTP 401
+With token: HTTP 200
+Model only: this is not an IAM evaluator or an IMDSv2 implementation.

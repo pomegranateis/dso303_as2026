@@ -1,0 +1,7 @@
+== simulate: reader role vs task role on one transcript object ==
+usms-transcripts-reader-role s3:GetObject     allowed
+usms-transcripts-reader-role s3:PutObject     explicitDeny
+usms-transcripts-reader-role s3:DeleteObject  explicitDeny
+usms-ecs-task-role     s3:GetObject     allowed
+usms-ecs-task-role     s3:PutObject     allowed
+usms-ecs-task-role     s3:DeleteObject  allowed

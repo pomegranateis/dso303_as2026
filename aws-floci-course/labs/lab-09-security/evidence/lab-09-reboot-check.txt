@@ -1,0 +1,7 @@
+== after the unplanned host reboot 2026-10-22T03:48:41Z ==
+nine facts identical after the reboot
+PASS=43  FAIL=7
+usms-web-02	running
+usms-web-01	running
+usms-db-01	running
+usms-db-02	running

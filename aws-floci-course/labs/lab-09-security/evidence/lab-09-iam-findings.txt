@@ -1,0 +1,59 @@
+== USMS IAM audit ==
+
+usms-lambda-exec-role
+    permissions boundary : NONE
+    HIGH trust policy: service principal lambda.amazonaws.com with NO Condition (confused deputy)
+    MED  no permissions boundary
+
+usms-eks-cluster-role
+    permissions boundary : NONE
+    MED  USMSEKSClusterPolicy: ec2:CreateNetworkInterface on Resource "*"
+    MED  USMSEKSClusterPolicy: ec2:DeleteNetworkInterface on Resource "*"
+    MED  USMSEKSClusterPolicy: ec2:CreateTags on Resource "*"
+    MED  USMSEKSClusterPolicy: elasticloadbalancing:CreateLoadBalancer on Resource "*"
+    MED  USMSEKSClusterPolicy: elasticloadbalancing:CreateTargetGroup on Resource "*"
+    MED  USMSEKSClusterPolicy: elasticloadbalancing:CreateListener on Resource "*"
+    HIGH trust policy: service principal eks.amazonaws.com with NO Condition (confused deputy)
+    MED  no permissions boundary
+
+usms-developer-role
+    permissions boundary : NONE
+    MED  USMSDeveloperBase: ec2:CreateVpc on Resource "*"
+    MED  USMSDeveloperBase: ec2:CreateSubnet on Resource "*"
+    MED  USMSDeveloperBase: ec2:CreateRouteTable on Resource "*"
+    MED  USMSDeveloperBase: ec2:CreateRoute on Resource "*"
+    MED  USMSDeveloperBase: ec2:CreateInternetGateway on Resource "*"
+    MED  USMSDeveloperBase: ec2:AttachInternetGateway on Resource "*"
+    MED  USMSDeveloperBase: ec2:CreateSecurityGroup on Resource "*"
+    MED  USMSDeveloperBase: ec2:AuthorizeSecurityGroupIngress on Resource "*"
+    MED  USMSDeveloperBase: ec2:CreateTags on Resource "*"
+    MED  USMSDeveloperBase: ec2:ModifyVpcAttribute on Resource "*"
+    MED  USMSDeveloperBase: ec2:DeleteVpc on Resource "*"
+    MED  no permissions boundary
+
+usms-ecs-exec-role
+    permissions boundary : NONE
+    HIGH trust policy: service principal ecs-tasks.amazonaws.com with NO Condition (confused deputy)
+    MED  no permissions boundary
+
+usms-ec2-app-role
+    permissions boundary : NONE
+    HIGH trust policy: service principal ec2.amazonaws.com with NO Condition (confused deputy)
+    MED  no permissions boundary
+
+usms-ecs-task-role
+    permissions boundary : NONE
+    HIGH trust policy: service principal ecs-tasks.amazonaws.com with NO Condition (confused deputy)
+    MED  no permissions boundary
+
+usms-eks-node-role
+    permissions boundary : NONE
+    MED  USMSEKSNodePolicy: ec2:AttachNetworkInterface on Resource "*"
+    MED  USMSEKSNodePolicy: ec2:DetachNetworkInterface on Resource "*"
+    MED  USMSEKSNodePolicy: ec2:CreateNetworkInterface on Resource "*"
+    MED  USMSEKSNodePolicy: ec2:DeleteNetworkInterface on Resource "*"
+    MED  USMSEKSNodePolicy: ec2:CreateTags on Resource "*"
+    HIGH trust policy: service principal ec2.amazonaws.com with NO Condition (confused deputy)
+    MED  no permissions boundary
+
+HIGH=6  MED=29  roles=7

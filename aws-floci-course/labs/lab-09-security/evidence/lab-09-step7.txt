@@ -1,0 +1,38 @@
+policies/usms-student-data-ro-policy.json valid JSON, unexpanded $: 0
+policies/trust-ecs-tasks-scoped.json valid JSON, unexpanded $: 0
+RO_POLICY_ARN = arn:aws:iam::000000000000:policy/USMSStudentDataReadOnly
+READER_ROLE_ARN = arn:aws:iam::000000000000:role/usms-transcripts-reader-role
+attached
+--- Part 5: save the undo, then replace the task role's trust ---
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Sid": "AllowEcsTasksToAssumeThisRole",
+            "Effect": "Allow",
+            "Principal": {
+                "Service": "ecs-tasks.amazonaws.com"
+            },
+            "Action": "sts:AssumeRole"
+        }
+    ]
+}
+trust replaced
+--- Part 6: verify ---
+{
+    "Name": "usms-transcripts-reader-role",
+    "MaxSession": 3600,
+    "Trust": {
+        "StringEquals": {
+            "aws:SourceAccount": "000000000000"
+        },
+        "ArnLike": {
+            "aws:SourceArn": "arn:aws:ecs:us-east-1:000000000000:*"
+        }
+    }
+}
+USMSStudentDataReadOnly
+before: [('{"Service": "ecs-tasks.amazonaws.com"}', False)]
+after : [('{"Service": "ecs-tasks.amazonaws.com"}', True)]
+
+SAME PRINCIPAL, NEW CONDITION

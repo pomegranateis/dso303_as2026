@@ -1,0 +1,6 @@
+== after the security review 2026-10-21T17:38:24Z ==
+lab-02     PASS=33  FAIL=0
+lab-03     PASS=32  FAIL=5
+lab-04     PASS=39  FAIL=1
+lab-05     PASS=52  FAIL=3
+lab-06     PASS=30  FAIL=20

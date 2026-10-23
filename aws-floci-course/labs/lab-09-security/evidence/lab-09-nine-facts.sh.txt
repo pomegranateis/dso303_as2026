@@ -1,0 +1,12 @@
+# The nine Step 18 facts. Fact 8 uses SecurityGroups[0].IpPermissions: the lab's query
+# (length(IpPermissions[...])) has no SecurityGroups[0] and errors on any build.
+aws iam get-role --role-name "$USMS_ECS_TASK_ROLE" --query 'length(Role.AssumeRolePolicyDocument.Statement[0].Condition)' --output text
+aws iam get-role --role-name usms-deploy-role --query 'Role.PermissionsBoundary.PermissionsBoundaryArn' --output text
+aws iam get-role --role-name usms-transcripts-reader-role --query 'Role.RoleName' --output text
+aws iam list-attached-role-policies --role-name usms-transcripts-reader-role --query 'AttachedPolicies[0].PolicyName' --output text
+aws iam list-access-keys --user-name "$USMS_DEV_USER" --query 'length(AccessKeyMetadata)' --output text
+for g in "$USMS_ALB_SG" "$USMS_ENROLMENT_SG" "$USMS_DB_SG"; do
+  aws ec2 describe-security-groups --group-ids "$g" --query "length(SecurityGroups[0].IpPermissionsEgress[?IpProtocol=='-1'])" --output text
+done
+aws ec2 describe-security-groups --group-ids "$USMS_APP_SG" --query 'length(SecurityGroups[0].IpPermissions[?FromPort==`22`].IpRanges[])' --output text
+aws ec2 describe-instances --instance-ids "$USMS_WEB_INSTANCE" --query 'Reservations[0].Instances[0].MetadataOptions.HttpTokens' --output text

@@ -1,0 +1,22 @@
+[1;34m==>[0m Floci is up at http://localhost:4566
+|  000000000000|  arn:aws:iam::000000000000:root  |  000000000000  |
++--------------+----------------------------------+----------------+
+[1;32m[ok] Account 000000000000 — this is Floci, not real AWS.[0m
+account                      000000000000
+region                       us-east-1
+dev user                     usms-dev-01
+admin user                   usms-admin-01
+developer role               usms-developer-role
+ec2 role                     usms-ec2-app-role
+lambda role                  usms-lambda-exec-role
+instance profile             usms-ec2-app-profile
+bucket name (policy)         usms-student-data
+vpc                          vpc-27ddc682
+app sg                       sg-96722a74c4be5da9e
+db sg                        sg-f765e22fd748ff412
+enrolment sg                 sg-5f99dfa81088e83e3
+alb sg                       sg-54033edc16ebffd09
+s3 endpoint                  vpce-cd2ab900c7d9eb834
+web instance                 i-68c4cb27d85e381e8
+db instance                  i-4fe69d1237fb2fc6a
+--- storage check ---
