@@ -1,0 +1,71 @@
+{
+  "vpc": "vpc-27ddc682",
+  "interfaces": [
+    {
+      "interface": "eni-32451a27275c7a166",
+      "name": "usms-web-02",
+      "private": "172.20.0.3",
+      "public": null,
+      "subnet": "subnet-8952dc13",
+      "route_table": "rtb-79f00a19",
+      "igw_route": true,
+      "groups": [
+        "usms-app-sg"
+      ],
+      "world_ports": [
+        "80",
+        "443"
+      ],
+      "verdict": "NO PUBLIC ADDRESS",
+      "reason": "igw route on rtb-79f00a19, but no public address; loopback 127.0.0.1 ignored"
+    },
+    {
+      "interface": "eni-9e05cf5dd2dc69b28",
+      "name": "usms-web-01",
+      "private": "172.20.0.4",
+      "public": "54.205.147.173",
+      "subnet": "subnet-d0e2e873",
+      "route_table": "rtb-79f00a19",
+      "igw_route": true,
+      "groups": [
+        "usms-app-sg"
+      ],
+      "world_ports": [
+        "80",
+        "443"
+      ],
+      "verdict": "EXPOSED",
+      "reason": "igw route + public address + sg allows 80,443 from 0.0.0.0/0"
+    },
+    {
+      "interface": "eni-733509c7fd7a0b49b",
+      "name": "usms-db-01",
+      "private": "172.20.0.5",
+      "public": null,
+      "subnet": "subnet-704e2524",
+      "route_table": "rtb-e509a19b",
+      "igw_route": false,
+      "groups": [
+        "usms-db-sg"
+      ],
+      "world_ports": [],
+      "verdict": "ISOLATED",
+      "reason": "no igw route on rtb-e509a19b; loopback 127.0.0.1 ignored"
+    },
+    {
+      "interface": "eni-b4fc240734f6c68d5",
+      "name": "usms-db-02",
+      "private": "172.20.0.6",
+      "public": null,
+      "subnet": "subnet-f9cff6ed",
+      "route_table": "rtb-e509a19b",
+      "igw_route": false,
+      "groups": [
+        "usms-db-sg"
+      ],
+      "world_ports": [],
+      "verdict": "ISOLATED",
+      "reason": "no igw route on rtb-e509a19b; loopback 127.0.0.1 ignored"
+    }
+  ]
+}

@@ -1,0 +1,35 @@
+== Ex 1: authorise the six rules BEFORE revoking the default ==
+sgr-d25221322b4c5fc02	sgr-e9817b96275b7d210	sgr-5f3a90038a2cf0cd3	sgr-c8c58c2c07bda5207	sgr-bde3f2e6f47ab3eb6	sgr-22589f9f669e65cbd
+True
+allow-all left on usms-app-sg: 0
+--- egress, groups API ---
+tcp	443	None
+tcp	443	0.0.0.0/0
+tcp	80	None
+tcp	5432	None
+udp	53	10.0.0.2/32
+tcp	53	10.0.0.2/32
+--- ingress unchanged (groups API) ---
+tcp	80	0.0.0.0/0
+tcp	443	0.0.0.0/0
+tcp	22	None
+tcp	22	None
+usms-app-sg  (sg-96722a74c4be5da9e)   interfaces: 2
+    ingress:
+        tcp/80        from 0.0.0.0/0
+        tcp/443       from 0.0.0.0/0
+        tcp/22        from <none>
+        tcp/22        from <none>
+    egress:
+        tcp/443       to   <none>
+        tcp/443       to   0.0.0.0/0
+        tcp/80        to   <none>
+        tcp/5432      to   <none>
+        udp/53        to   10.0.0.2/32
+        tcp/53        to   10.0.0.2/32
+    HIGH ingress tcp/80 from 0.0.0.0/0
+    HIGH ingress tcp/443 from 0.0.0.0/0
+
+HIGH=4  MED=6  LOW=6  groups=8
+  usms-app-sg            tcp/443 ->  ; tcp/443 -> 0.0.0.0/0 ; tcp/80 ->  ; tcp/5432 ->  ; udp/53 -> 10.0.0.2/32 ; tcp/53 -> 10.0.0.2/32
+PASS=43  FAIL=7

@@ -1,0 +1,9 @@
+# Lab 09 Exercise 5 - readiness for Lab 10, derived from policy documents and the identity inventory
+bucket name (from USMSStudentDataReadWrite) : usms-student-data
+bucket exists today                         : no - head-bucket exit 254
+policies naming the bucket (3)            : USMSLambdaBasic USMSStudentDataReadOnly USMSStudentDataReadWrite
+  USMSLambdaBasic                            roles: arn:aws:iam::000000000000:role/usms-lambda-exec-role
+  USMSStudentDataReadOnly                    roles: arn:aws:iam::000000000000:role/usms-transcripts-reader-role
+  USMSStudentDataReadWrite                   roles: arn:aws:iam::000000000000:role/usms-ec2-app-role arn:aws:iam::000000000000:role/usms-ecs-task-role arn:aws:iam::000000000000:role/usms-eks-node-role
+principals in the draft's Allow statements   : 5
+what changes when Lab 10 runs create-bucket  : nothing in IAM changes, but every one of these 5 roles goes from holding permissions on a bucket that does not exist to holding them on a real one, and the read-write holders can PUT and DELETE objects from that moment, until this draft (or a narrower identity policy) is applied.

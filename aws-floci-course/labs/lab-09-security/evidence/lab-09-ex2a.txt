@@ -1,0 +1,34 @@
+== Ex 2 Part A ==
+arn:aws:iam::000000000000:policy/USMSBreakGlassScaling
+arn:aws:iam::000000000000:role/usms-breakglass-role
+attached
+-- shortest MaxSessionDuration IAM accepts: try 3599 --
+Invalid value for parameter MaxSessionDuration, value: 3599, valid min value: 3600
+{
+    "Max": 3600,
+    "Condition": {
+        "Bool": {
+            "aws:MultiFactorAuthPresent": "true"
+        },
+        "StringEquals": {
+            "sts:ExternalId": "usms-breakglass-2026"
+        }
+    },
+    "Principal": "arn:aws:iam::000000000000:user/usms-admin-01"
+}
+-- simulate the role's permissions --
+application-autoscaling:RegisterScalableTarget   allowed
+application-autoscaling:DescribeScalableTargets  allowed
+application-autoscaling:DeleteScalingPolicy      implicitDeny
+ecs:UpdateService                                implicitDeny
+iam:CreateUser                                   implicitDeny
+usms-deploy-role       ec2:DeleteVpc          explicitDeny
+usms-deploy-role       iam:AttachRolePolicy   explicitDeny
+usms-breakglass-role   ec2:DeleteVpc          implicitDeny
+usms-breakglass-role   iam:AttachRolePolicy   implicitDeny
+== put-role-permissions-boundary on usms-breakglass-role ==
+put: ok
+ec2:DeleteVpc                                    explicitDeny
+iam:AttachRolePolicy                             explicitDeny
+iam:CreateUser                                   explicitDeny
+application-autoscaling:RegisterScalableTarget   allowed

@@ -1,0 +1,44 @@
+[
+  {
+    "IpProtocol": "tcp", "FromPort": 443, "ToPort": 443,
+    "PrefixListIds": [
+      { "PrefixListId": "pl-63a5400a",
+        "Description": "1. S3 through the Lab 02 gateway endpoint - transcripts never leave the AWS network" }
+    ]
+  },
+  {
+    "IpProtocol": "tcp", "FromPort": 443, "ToPort": 443,
+    "IpRanges": [
+      { "CidrIp": "0.0.0.0/0",
+        "Description": "2. HTTPS to AWS service endpoints, STS included - narrow to interface endpoints on real AWS" }
+    ]
+  },
+  {
+    "IpProtocol": "tcp", "FromPort": 80, "ToPort": 80,
+    "UserIdGroupPairs": [
+      { "GroupId": "sg-54033edc16ebffd09",
+        "Description": "3. The enrolment API, through the load balancer only (Lab 05) - never to the tasks directly" }
+    ]
+  },
+  {
+    "IpProtocol": "tcp", "FromPort": 5432, "ToPort": 5432,
+    "UserIdGroupPairs": [
+      { "GroupId": "sg-f765e22fd748ff412",
+        "Description": "4. PostgreSQL on the data tier - the other half of usms-db-sg's single ingress rule" }
+    ]
+  },
+  {
+    "IpProtocol": "udp", "FromPort": 53, "ToPort": 53,
+    "IpRanges": [
+      { "CidrIp": "10.0.0.2/32",
+        "Description": "5a. DNS queries to the Amazon resolver at the VPC base address plus two" }
+    ]
+  },
+  {
+    "IpProtocol": "tcp", "FromPort": 53, "ToPort": 53,
+    "IpRanges": [
+      { "CidrIp": "10.0.0.2/32",
+        "Description": "5b. DNS over TCP to the same resolver - large answers and truncated replies fall back to TCP" }
+    ]
+  }
+]

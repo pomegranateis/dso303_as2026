@@ -1,0 +1,80 @@
+== USMS IAM audit ==
+
+usms-lambda-exec-role
+    permissions boundary : NONE
+    MED  no permissions boundary
+
+usms-eks-cluster-role
+    permissions boundary : NONE
+    MED  USMSEKSClusterPolicy: ec2:CreateNetworkInterface on Resource "*"
+    MED  USMSEKSClusterPolicy: ec2:DeleteNetworkInterface on Resource "*"
+    MED  USMSEKSClusterPolicy: ec2:CreateTags on Resource "*"
+    MED  USMSEKSClusterPolicy: elasticloadbalancing:CreateLoadBalancer on Resource "*"
+    MED  USMSEKSClusterPolicy: elasticloadbalancing:CreateTargetGroup on Resource "*"
+    MED  USMSEKSClusterPolicy: elasticloadbalancing:CreateListener on Resource "*"
+    ACCEPTED (HIGH) trust policy: service principal eks.amazonaws.com with NO Condition (confused deputy)
+         reason      : Not verified which source keys EKS sends when it assumes the cluster role; a condition on a key that is never sent denies everything and would stop the control plane from managing the cluster.
+         compensating: Only eks.amazonaws.com may assume it, the cluster-sg admits tcp/443 from the VPC only, and USMSEKSClusterPolicy ends in a region Deny. Revisit once the EKS documentation for aws:SourceArn is checked.
+    MED  no permissions boundary
+
+usms-deploy-role
+    permissions boundary : NONE
+    MED  USMSDeployBase: ecs:UpdateService on Resource "*"
+    MED  no permissions boundary
+
+usms-developer-role
+    permissions boundary : NONE
+    MED  USMSDeveloperBase: ec2:CreateVpc on Resource "*"
+    MED  USMSDeveloperBase: ec2:CreateSubnet on Resource "*"
+    MED  USMSDeveloperBase: ec2:CreateRouteTable on Resource "*"
+    MED  USMSDeveloperBase: ec2:CreateRoute on Resource "*"
+    MED  USMSDeveloperBase: ec2:CreateInternetGateway on Resource "*"
+    MED  USMSDeveloperBase: ec2:AttachInternetGateway on Resource "*"
+    MED  USMSDeveloperBase: ec2:CreateSecurityGroup on Resource "*"
+    MED  USMSDeveloperBase: ec2:AuthorizeSecurityGroupIngress on Resource "*"
+    MED  USMSDeveloperBase: ec2:CreateTags on Resource "*"
+    MED  USMSDeveloperBase: ec2:ModifyVpcAttribute on Resource "*"
+    MED  USMSDeveloperBase: ec2:DeleteVpc on Resource "*"
+    MED  no permissions boundary
+
+usms-breakglass-role
+    permissions boundary : NONE
+    MED  no permissions boundary
+
+usms-ecs-exec-role
+    permissions boundary : NONE
+    MED  no permissions boundary
+
+usms-ec2-app-role
+    permissions boundary : NONE
+    ACCEPTED (HIGH) trust policy: service principal ec2.amazonaws.com with NO Condition (confused deputy)
+         reason      : EC2 does not send aws:SourceArn when an instance profile's role is assumed, so a SourceArn or SourceAccount condition would deny usms-web-01 its own credentials (Lab 09 Step 7 caveat).
+         compensating: Only usms-ec2-app-profile carries the role and only usms-web-01 wears it; IMDSv2 required with hop limit 1 (Step 11 - not applicable on Floci 1.5.34, must be applied on real AWS); USMSDeployBase denies iam:PassRole to ec2.amazonaws.com.
+    MED  no permissions boundary
+
+usms-ecs-task-role
+    permissions boundary : NONE
+    MED  no permissions boundary
+
+usms-transcripts-reader-role
+    permissions boundary : NONE
+    MED  no permissions boundary
+
+usms-eks-node-role
+    permissions boundary : NONE
+    MED  USMSEKSNodePolicy: ec2:AttachNetworkInterface on Resource "*"
+    MED  USMSEKSNodePolicy: ec2:DetachNetworkInterface on Resource "*"
+    MED  USMSEKSNodePolicy: ec2:CreateNetworkInterface on Resource "*"
+    MED  USMSEKSNodePolicy: ec2:DeleteNetworkInterface on Resource "*"
+    MED  USMSEKSNodePolicy: ec2:CreateTags on Resource "*"
+    ACCEPTED (HIGH) trust policy: service principal ec2.amazonaws.com with NO Condition (confused deputy)
+         reason      : EKS nodes are EC2 instances: the same instance-profile behaviour as usms-ec2-app-role, so the same condition would stop every node from joining the cluster.
+         compensating: IMDSv2 with hop limit 1 on the node launch template, so pods cannot reach the node's credentials; IRSA for usms-enrolment-sa (Lab 08 Exercise 5) to remove USMSStudentDataReadWrite from the node role.
+    MED  no permissions boundary
+
+HIGH=0  MED=33  ACCEPTED=3  roles=10
+exit code: 0
+
+== constraint test: same audit with the accepted-findings file empty ==
+HIGH=3  MED=33  ACCEPTED=0  roles=10
+exit code: 1

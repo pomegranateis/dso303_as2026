@@ -1,0 +1,17 @@
+== Ex 2 Part B: fix two, undo saved first ==
+usms-ecs-exec-role: trust replaced (undo in outputs/lab-09-usms-ecs-exec-role-trust-before.json)
+{
+    "Principal": "ecs-tasks.amazonaws.com",
+    "Keys": [
+        "StringEquals",
+        "ArnLike"
+    ]
+}
+usms-lambda-exec-role: trust replaced (undo in outputs/lab-09-usms-lambda-exec-role-trust-before.json)
+{
+    "Principal": "lambda.amazonaws.com",
+    "Keys": [
+        "StringEquals",
+        "ArnLike"
+    ]
+}
