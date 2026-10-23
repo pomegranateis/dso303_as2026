@@ -1,0 +1,51 @@
+== USMS reachability matrix ==
+
+WHO MAY OPEN A CONNECTION TO WHAT  (ingress, computed from rules only)
+
+  -> default
+       (nothing. no ingress rule exists)
+
+  -> usms-alb-sg
+       tcp/80        <- cidr  0.0.0.0/0   <-- THE INTERNET
+       tcp/443       <- cidr  0.0.0.0/0   <-- THE INTERNET
+
+  -> usms-app-sg
+       tcp/80        <- cidr  0.0.0.0/0   <-- THE INTERNET
+       tcp/443       <- cidr  0.0.0.0/0   <-- THE INTERNET
+
+  -> usms-bastion-sg
+       tcp/22        <- cidr  203.0.113.10/32
+
+  -> usms-db-sg
+
+  -> usms-eks-cluster-sg
+       tcp/443       <- cidr  10.0.0.0/16
+
+  -> usms-enrolment-sg
+
+  -> usms-exam-sg
+       tcp/8443      <- cidr  10.10.0.0/16
+
+WHAT EACH GROUP MAY INITIATE  (egress)
+
+  default                all/all -> 0.0.0.0/0
+  usms-alb-sg            tcp/80 -> 
+  usms-app-sg            all/all -> 0.0.0.0/0
+  usms-bastion-sg        all/all -> 0.0.0.0/0
+  usms-db-sg             tcp/443 -> 0.0.0.0/0
+  usms-eks-cluster-sg    all/all -> 0.0.0.0/0
+  usms-enrolment-sg      tcp/443 ->  ; tcp/443 -> 0.0.0.0/0 ; tcp/443 -> 
+  usms-exam-sg           all/all -> 0.0.0.0/0
+
+INSTANCES, AND WHETHER THE INTERNET HAS AN ADDRESS TO SEND TO
+
+  usms-web-02      private=172.20.0.7   public=127.0.0.1        groups=usms-app-sg
+  usms-web-01      private=172.20.0.5   public=127.0.0.1        groups=usms-app-sg
+  usms-db-01       private=172.20.0.6   public=127.0.0.1        groups=usms-db-sg
+  usms-db-02       private=172.20.0.8   public=127.0.0.1        groups=usms-db-sg
+
+SINGLE POINT OF CONTROL - these groups are protected by exactly ONE ingress rule:
+    usms-bastion-sg
+    usms-eks-cluster-sg
+    usms-exam-sg
+    One mistake in one rule is the whole of the protection. Say so in your report.

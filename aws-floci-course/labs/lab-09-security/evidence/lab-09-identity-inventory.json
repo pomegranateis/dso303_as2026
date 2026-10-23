@@ -1,0 +1,728 @@
+[
+  {
+    "role": "usms-lambda-exec-role",
+    "arn": "arn:aws:iam::000000000000:role/usms-lambda-exec-role",
+    "maxSessionDuration": 3600,
+    "permissionsBoundary": null,
+    "trustPolicy": {
+      "Version": "2012-10-17",
+      "Statement": [
+        {
+          "Sid": "LambdaMayAssumeThisRoleForThisAccountOnly",
+          "Effect": "Allow",
+          "Principal": {
+            "Service": "lambda.amazonaws.com"
+          },
+          "Action": "sts:AssumeRole",
+          "Condition": {
+            "StringEquals": {
+              "aws:SourceAccount": "000000000000"
+            },
+            "ArnLike": {
+              "aws:SourceArn": "arn:aws:lambda:us-east-1:000000000000:function:*"
+            }
+          }
+        }
+      ]
+    },
+    "attachedPolicies": [
+      {
+        "name": "USMSLambdaBasic",
+        "arn": "arn:aws:iam::000000000000:policy/USMSLambdaBasic",
+        "version": "v1",
+        "document": {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Sid": "WriteOwnLogs",
+              "Effect": "Allow",
+              "Action": [
+                "logs:CreateLogGroup",
+                "logs:CreateLogStream",
+                "logs:PutLogEvents"
+              ],
+              "Resource": "arn:aws:logs:us-east-1:000000000000:*"
+            },
+            {
+              "Sid": "ReadStudentDataForNotifications",
+              "Effect": "Allow",
+              "Action": [
+                "s3:GetObject"
+              ],
+              "Resource": "arn:aws:s3:::usms-student-data/*"
+            }
+          ]
+        }
+      }
+    ],
+    "inlinePolicies": []
+  },
+  {
+    "role": "usms-eks-cluster-role",
+    "arn": "arn:aws:iam::000000000000:role/usms-eks-cluster-role",
+    "maxSessionDuration": 3600,
+    "permissionsBoundary": null,
+    "trustPolicy": {
+      "Version": "2012-10-17",
+      "Statement": [
+        {
+          "Sid": "EKSControlPlaneAssumesThisRole",
+          "Effect": "Allow",
+          "Principal": {
+            "Service": "eks.amazonaws.com"
+          },
+          "Action": "sts:AssumeRole"
+        }
+      ]
+    },
+    "attachedPolicies": [
+      {
+        "name": "USMSEKSClusterPolicy",
+        "arn": "arn:aws:iam::000000000000:policy/USMSEKSClusterPolicy",
+        "version": "v1",
+        "document": {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Sid": "ManageNetworkInterfacesForTheClusterEndpoint",
+              "Effect": "Allow",
+              "Action": [
+                "ec2:CreateNetworkInterface",
+                "ec2:DeleteNetworkInterface",
+                "ec2:DescribeNetworkInterfaces",
+                "ec2:DescribeSubnets",
+                "ec2:DescribeVpcs",
+                "ec2:DescribeSecurityGroups",
+                "ec2:DescribeInstances",
+                "ec2:CreateTags"
+              ],
+              "Resource": "*"
+            },
+            {
+              "Sid": "ManageLoadBalancersForServicesOfTypeLoadBalancer",
+              "Effect": "Allow",
+              "Action": [
+                "elasticloadbalancing:Describe*",
+                "elasticloadbalancing:CreateLoadBalancer",
+                "elasticloadbalancing:CreateTargetGroup",
+                "elasticloadbalancing:CreateListener",
+                "elasticloadbalancing:RegisterTargets",
+                "elasticloadbalancing:DeregisterTargets",
+                "elasticloadbalancing:AddTags"
+              ],
+              "Resource": "*"
+            },
+            {
+              "Sid": "DenyEverythingOutsideTheCourseRegion",
+              "Effect": "Deny",
+              "Action": "*",
+              "Resource": "*",
+              "Condition": {
+                "StringNotEquals": {
+                  "aws:RequestedRegion": "us-east-1"
+                }
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "inlinePolicies": []
+  },
+  {
+    "role": "usms-deploy-role",
+    "arn": "arn:aws:iam::000000000000:role/usms-deploy-role",
+    "maxSessionDuration": 3600,
+    "permissionsBoundary": null,
+    "trustPolicy": {
+      "Version": "2012-10-17",
+      "Statement": [
+        {
+          "Sid": "OnlyTheAdminUserMayDeploy",
+          "Effect": "Allow",
+          "Principal": {
+            "AWS": "arn:aws:iam::000000000000:user/usms-admin-01"
+          },
+          "Action": "sts:AssumeRole"
+        }
+      ]
+    },
+    "attachedPolicies": [
+      {
+        "name": "USMSDeployBase",
+        "arn": "arn:aws:iam::000000000000:policy/USMSDeployBase",
+        "version": "v1",
+        "document": {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Sid": "DeployTheContainerPlatform",
+              "Effect": "Allow",
+              "Action": [
+                "ecs:RegisterTaskDefinition",
+                "ecs:DeregisterTaskDefinition",
+                "ecs:UpdateService",
+                "ecs:DescribeServices",
+                "ecs:DescribeTaskDefinition",
+                "ecs:ListTasks",
+                "ecs:DescribeTasks",
+                "elasticloadbalancing:Describe*",
+                "application-autoscaling:Describe*",
+                "logs:DescribeLogGroups",
+                "logs:DescribeLogStreams",
+                "logs:GetLogEvents"
+              ],
+              "Resource": "*"
+            },
+            {
+              "Sid": "PassOnlyTheseThreeRolesAndOnlyToTheseServices",
+              "Effect": "Allow",
+              "Action": "iam:PassRole",
+              "Resource": [
+                "arn:aws:iam::000000000000:role/usms-ecs-exec-role",
+                "arn:aws:iam::000000000000:role/usms-ecs-task-role",
+                "arn:aws:iam::000000000000:role/usms-transcripts-reader-role"
+              ],
+              "Condition": {
+                "StringEquals": {
+                  "iam:PassedToService": "ecs-tasks.amazonaws.com"
+                }
+              }
+            },
+            {
+              "Sid": "NeverPassAnythingToEC2",
+              "Effect": "Deny",
+              "Action": "iam:PassRole",
+              "Resource": "*",
+              "Condition": {
+                "StringEquals": {
+                  "iam:PassedToService": "ec2.amazonaws.com"
+                }
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "inlinePolicies": []
+  },
+  {
+    "role": "usms-developer-role",
+    "arn": "arn:aws:iam::000000000000:role/usms-developer-role",
+    "maxSessionDuration": 3600,
+    "permissionsBoundary": null,
+    "trustPolicy": {
+      "Version": "2012-10-17",
+      "Statement": [
+        {
+          "Sid": "AllowUSMSDevelopersToAssume",
+          "Effect": "Allow",
+          "Principal": {
+            "AWS": "arn:aws:iam::000000000000:user/usms-dev-01"
+          },
+          "Action": "sts:AssumeRole"
+        }
+      ]
+    },
+    "attachedPolicies": [
+      {
+        "name": "USMSDeveloperBase",
+        "arn": "arn:aws:iam::000000000000:policy/USMSDeveloperBase",
+        "version": "v3",
+        "document": {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Sid": "ReadInfrastructure",
+              "Effect": "Allow",
+              "Action": [
+                "iam:Get*",
+                "iam:List*",
+                "ec2:Describe*",
+                "s3:List*",
+                "s3:GetBucketLocation",
+                "cloudwatch:Describe*",
+                "cloudwatch:Get*",
+                "logs:Describe*",
+                "logs:GetLogEvents",
+                "sts:GetCallerIdentity"
+              ],
+              "Resource": "*"
+            },
+            {
+              "Sid": "BuildNetworkingForLab02",
+              "Effect": "Allow",
+              "Action": [
+                "ec2:CreateVpc",
+                "ec2:CreateSubnet",
+                "ec2:CreateRouteTable",
+                "ec2:CreateRoute",
+                "ec2:CreateInternetGateway",
+                "ec2:AttachInternetGateway",
+                "ec2:AssociateRouteTable",
+                "ec2:CreateSecurityGroup",
+                "ec2:AuthorizeSecurityGroupIngress",
+                "ec2:CreateTags",
+                "ec2:ModifyVpcAttribute",
+                "ec2:DeleteVpc",
+                "ec2:DescribeAvailabilityZones"
+              ],
+              "Resource": "*",
+              "Condition": {
+                "StringEquals": {
+                  "aws:RequestedRegion": "us-east-1"
+                }
+              }
+            },
+            {
+              "Sid": "DenyDangerousIdentityChanges",
+              "Effect": "Deny",
+              "Action": [
+                "iam:CreateUser",
+                "iam:DeleteUser",
+                "iam:CreateAccessKey",
+                "iam:AttachUserPolicy",
+                "iam:PutUserPolicy",
+                "aws-portal:*",
+                "organizations:*"
+              ],
+              "Resource": "*"
+            }
+          ]
+        }
+      }
+    ],
+    "inlinePolicies": []
+  },
+  {
+    "role": "usms-breakglass-role",
+    "arn": "arn:aws:iam::000000000000:role/usms-breakglass-role",
+    "maxSessionDuration": 3600,
+    "permissionsBoundary": null,
+    "trustPolicy": {
+      "Version": "2012-10-17",
+      "Statement": [
+        {
+          "Sid": "AdminOnlyWithMfaAndTheAgreedExternalId",
+          "Effect": "Allow",
+          "Principal": {
+            "AWS": "arn:aws:iam::000000000000:user/usms-admin-01"
+          },
+          "Action": "sts:AssumeRole",
+          "Condition": {
+            "Bool": {
+              "aws:MultiFactorAuthPresent": "true"
+            },
+            "StringEquals": {
+              "sts:ExternalId": "usms-breakglass-2026"
+            }
+          }
+        }
+      ]
+    },
+    "attachedPolicies": [
+      {
+        "name": "USMSBreakGlassScaling",
+        "arn": "arn:aws:iam::000000000000:policy/USMSBreakGlassScaling",
+        "version": "v1",
+        "document": {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Sid": "SuspendAndReadBackEnrolmentScalingOnly",
+              "Effect": "Allow",
+              "Action": [
+                "application-autoscaling:RegisterScalableTarget",
+                "application-autoscaling:DescribeScalableTargets"
+              ],
+              "Resource": "*"
+            }
+          ]
+        }
+      }
+    ],
+    "inlinePolicies": []
+  },
+  {
+    "role": "usms-ecs-exec-role",
+    "arn": "arn:aws:iam::000000000000:role/usms-ecs-exec-role",
+    "maxSessionDuration": 3600,
+    "permissionsBoundary": null,
+    "trustPolicy": {
+      "Version": "2012-10-17",
+      "Statement": [
+        {
+          "Sid": "EcsTasksMayAssumeThisRoleForThisAccountOnly",
+          "Effect": "Allow",
+          "Principal": {
+            "Service": "ecs-tasks.amazonaws.com"
+          },
+          "Action": "sts:AssumeRole",
+          "Condition": {
+            "StringEquals": {
+              "aws:SourceAccount": "000000000000"
+            },
+            "ArnLike": {
+              "aws:SourceArn": "arn:aws:ecs:us-east-1:000000000000:*"
+            }
+          }
+        }
+      ]
+    },
+    "attachedPolicies": [
+      {
+        "name": "USMSECSTaskExecution",
+        "arn": "arn:aws:iam::000000000000:policy/USMSECSTaskExecution",
+        "version": "v1",
+        "document": {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Sid": "PullContainerImages",
+              "Effect": "Allow",
+              "Action": [
+                "ecr:GetAuthorizationToken",
+                "ecr:BatchCheckLayerAvailability",
+                "ecr:GetDownloadUrlForLayer",
+                "ecr:BatchGetImage"
+              ],
+              "Resource": "*"
+            },
+            {
+              "Sid": "WriteTaskLogsToItsOwnGroupOnly",
+              "Effect": "Allow",
+              "Action": [
+                "logs:CreateLogStream",
+                "logs:PutLogEvents"
+              ],
+              "Resource": "arn:aws:logs:us-east-1:000000000000:log-group:/usms/ecs/enrolment:*"
+            }
+          ]
+        }
+      }
+    ],
+    "inlinePolicies": []
+  },
+  {
+    "role": "usms-ec2-app-role",
+    "arn": "arn:aws:iam::000000000000:role/usms-ec2-app-role",
+    "maxSessionDuration": 3600,
+    "permissionsBoundary": null,
+    "trustPolicy": {
+      "Version": "2012-10-17",
+      "Statement": [
+        {
+          "Sid": "AllowEC2ToAssumeThisRole",
+          "Effect": "Allow",
+          "Principal": {
+            "Service": "ec2.amazonaws.com"
+          },
+          "Action": "sts:AssumeRole"
+        }
+      ]
+    },
+    "attachedPolicies": [
+      {
+        "name": "USMSStudentDataReadWrite",
+        "arn": "arn:aws:iam::000000000000:policy/USMSStudentDataReadWrite",
+        "version": "v1",
+        "document": {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Sid": "ListTheBucketItself",
+              "Effect": "Allow",
+              "Action": [
+                "s3:ListBucket",
+                "s3:GetBucketLocation"
+              ],
+              "Resource": "arn:aws:s3:::usms-student-data"
+            },
+            {
+              "Sid": "ReadWriteObjectsInsideTheBucket",
+              "Effect": "Allow",
+              "Action": [
+                "s3:GetObject",
+                "s3:PutObject",
+                "s3:DeleteObject"
+              ],
+              "Resource": "arn:aws:s3:::usms-student-data/*"
+            },
+            {
+              "Sid": "NeverDeleteTheBucket",
+              "Effect": "Deny",
+              "Action": [
+                "s3:DeleteBucket"
+              ],
+              "Resource": "arn:aws:s3:::usms-student-data"
+            }
+          ]
+        }
+      }
+    ],
+    "inlinePolicies": []
+  },
+  {
+    "role": "usms-ecs-task-role",
+    "arn": "arn:aws:iam::000000000000:role/usms-ecs-task-role",
+    "maxSessionDuration": 3600,
+    "permissionsBoundary": null,
+    "trustPolicy": {
+      "Version": "2012-10-17",
+      "Statement": [
+        {
+          "Sid": "EcsTasksMayAssumeThisRoleForThisAccountOnly",
+          "Effect": "Allow",
+          "Principal": {
+            "Service": "ecs-tasks.amazonaws.com"
+          },
+          "Action": "sts:AssumeRole",
+          "Condition": {
+            "StringEquals": {
+              "aws:SourceAccount": "000000000000"
+            },
+            "ArnLike": {
+              "aws:SourceArn": "arn:aws:ecs:us-east-1:000000000000:*"
+            }
+          }
+        }
+      ]
+    },
+    "attachedPolicies": [
+      {
+        "name": "USMSStudentDataReadWrite",
+        "arn": "arn:aws:iam::000000000000:policy/USMSStudentDataReadWrite",
+        "version": "v1",
+        "document": {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Sid": "ListTheBucketItself",
+              "Effect": "Allow",
+              "Action": [
+                "s3:ListBucket",
+                "s3:GetBucketLocation"
+              ],
+              "Resource": "arn:aws:s3:::usms-student-data"
+            },
+            {
+              "Sid": "ReadWriteObjectsInsideTheBucket",
+              "Effect": "Allow",
+              "Action": [
+                "s3:GetObject",
+                "s3:PutObject",
+                "s3:DeleteObject"
+              ],
+              "Resource": "arn:aws:s3:::usms-student-data/*"
+            },
+            {
+              "Sid": "NeverDeleteTheBucket",
+              "Effect": "Deny",
+              "Action": [
+                "s3:DeleteBucket"
+              ],
+              "Resource": "arn:aws:s3:::usms-student-data"
+            }
+          ]
+        }
+      }
+    ],
+    "inlinePolicies": []
+  },
+  {
+    "role": "usms-transcripts-reader-role",
+    "arn": "arn:aws:iam::000000000000:role/usms-transcripts-reader-role",
+    "maxSessionDuration": 3600,
+    "permissionsBoundary": null,
+    "trustPolicy": {
+      "Version": "2012-10-17",
+      "Statement": [
+        {
+          "Sid": "EcsTasksMayAssumeThisRoleForThisAccountOnly",
+          "Effect": "Allow",
+          "Principal": {
+            "Service": "ecs-tasks.amazonaws.com"
+          },
+          "Action": "sts:AssumeRole",
+          "Condition": {
+            "StringEquals": {
+              "aws:SourceAccount": "000000000000"
+            },
+            "ArnLike": {
+              "aws:SourceArn": "arn:aws:ecs:us-east-1:000000000000:*"
+            }
+          }
+        }
+      ]
+    },
+    "attachedPolicies": [
+      {
+        "name": "USMSStudentDataReadOnly",
+        "arn": "arn:aws:iam::000000000000:policy/USMSStudentDataReadOnly",
+        "version": "v1",
+        "document": {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Sid": "ListTheTranscriptsBucket",
+              "Effect": "Allow",
+              "Action": "s3:ListBucket",
+              "Resource": "arn:aws:s3:::usms-student-data"
+            },
+            {
+              "Sid": "ReadTranscriptObjectsOnly",
+              "Effect": "Allow",
+              "Action": "s3:GetObject",
+              "Resource": "arn:aws:s3:::usms-student-data/*"
+            },
+            {
+              "Sid": "NeverWriteAndNeverDelete",
+              "Effect": "Deny",
+              "Action": [
+                "s3:PutObject",
+                "s3:DeleteObject",
+                "s3:DeleteBucket",
+                "s3:PutBucketPolicy"
+              ],
+              "Resource": [
+                "arn:aws:s3:::usms-student-data",
+                "arn:aws:s3:::usms-student-data/*"
+              ]
+            }
+          ]
+        }
+      }
+    ],
+    "inlinePolicies": []
+  },
+  {
+    "role": "usms-eks-node-role",
+    "arn": "arn:aws:iam::000000000000:role/usms-eks-node-role",
+    "maxSessionDuration": 3600,
+    "permissionsBoundary": null,
+    "trustPolicy": {
+      "Version": "2012-10-17",
+      "Statement": [
+        {
+          "Sid": "EC2InstancesAssumeThisRole",
+          "Effect": "Allow",
+          "Principal": {
+            "Service": "ec2.amazonaws.com"
+          },
+          "Action": "sts:AssumeRole"
+        }
+      ]
+    },
+    "attachedPolicies": [
+      {
+        "name": "USMSEKSNodePolicy",
+        "arn": "arn:aws:iam::000000000000:policy/USMSEKSNodePolicy",
+        "version": "v1",
+        "document": {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Sid": "KubeletDescribesTheClusterAndRegisters",
+              "Effect": "Allow",
+              "Action": [
+                "eks:DescribeCluster",
+                "eks:DescribeNodegroup",
+                "eks:ListClusters"
+              ],
+              "Resource": "*"
+            },
+            {
+              "Sid": "VpcCniAttachesInterfacesAndAssignsPodAddresses",
+              "Effect": "Allow",
+              "Action": [
+                "ec2:AssignPrivateIpAddresses",
+                "ec2:UnassignPrivateIpAddresses",
+                "ec2:AttachNetworkInterface",
+                "ec2:DetachNetworkInterface",
+                "ec2:CreateNetworkInterface",
+                "ec2:DeleteNetworkInterface",
+                "ec2:DescribeNetworkInterfaces",
+                "ec2:DescribeInstances",
+                "ec2:DescribeSubnets",
+                "ec2:DescribeTags",
+                "ec2:CreateTags"
+              ],
+              "Resource": "*"
+            },
+            {
+              "Sid": "PullImagesFromEcr",
+              "Effect": "Allow",
+              "Action": [
+                "ecr:GetAuthorizationToken",
+                "ecr:BatchCheckLayerAvailability",
+                "ecr:GetDownloadUrlForLayer",
+                "ecr:BatchGetImage"
+              ],
+              "Resource": "*"
+            },
+            {
+              "Sid": "WriteContainerLogs",
+              "Effect": "Allow",
+              "Action": [
+                "logs:CreateLogGroup",
+                "logs:CreateLogStream",
+                "logs:PutLogEvents",
+                "logs:DescribeLogStreams"
+              ],
+              "Resource": "arn:aws:logs:us-east-1:000000000000:log-group:/usms/eks/*"
+            },
+            {
+              "Sid": "DenyEverythingOutsideTheCourseRegion",
+              "Effect": "Deny",
+              "Action": "*",
+              "Resource": "*",
+              "Condition": {
+                "StringNotEquals": {
+                  "aws:RequestedRegion": "us-east-1"
+                }
+              }
+            }
+          ]
+        }
+      },
+      {
+        "name": "USMSStudentDataReadWrite",
+        "arn": "arn:aws:iam::000000000000:policy/USMSStudentDataReadWrite",
+        "version": "v1",
+        "document": {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Sid": "ListTheBucketItself",
+              "Effect": "Allow",
+              "Action": [
+                "s3:ListBucket",
+                "s3:GetBucketLocation"
+              ],
+              "Resource": "arn:aws:s3:::usms-student-data"
+            },
+            {
+              "Sid": "ReadWriteObjectsInsideTheBucket",
+              "Effect": "Allow",
+              "Action": [
+                "s3:GetObject",
+                "s3:PutObject",
+                "s3:DeleteObject"
+              ],
+              "Resource": "arn:aws:s3:::usms-student-data/*"
+            },
+            {
+              "Sid": "NeverDeleteTheBucket",
+              "Effect": "Deny",
+              "Action": [
+                "s3:DeleteBucket"
+              ],
+              "Resource": "arn:aws:s3:::usms-student-data"
+            }
+          ]
+        }
+      }
+    ],
+    "inlinePolicies": []
+  }
+]

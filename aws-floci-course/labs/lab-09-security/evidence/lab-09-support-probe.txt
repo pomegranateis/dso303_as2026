@@ -1,0 +1,23 @@
+== Lab 09 support probe 2026-10-21T16:36:34Z, Server:      1.5.34 (floci-always-free) ==
+iam list-roles                                               SUPPORTED
+iam list-policies --scope Local                              SUPPORTED
+iam get-role                                                 SUPPORTED
+iam list-attached-role-policies                              SUPPORTED
+iam get-account-authorization-details                        not available
+iam update-assume-role-policy (skeleton)                     SUPPORTED
+iam create-role --permissions-boundary (skeleton)            SUPPORTED
+iam put-role-permissions-boundary (skeleton)                 SUPPORTED
+iam simulate-principal-policy                                SUPPORTED
+accessanalyzer list-analyzers                                not available
+sts assume-role (skeleton)                                   SUPPORTED
+iam list-access-keys                                         SUPPORTED
+iam get-access-key-last-used                                 SUPPORTED
+iam get-credential-report                                    not available
+iam list-entities-for-policy                                 not available
+ec2 describe-security-group-rules                            SUPPORTED
+ec2 authorize-security-group-egress (skeleton)               SUPPORTED
+ec2 revoke-security-group-egress (skeleton)                  SUPPORTED
+ec2 describe-prefix-lists                                    SUPPORTED
+ec2 describe-network-interfaces                              SUPPORTED
+ec2 modify-instance-metadata-options (skeleton)              SUPPORTED
+ec2 describe-instances MetadataOptions                       SUPPORTED

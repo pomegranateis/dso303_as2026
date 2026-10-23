@@ -1,0 +1,8 @@
+7 roles inventoried
+  usms-lambda-exec-role          policies=1 boundary=-
+  usms-eks-cluster-role          policies=1 boundary=-
+  usms-developer-role            policies=1 boundary=-
+  usms-ecs-exec-role             policies=1 boundary=-
+  usms-ec2-app-role              policies=1 boundary=-
+  usms-ecs-task-role             policies=1 boundary=-
+  usms-eks-node-role             policies=2 boundary=-

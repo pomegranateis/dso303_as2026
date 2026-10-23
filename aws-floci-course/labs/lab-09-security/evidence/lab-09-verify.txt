@@ -1,0 +1,64 @@
+== Environment ==
+  ok   Floci container running
+  ok   Storage mode is NOT memory
+  ok   AWS CLI reaches Floci
+  ok   Account is 000000000000
+== Labs 01 to 06 dependencies still present ==
+  ok   usms-vpc exists
+  ok   usms-ecs-task-role exists
+  ok   usms-ec2-app-profile exists
+  ok   usms-enrolment-svc is ACTIVE
+  ok   USMSStudentDataReadWrite is still on TWO roles (Lab 10 needs both)
+== Lab 09 identity: the read-only split ==
+  ok   USMSStudentDataReadOnly exists
+  ok   it ALLOWS s3:GetObject
+  ok   it does NOT allow s3:PutObject
+  ok   it explicitly DENIES s3:PutObject
+  ok   usms-transcripts-reader-role exists
+  ok   it carries USMSStudentDataReadOnly
+== Lab 09 identity: the confused-deputy fix ==
+  ok   usms-ecs-task-role trust policy has a Condition
+  ok   its principal is STILL ecs-tasks.amazonaws.com
+  ok   the condition pins aws:SourceAccount to this account
+== Lab 09 identity: PassRole and the boundary ==
+  ok   USMSDeployBase exists
+  ok   its iam:PassRole names role ARNs, not Resource "*"
+  ok   its iam:PassRole carries an iam:PassedToService condition
+  ok   USMSPermissionsBoundary exists
+  ok   the boundary is attached to NOTHING as an ordinary policy
+  ok   usms-deploy-role exists
+  FAIL [floci] usms-deploy-role HAS a permissions boundary
+  ok   usms-deploy-role trusts a USER, not a service
+== Lab 09 credentials and metadata ==
+  ok   usms-dev-01 has EXACTLY ONE access key
+  ok   that key is Active
+  FAIL [floci] usms-web-01 requires IMDSv2
+== Lab 09 network: ingress unchanged ==
+  ok   usms-alb-sg still admits tcp/80 from 0.0.0.0/0
+  FAIL [floci] usms-enrolment-sg still admits tcp/80 from usms-alb-sg
+  FAIL [floci] usms-db-sg still admits tcp/5432 from usms-app-sg
+== Lab 09 network: egress written ==
+  ok   usms-alb-sg has NO allow-all egress rule
+  FAIL [floci] usms-alb-sg egress destination is a GROUP, not a CIDR
+  ok   usms-enrolment-sg has NO allow-all egress rule
+  ok   usms-enrolment-sg egress is tcp/443 only
+  ok   usms-db-sg has NO allow-all egress rule
+  ok   usms-db-sg egress is tcp/443 only
+== Lab 09 network: the SSH cutover ==
+  ok   usms-bastion-sg exists
+  FAIL [floci] usms-app-sg admits tcp/22 from a GROUP
+  ok   usms-app-sg has NO CIDR source on tcp/22
+== The negatives that must stay true ==
+  FAIL [floci] usms-db-01 has NO public address
+  ok   the private subnet does NOT auto-assign public addresses
+  ok   the private route table has NO internet gateway route
+== Files, documents and Git hygiene ==
+  ok   configs/lab-09.env exists
+  ok   configs/lab-09.env has no empty values
+  ok   every policies/ document is valid JSON
+  ok   no policies/ document contains an unexpanded variable
+  ok   the three audit scripts exist and are executable
+  ok   no secret is tracked by git
+
+PASS=43  FAIL=7
+

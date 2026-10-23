@@ -1,0 +1,43 @@
+policy arn:aws:iam::000000000000:policy/USMSStudentDataReadWrite default version v1
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Sid": "ListTheBucketItself",
+            "Effect": "Allow",
+            "Action": [
+                "s3:ListBucket",
+                "s3:GetBucketLocation"
+            ],
+            "Resource": "arn:aws:s3:::usms-student-data"
+        },
+        {
+            "Sid": "ReadWriteObjectsInsideTheBucket",
+            "Effect": "Allow",
+            "Action": [
+                "s3:GetObject",
+                "s3:PutObject",
+                "s3:DeleteObject"
+            ],
+            "Resource": "arn:aws:s3:::usms-student-data/*"
+        },
+        {
+            "Sid": "NeverDeleteTheBucket",
+            "Effect": "Deny",
+            "Action": [
+                "s3:DeleteBucket"
+            ],
+            "Resource": "arn:aws:s3:::usms-student-data"
+        }
+    ]
+}
+--- who carries it ---
+An error occurred (UnsupportedOperation) when calling the ListEntitiesForPolicy operation: Operation ListEntitiesForPolicy is not supported.
+fallback, role by role / user by user / group by group:
+  role  usms-ec2-app-role
+  role  usms-ecs-task-role
+  role  usms-eks-node-role
+--- Part 2: does the bucket exist? ---
+
+An error occurred (404) when calling the HeadBucket operation: Not Found
+head-bucket exit: 254

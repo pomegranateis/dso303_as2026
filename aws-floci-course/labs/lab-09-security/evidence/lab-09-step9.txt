@@ -1,0 +1,60 @@
+== Part 2: assume usms-developer-role with a session policy ==
+role: arn:aws:iam::000000000000:role/usms-developer-role
+credentials returned (not printed); expiry 2026-10-21T17:32:18.709620+00:00
+arn:aws:sts::000000000000:assumed-role/usms-developer-role/floci-session
+describe-vpcs as the scoped session: 2
+iam list-users as the scoped session (session policy would deny on AWS): 4
+== Part 3: effective permissions = identity AND session ==
+identity policy allows (patterns):
+    cloudwatch:Describe*
+    cloudwatch:Get*
+    ec2:AssociateRouteTable
+    ec2:AttachInternetGateway
+    ec2:AuthorizeSecurityGroupIngress
+    ec2:CreateInternetGateway
+    ec2:CreateRoute
+    ec2:CreateRouteTable
+    ec2:CreateSecurityGroup
+    ec2:CreateSubnet
+    ec2:CreateTags
+    ec2:CreateVpc
+    ec2:DeleteVpc
+    ec2:Describe*
+    ec2:DescribeAvailabilityZones
+    ec2:ModifyVpcAttribute
+    iam:Get*
+    iam:List*
+    logs:Describe*
+    logs:GetLogEvents
+    s3:GetBucketLocation
+    s3:List*
+    sts:GetCallerIdentity
+
+session policy allows:
+    ec2:DescribeSecurityGroups
+    ec2:DescribeSubnets
+    ec2:DescribeVpcs
+    sts:GetCallerIdentity
+
+EFFECTIVE - an action needs a match in BOTH and a match in NEITHER deny:
+    ec2:DescribeSecurityGroups       ALLOWED
+    ec2:DescribeSubnets              ALLOWED
+    ec2:DescribeVpcs                 ALLOWED
+    sts:GetCallerIdentity            ALLOWED
+== path A: the simulator on the role's identity policy ==
+-------------------------------------------
+|         SimulatePrincipalPolicy         |
++------------------------+----------------+
+|         Action         |   Decision     |
++------------------------+----------------+
+|  ec2:DescribeVpcs      |  allowed       |
+|  sts:GetCallerIdentity |  allowed       |
+|  iam:CreateUser        |  explicitDeny  |
++------------------------+----------------+
+
+== variant: the same session policy plus s3:PutObject (asking the session for MORE than the role has) ==
+    ec2:DescribeSecurityGroups       ALLOWED
+    ec2:DescribeSubnets              ALLOWED
+    ec2:DescribeVpcs                 ALLOWED
+    s3:PutObject                     NOT in the identity policy -> denied
+    sts:GetCallerIdentity            ALLOWED

@@ -1,0 +1,33 @@
+== Roles in this account ==
+-----------------------------------------------------------------------------
+|                                 ListRoles                                 |
++-----------------------------------+-------------+-------------------------+
+|              Created              | MaxSession  |          Role           |
++-----------------------------------+-------------+-------------------------+
+|  2026-08-21T06:02:35.719787+00:00 |  3600       |  usms-developer-role    |
+|  2026-08-21T05:30:22.100954+00:00 |  3600       |  usms-ec2-app-role      |
+|  2026-10-12T15:11:37.036311+00:00 |  3600       |  usms-ecs-exec-role     |
+|  2026-10-12T15:12:45.894030+00:00 |  3600       |  usms-ecs-task-role     |
+|  2026-10-12T18:20:46.278835+00:00 |  3600       |  usms-eks-cluster-role  |
+|  2026-10-12T18:20:52.724707+00:00 |  3600       |  usms-eks-node-role     |
+|  2026-08-21T05:49:50.114554+00:00 |  3600       |  usms-lambda-exec-role  |
++-----------------------------------+-------------+-------------------------+
+== Users and their access keys ==
+  usms-audit-01      access keys: 0
+  usms-admin-01      access keys: 0
+  usms-intern-01     access keys: 0
+  usms-dev-01        access keys: 1
+== Customer managed policies ==
+-----------------------------------------------------
+|                   ListPolicies                    |
++----------+----------+-----------------------------+
+| Attached | Default  |           Policy            |
++----------+----------+-----------------------------+
+|  2       |  v1      |  USMSAssumeAppRoles         |
+|  3       |  v3      |  USMSDeveloperBase          |
+|  1       |  v1      |  USMSECSTaskExecution       |
+|  1       |  v1      |  USMSEKSClusterPolicy       |
+|  1       |  v1      |  USMSEKSNodePolicy          |
+|  1       |  v1      |  USMSLambdaBasic            |
+|  3       |  v1      |  USMSStudentDataReadWrite   |
++----------+----------+-----------------------------+

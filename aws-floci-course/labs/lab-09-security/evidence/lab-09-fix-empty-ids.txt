@@ -1,0 +1,23 @@
+== FIX 17:31:36: empty IDs written by my subshell mistake; revoke the two empty-source rules, authorise the corrected ones ==
+True
+sgr-4d7d9541f5a0cf15f	None
+True
+sgr-920700cf5607e988c	None
+-- app-sg ingress, groups API --
+80	0.0.0.0/0	None
+443	0.0.0.0/0	None
+22	None	None
+22	None	None
+-- enrolment-sg egress, groups API --
+443	None	None
+443	0.0.0.0/0	None
+443	None	None
+-- rules API --
+sgr-4d7d9541f5a0cf15f	False	22	None	None	None
+sgr-f2289be10f31e5f44	False	22	10.0.0.0/16	None	None
+sgr-307873e302e0cfdb8	False	443	0.0.0.0/0	None	None
+sgr-9a275fde3919b5116	False	22	None	None	None
+sgr-4c4213aecc99849b2	False	22	None	None	None
+sgr-e69f5f52f16d9a03a	True	443	None	None	None
+sgr-2e4bedef23a4cf9da	True	443	0.0.0.0/0	None	None
+sgr-920700cf5607e988c	True	443	None	None	None

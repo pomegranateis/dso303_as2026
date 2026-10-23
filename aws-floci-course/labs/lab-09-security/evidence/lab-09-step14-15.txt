@@ -1,0 +1,26 @@
+policies/usms-alb-sg-egress.json valid JSON, unexpanded $: 0
+policies/usms-db-sg-egress.json valid JSON, unexpanded $: 0
+== usms-alb-sg: authorise, then revoke the default ==
+sgr-9144e16e7083098a9
+True
+groups API egress:
+None	80	tcp	None
+rules API egress:
+sgr-9144e16e7083098a9	tcp	80	None	None
+sgr-8a1333566bbbeb245	-1	None	0.0.0.0/0	None
+== usms-db-sg: authorise, then revoke the default ==
+sgr-81beb6512f1a87c51
+True
+groups API egress:
+0.0.0.0/0	443	tcp	None
+rules API egress:
+sgr-81beb6512f1a87c51	tcp	443	0.0.0.0/0	None
+sgr-572a229c37c9e4ec0	-1	None	0.0.0.0/0	None
+== Step 15 verify: allow-all egress remaining (groups API) ==
+usms-enrolment-sg      allow-all egress rules remaining: 0
+usms-alb-sg            allow-all egress rules remaining: 0
+usms-db-sg             allow-all egress rules remaining: 0
+== ingress unchanged? (rules API counts: alb 2, enrolment 3, db 2 before) ==
+sg-54033edc16ebffd09 ingress rules: 2
+sg-5f99dfa81088e83e3 ingress rules: 3
+sg-f765e22fd748ff412 ingress rules: 2

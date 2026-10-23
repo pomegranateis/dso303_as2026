@@ -1,0 +1,44 @@
+== Step 11 Part 1: before ==
+{
+    "State": "applied",
+    "HttpTokens": "optional",
+    "HttpPutResponseHopLimit": 1,
+    "HttpEndpoint": "enabled",
+    "HttpProtocolIpv6": "disabled",
+    "InstanceMetadataTags": "disabled"
+}
+== Part 2: require tokens, hop limit 1 ==
+
+An error occurred (UnsupportedOperation) when calling the ModifyInstanceMetadataOptions operation: Operation ModifyInstanceMetadataOptions is not supported.
+modify-instance-metadata-options not supported on this build - record it and continue
+== Part 3: after ==
+{
+    "State": "applied",
+    "HttpTokens": "optional",
+    "HttpPutResponseHopLimit": 1,
+    "HttpEndpoint": "enabled",
+    "HttpProtocolIpv6": "disabled",
+    "InstanceMetadataTags": "disabled"
+}
+HttpTokens : optional  ->  optional
+HopLimit   : 1  ->  1
+
+NOT APPLIED - record this as a Floci limitation and say what real AWS would have done
+== Your turn: usms-db-01 has no instance profile -> switch the endpoint off ==
+{
+    "Profile": null,
+    "Metadata": {
+        "State": "applied",
+        "HttpTokens": "optional",
+        "HttpPutResponseHopLimit": 1,
+        "HttpEndpoint": "enabled",
+        "HttpProtocolIpv6": "disabled",
+        "InstanceMetadataTags": "disabled"
+    }
+}
+
+An error occurred (UnsupportedOperation) when calling the ModifyInstanceMetadataOptions operation: Operation ModifyInstanceMetadataOptions is not supported.
+{
+    "Endpoint": "enabled",
+    "Tokens": "optional"
+}

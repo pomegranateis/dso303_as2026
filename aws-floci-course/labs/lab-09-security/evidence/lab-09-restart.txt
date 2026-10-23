@@ -1,0 +1,20 @@
+== Step 18 Part 2: perturb 17:37:31 ==
+[1;34m==>[0m Floci stopped. State preserved in /home/pomegranateu/floci-data
+[1;34m==>[0m Floci is up at http://localhost:4566
+== Part 3: re-derive IDs from the API, not the env files ==
+re-derived:
+  sg-54033edc16ebffd09
+  sg-5f99dfa81088e83e3
+  sg-f765e22fd748ff412
+  sg-96722a74c4be5da9e
+  i-68c4cb27d85e381e8
+PERSISTENCE PROVEN: the trust condition, the permissions boundary, the read-only role and its policy, the single access key, three written egress rules, the absence of a CIDR SSH source, and the IMDSv2 requirement are all unchanged
+-- boundary still evaluated after the restart? --
+iam:CreateUser	explicitDeny
+ec2:DeleteVpc	explicitDeny
+-- Lab 3 instances after the restart --
+stopped	stopped	stopped	stopped
+usms-web-02	running
+usms-web-01	running
+usms-db-01	running
+usms-db-02	running

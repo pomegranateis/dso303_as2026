@@ -1,0 +1,75 @@
+== USMS security group audit ==
+
+default  (sg-31cd6c3223f0d3ba4)   interfaces: 0
+    ingress:
+        (none - nothing may reach anything wearing this group)
+    egress:
+        all/all       to   0.0.0.0/0
+    MED  egress is the DEFAULT allow-all rule - nobody wrote this
+    LOW  attached to no network interface
+
+usms-alb-sg  (sg-54033edc16ebffd09)   interfaces: 0
+    ingress:
+        tcp/80        from 0.0.0.0/0
+        tcp/443       from 0.0.0.0/0
+    egress:
+        tcp/80        to   <none>
+    HIGH ingress tcp/80 from 0.0.0.0/0
+    HIGH ingress tcp/443 from 0.0.0.0/0
+    LOW  attached to no network interface
+
+usms-app-sg  (sg-96722a74c4be5da9e)   interfaces: 2
+    ingress:
+        tcp/80        from 0.0.0.0/0
+        tcp/443       from 0.0.0.0/0
+        tcp/22        from <none>
+        tcp/22        from <none>
+    egress:
+        all/all       to   0.0.0.0/0
+    HIGH ingress tcp/80 from 0.0.0.0/0
+    HIGH ingress tcp/443 from 0.0.0.0/0
+    MED  egress is the DEFAULT allow-all rule - nobody wrote this
+
+usms-bastion-sg  (sg-00f100748c6d999b7)   interfaces: 0
+    ingress:
+        tcp/22        from 203.0.113.10/32
+    egress:
+        all/all       to   0.0.0.0/0
+    MED  egress is the DEFAULT allow-all rule - nobody wrote this
+    LOW  attached to no network interface
+
+usms-db-sg  (sg-f765e22fd748ff412)   interfaces: 2
+    ingress:
+        tcp/5432      from <none>
+        tcp/5432      from <none>
+    egress:
+        tcp/443       to   0.0.0.0/0
+
+usms-eks-cluster-sg  (sg-77d25192a5b480a71)   interfaces: 0
+    ingress:
+        tcp/443       from 10.0.0.0/16
+    egress:
+        all/all       to   0.0.0.0/0
+    MED  ingress tcp/443 from a whole VPC range (10.0.0.0/16) - could this be a group reference?
+    MED  egress is the DEFAULT allow-all rule - nobody wrote this
+    LOW  attached to no network interface
+
+usms-enrolment-sg  (sg-5f99dfa81088e83e3)   interfaces: 0
+    ingress:
+        tcp/80        from <none>
+    egress:
+        tcp/443       to   <none>
+        tcp/443       to   0.0.0.0/0
+        tcp/443       to   <none>
+    LOW  attached to no network interface
+
+usms-exam-sg  (sg-314850fc3b26ca8b6)   interfaces: 0
+    ingress:
+        tcp/8443      from 10.10.0.0/16
+    egress:
+        all/all       to   0.0.0.0/0
+    MED  ingress tcp/8443 from a whole VPC range (10.10.0.0/16) - could this be a group reference?
+    MED  egress is the DEFAULT allow-all rule - nobody wrote this
+    LOW  attached to no network interface
+
+HIGH=4  MED=7  LOW=6  groups=8

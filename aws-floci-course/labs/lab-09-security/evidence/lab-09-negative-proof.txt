@@ -1,0 +1,14 @@
+== Claim: usms-db-01 is not reachable from the internet ==
+   Each control below would have to fail INDEPENDENTLY for the claim to be false.
+
+-- control 1: no public address --
+127.0.0.1
+-- control 2: its subnet does not auto-assign one --
+False
+-- control 3: its route table has no internet gateway route --
+None	nat-7704d7218e8782ddc
+-- control 4: its security group admits ONE group, no CIDR --
+None	None	5432
+None	None	5432
+-- control 5: the subnet's network ACL is not the default one --
+acl-2d156e19ebd08123e	False

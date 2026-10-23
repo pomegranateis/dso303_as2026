@@ -1,0 +1,49 @@
+== EKS rebuild after Lab 09 Step 18 restart ==
+k3s container present
+k3s volume present
+DELETING
+DELETING
+CREATING
+cluster: CREATING
+ACTIVE
+
+Cluster status is CREATING
+E1021 23:49:12.282057  133876 memcache.go:265] "Unhandled Error" err="couldn't get current server API group list: the server is currently unable to handle the request"
+E1021 23:49:12.284122  133876 memcache.go:265] "Unhandled Error" err="couldn't get current server API group list: the server is currently unable to handle the request"
+E1021 23:49:12.286031  133876 memcache.go:265] "Unhandled Error" err="couldn't get current server API group list: the server is currently unable to handle the request"
+E1021 23:49:12.287818  133876 memcache.go:265] "Unhandled Error" err="couldn't get current server API group list: the server is currently unable to handle the request"
+E1021 23:49:12.289594  133876 memcache.go:265] "Unhandled Error" err="couldn't get current server API group list: the server is currently unable to handle the request"
+Error from server (ServiceUnavailable): the server is currently unable to handle the request
+== k3s stuck: containerd will not start on the reused volume; rebuild on a fresh volume ==
+DELETING
+DELETING
+k3s container removed
+Error response from daemon: get floci-floci-course-eks-usms-eks-cluster: no such volume
+CREATING
+cluster: CREATING
+== cause: inotify max_user_instances=128 exhausted (dso202 running); pause dso202 and recreate ==
+dso202 paused
+An error occurred (ResourceNotFoundException) when calling the DeleteNodegroup operation: No nodegroup found for name: usms-eks-nodes
+DELETING
+CREATING
+cluster: ACTIVE
+ACTIVE
+Updated context usms-eks in /home/pomegranateu/.kube/usms-lab07
+d129bdca0701   Ready   control-plane   7s    v1.34.1+k3s1
+node/d129bdca0701 labeled
+lab-07 manifests applied
+deployment.apps/usms-enrolment env updated
+lab-08 manifests applied (except 20-loadgen)
+Waiting for deployment "usms-enrolment" rollout to finish: 1 out of 2 new replicas have been updated...
+Waiting for deployment "usms-enrolment" rollout to finish: 1 out of 2 new replicas have been updated...
+Waiting for deployment "usms-enrolment" rollout to finish: 1 out of 2 new replicas have been updated...
+Waiting for deployment "usms-enrolment" rollout to finish: 1 out of 2 new replicas have been updated...
+Waiting for deployment "usms-enrolment" rollout to finish: 1 old replicas are pending termination...
+Waiting for deployment "usms-enrolment" rollout to finish: 1 old replicas are pending termination...
+deployment "usms-enrolment" successfully rolled out
+Waiting for deployment "usms-results" rollout to finish: 1 of 2 updated replicas are available...
+deployment "usms-results" successfully rolled out
+Waiting for deployment "usms-gateway" rollout to finish: 0 of 2 updated replicas are available...
+Waiting for deployment "usms-gateway" rollout to finish: 1 of 2 updated replicas are available...
+deployment "usms-gateway" successfully rolled out
+deployment "usms-timetable" successfully rolled out

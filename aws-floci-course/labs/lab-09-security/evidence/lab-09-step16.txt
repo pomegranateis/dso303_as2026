@@ -1,0 +1,39 @@
+== Step 16 Part 1: the bastion group ==
+reusing usms-bastion-sg from Lab 02 Exercise 2
+BASTION_SG = sg-00f100748c6d999b7
+--- usms-app-sg tcp/22 BEFORE: groups API ---
+[]
+--- rules API ---
+sgr-f2289be10f31e5f44	10.0.0.0/16	None	None
+sgr-4c4213aecc99849b2	None	None	None
+valid JSON, unexpanded $: 0
+== Part 2: authorise SSH from the bastion group ==
+sgr-9a275fde3919b5116
+--- groups API after authorise ---
+0.0.0.0/0	None	80
+0.0.0.0/0	None	443
+None	None	22
+== Part 3: revoke tcp/22 from 10.0.0.0/16 ==
+OLD_SSH_RULE = sgr-f2289be10f31e5f44
+True
+== verify: groups API (the group document) ==
+--------------------------------------------
+|          DescribeSecurityGroups          |
++------------+-------+-------------+-------+
+|    CIDR    | Desc  |  FromGroup  | Port  |
++------------+-------+-------------+-------+
+|  0.0.0.0/0 |  None |  None       |  80   |
+|  0.0.0.0/0 |  None |  None       |  443  |
+|  None      |  None |  None       |  22   |
++------------+-------+-------------+-------+
+
+In function length(), invalid type for value: None, expected one of: ['string', 'array', 'object'], received: "null"
+CIDR sources on tcp/22 (groups API): 
+== rules API ==
+sgr-f2289be10f31e5f44	22	10.0.0.0/16	None
+sgr-307873e302e0cfdb8	443	0.0.0.0/0	HTTPS from the internet
+sgr-9a275fde3919b5116	22	None	None
+sgr-9863748ba551a575b	80	0.0.0.0/0	None
+sgr-4c4213aecc99849b2	22	None	None
+CIDR sources on tcp/22 (corrected query): 0
+group-sourced tcp/22 rules: 1
