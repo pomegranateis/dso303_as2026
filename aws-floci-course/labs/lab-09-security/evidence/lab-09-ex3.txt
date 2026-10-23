@@ -1,0 +1,11 @@
+--- from the repo root ---
+== USMS exposure report ==  (verdicts from routes, addresses and rules only)
+  usms-web-02    172.20.0.3   -                NO PUBLIC ADDRESS        (igw route on rtb-79f00a19, but no public address; loopback 127.0.0.1 ignored)
+  usms-web-01    172.20.0.4   54.205.147.173   EXPOSED                  (igw route + public address + sg allows 80,443 from 0.0.0.0/0)
+  usms-db-01     172.20.0.5   -                ISOLATED                 (no igw route on rtb-e509a19b; loopback 127.0.0.1 ignored)
+  usms-db-02     172.20.0.6   -                ISOLATED                 (no igw route on rtb-e509a19b; loopback 127.0.0.1 ignored)
+  EXPOSED=1  ISOLATED=2  NO PUBLIC ADDRESS=1  interfaces=4
+--- from ~ ---
+--- from labs/lab-09-security/ ---
+identical output from ~ and from labs/lab-09-security/
+outputs/lab-09-exposure.json valid JSON

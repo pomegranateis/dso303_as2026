@@ -1,0 +1,123 @@
+{
+  "Version": "2012-10-17",
+  "Id": "USMSTranscriptsBucketPolicyDraft",
+  "Statement": [
+    {
+      "Sid": "AllowWhatThisRoleAlreadyHasUsmsec2Approle",
+      "Effect": "Allow",
+      "Principal": {
+        "AWS": "arn:aws:iam::000000000000:role/usms-ec2-app-role"
+      },
+      "Action": [
+        "s3:DeleteObject",
+        "s3:GetBucketLocation",
+        "s3:GetObject",
+        "s3:ListBucket",
+        "s3:PutObject"
+      ],
+      "Resource": [
+        "arn:aws:s3:::usms-student-data",
+        "arn:aws:s3:::usms-student-data/*"
+      ]
+    },
+    {
+      "Sid": "AllowWhatThisRoleAlreadyHasUsmsecstaskrole",
+      "Effect": "Allow",
+      "Principal": {
+        "AWS": "arn:aws:iam::000000000000:role/usms-ecs-task-role"
+      },
+      "Action": [
+        "s3:DeleteObject",
+        "s3:GetBucketLocation",
+        "s3:GetObject",
+        "s3:ListBucket",
+        "s3:PutObject"
+      ],
+      "Resource": [
+        "arn:aws:s3:::usms-student-data",
+        "arn:aws:s3:::usms-student-data/*"
+      ]
+    },
+    {
+      "Sid": "AllowWhatThisRoleAlreadyHasUsmseksnoderole",
+      "Effect": "Allow",
+      "Principal": {
+        "AWS": "arn:aws:iam::000000000000:role/usms-eks-node-role"
+      },
+      "Action": [
+        "s3:DeleteObject",
+        "s3:GetBucketLocation",
+        "s3:GetObject",
+        "s3:ListBucket",
+        "s3:PutObject"
+      ],
+      "Resource": [
+        "arn:aws:s3:::usms-student-data",
+        "arn:aws:s3:::usms-student-data/*"
+      ]
+    },
+    {
+      "Sid": "AllowWhatThisRoleAlreadyHasUsmslambdaexecrole",
+      "Effect": "Allow",
+      "Principal": {
+        "AWS": "arn:aws:iam::000000000000:role/usms-lambda-exec-role"
+      },
+      "Action": [
+        "s3:GetObject"
+      ],
+      "Resource": [
+        "arn:aws:s3:::usms-student-data",
+        "arn:aws:s3:::usms-student-data/*"
+      ]
+    },
+    {
+      "Sid": "AllowWhatThisRoleAlreadyHasUsmstranscriptsreaderrole",
+      "Effect": "Allow",
+      "Principal": {
+        "AWS": "arn:aws:iam::000000000000:role/usms-transcripts-reader-role"
+      },
+      "Action": [
+        "s3:GetObject",
+        "s3:ListBucket"
+      ],
+      "Resource": [
+        "arn:aws:s3:::usms-student-data",
+        "arn:aws:s3:::usms-student-data/*"
+      ]
+    },
+    {
+      "Sid": "DenyAnyRequestNotOverTLS",
+      "Effect": "Deny",
+      "Principal": "*",
+      "Action": "s3:*",
+      "Resource": [
+        "arn:aws:s3:::usms-student-data",
+        "arn:aws:s3:::usms-student-data/*"
+      ],
+      "Condition": {
+        "Bool": {
+          "aws:SecureTransport": "false"
+        }
+      }
+    },
+    {
+      "Sid": "DenyEveryoneButTheseRolesAndTheAccountRoot",
+      "Effect": "Deny",
+      "NotPrincipal": {
+        "AWS": [
+          "arn:aws:iam::000000000000:role/usms-ec2-app-role",
+          "arn:aws:iam::000000000000:role/usms-ecs-task-role",
+          "arn:aws:iam::000000000000:role/usms-eks-node-role",
+          "arn:aws:iam::000000000000:role/usms-lambda-exec-role",
+          "arn:aws:iam::000000000000:role/usms-transcripts-reader-role",
+          "arn:aws:iam::000000000000:root"
+        ]
+      },
+      "Action": "s3:*",
+      "Resource": [
+        "arn:aws:s3:::usms-student-data",
+        "arn:aws:s3:::usms-student-data/*"
+      ]
+    }
+  ]
+}

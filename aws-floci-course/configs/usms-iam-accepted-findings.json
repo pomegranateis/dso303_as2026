@@ -1,0 +1,26 @@
+[
+  {
+    "role": "usms-ec2-app-role",
+    "finding": "service principal ec2.amazonaws.com with NO Condition",
+    "reason": "EC2 does not send aws:SourceArn when an instance profile's role is assumed, so a SourceArn or SourceAccount condition would deny usms-web-01 its own credentials (Lab 09 Step 7 caveat).",
+    "compensating": "Only usms-ec2-app-profile carries the role and only usms-web-01 wears it; IMDSv2 required with hop limit 1 (Step 11 - not applicable on Floci 1.5.34, must be applied on real AWS); USMSDeployBase denies iam:PassRole to ec2.amazonaws.com.",
+    "accepted_by": "usms-admin-01",
+    "date": "2026-10-22"
+  },
+  {
+    "role": "usms-eks-node-role",
+    "finding": "service principal ec2.amazonaws.com with NO Condition",
+    "reason": "EKS nodes are EC2 instances: the same instance-profile behaviour as usms-ec2-app-role, so the same condition would stop every node from joining the cluster.",
+    "compensating": "IMDSv2 with hop limit 1 on the node launch template, so pods cannot reach the node's credentials; IRSA for usms-enrolment-sa (Lab 08 Exercise 5) to remove USMSStudentDataReadWrite from the node role.",
+    "accepted_by": "usms-admin-01",
+    "date": "2026-10-22"
+  },
+  {
+    "role": "usms-eks-cluster-role",
+    "finding": "service principal eks.amazonaws.com with NO Condition",
+    "reason": "Not verified which source keys EKS sends when it assumes the cluster role; a condition on a key that is never sent denies everything and would stop the control plane from managing the cluster.",
+    "compensating": "Only eks.amazonaws.com may assume it, the cluster-sg admits tcp/443 from the VPC only, and USMSEKSClusterPolicy ends in a region Deny. Revisit once the EKS documentation for aws:SourceArn is checked.",
+    "accepted_by": "usms-admin-01",
+    "date": "2026-10-22"
+  }
+]
