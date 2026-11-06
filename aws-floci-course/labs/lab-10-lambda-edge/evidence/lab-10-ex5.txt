@@ -1,0 +1,41 @@
+== Ex 5: upload the allow trace and confirm the notifier saw it ==
+trace chain: viewer-request -> origin -> origin-response
+"c0ac6c5725fbb160de53f7c254b9f9a7"
+USMS_NOTIFY {"bucket": "usms-student-data", "event": "ObjectCreated:Put", "key": "transcripts/evidence/lab-10-edge-trace.json", "readable": true, "size": 623}
+== readiness (run twice: it must be reproducible) ==
+# Lab 10 Exercise 5 - S3 readiness, generated 2026-11-06T03:52:19Z by scripts/utilities/usms-s3-readiness.sh
+bucket name            : usms-student-data
+bucket ARN             : arn:aws:s3:::usms-student-data
+objects in transcripts/: 5
+notification           : usms-transcript-upload	arn:aws:lambda:us-east-1:000000000000:function:usms-transcript-notifier:live	prefix=transcripts/,suffix=.json
+functions              : usms-edge-viewer-request(versions 1,2) usms-edge-origin-response(versions 1,2,3) usms-transcript-notifier(versions 2,1) 
+cloudfront supported   : yes (distribution E1OWPB9TTQNP7G; associations stored as 0 - see the Lab 10 report)
+bucket policy          : no bucket policy - correct, the S3 configuration lab applies it
+draft validation       : outputs/lab-09-bucket-policy-draft.json - every ARN resolves
+  yes  principal arn:aws:iam::000000000000:role/usms-ec2-app-role
+  yes  principal arn:aws:iam::000000000000:role/usms-ecs-task-role
+  yes  principal arn:aws:iam::000000000000:role/usms-eks-node-role
+  yes  principal arn:aws:iam::000000000000:role/usms-lambda-exec-role
+  yes  principal arn:aws:iam::000000000000:role/usms-transcripts-reader-role
+  yes  principal arn:aws:iam::000000000000:root
+  yes  resource  arn:aws:s3:::usms-student-data
+  yes  resource  arn:aws:s3:::usms-student-data/*
+(reproducible: identical apart from the timestamp line)
+aws-floci-course/.gitignore:7:outputs/*	outputs/lab-10-s3-readiness.txt
+aws-floci-course/.gitignore:7:outputs/*	outputs/lab-09-bucket-policy-draft.json
+An error occurred (NoSuchBucketPolicy) when calling the GetBucketPolicy operation: The bucket policy does not exist
+== negative test: a draft with one non-existent role and a misspelled bucket ==
+draft validation       : outputs/lab-10-draft-broken.json - 3 MISMATCH(ES) - see below
+  yes  principal arn:aws:iam::000000000000:role/usms-ec2-app-role
+  yes  principal arn:aws:iam::000000000000:role/usms-ecs-task-role
+  yes  principal arn:aws:iam::000000000000:role/usms-eks-node-role
+  yes  principal arn:aws:iam::000000000000:role/usms-lambda-exec-role
+  no   principal arn:aws:iam::000000000000:role/usms-role-that-does-not-exist
+  yes  principal arn:aws:iam::000000000000:role/usms-transcripts-reader-role
+  yes  principal arn:aws:iam::000000000000:root
+  yes  resource  arn:aws:s3:::usms-student-data
+  yes  resource  arn:aws:s3:::usms-student-data/*
+  no   resource  arn:aws:s3:::usms-student-dta
+  no   resource  arn:aws:s3:::usms-student-dta/*
+== the real readiness file is untouched ==
+draft validation       : outputs/lab-09-bucket-policy-draft.json - every ARN resolves

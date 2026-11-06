@@ -1,0 +1,17 @@
+# Lab 10 Exercise 5 - S3 readiness, generated 2026-11-06T03:52:19Z by scripts/utilities/usms-s3-readiness.sh
+bucket name            : usms-student-data
+bucket ARN             : arn:aws:s3:::usms-student-data
+objects in transcripts/: 5
+notification           : usms-transcript-upload	arn:aws:lambda:us-east-1:000000000000:function:usms-transcript-notifier:live	prefix=transcripts/,suffix=.json
+functions              : usms-edge-viewer-request(versions 1,2) usms-edge-origin-response(versions 1,2,3) usms-transcript-notifier(versions 2,1) 
+cloudfront supported   : yes (distribution E1OWPB9TTQNP7G; associations stored as 0 - see the Lab 10 report)
+bucket policy          : no bucket policy - correct, the S3 configuration lab applies it
+draft validation       : outputs/lab-09-bucket-policy-draft.json - every ARN resolves
+  yes  principal arn:aws:iam::000000000000:role/usms-ec2-app-role
+  yes  principal arn:aws:iam::000000000000:role/usms-ecs-task-role
+  yes  principal arn:aws:iam::000000000000:role/usms-eks-node-role
+  yes  principal arn:aws:iam::000000000000:role/usms-lambda-exec-role
+  yes  principal arn:aws:iam::000000000000:role/usms-transcripts-reader-role
+  yes  principal arn:aws:iam::000000000000:root
+  yes  resource  arn:aws:s3:::usms-student-data
+  yes  resource  arn:aws:s3:::usms-student-data/*

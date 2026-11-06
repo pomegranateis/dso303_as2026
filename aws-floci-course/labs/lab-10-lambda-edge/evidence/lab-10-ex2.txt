@@ -1,0 +1,43 @@
+valid JSON, unexpanded ${UPPER}: 0, s3 actions: 0
+arn:aws:iam::000000000000:policy/USMSEdgeBasic
+arn:aws:iam::000000000000:role/usms-edge-exec-role
+attached
+== repoint both edge functions, publish new versions ==
+usms-edge-viewer-request	arn:aws:iam::000000000000:role/usms-edge-exec-role
+2	arn:aws:iam::000000000000:role/usms-edge-exec-role
+usms-edge-origin-response	arn:aws:iam::000000000000:role/usms-edge-exec-role
+3	arn:aws:iam::000000000000:role/usms-edge-exec-role
+== role per version (list-versions-by-function; get-function-configuration ignores --qualifier here) ==
+usms-edge-viewer-request
+  $LATEST	arn:aws:iam::000000000000:role/usms-edge-exec-role
+  1	arn:aws:iam::000000000000:role/usms-lambda-exec-role
+  2	arn:aws:iam::000000000000:role/usms-edge-exec-role
+usms-edge-origin-response
+  $LATEST	arn:aws:iam::000000000000:role/usms-edge-exec-role
+  1	arn:aws:iam::000000000000:role/usms-lambda-exec-role
+  2	arn:aws:iam::000000000000:role/usms-lambda-exec-role
+  3	arn:aws:iam::000000000000:role/usms-edge-exec-role
+== usms-lambda-exec-role untouched (the notifier still uses it) ==
+USMSLambdaBasic
+arn:aws:iam::000000000000:role/usms-lambda-exec-role
+== what the new role can and cannot do ==
+  logs:PutLogEvents  arn:aws:logs:us-east-1:000000000000:log-group:/aws/lambda/usms-edge-viewer-request:log-stream:x allowed
+  logs:PutLogEvents  arn:aws:logs:eu-west-1:000000000000:log-group:/aws/lambda/us-east-1.usms-edge-viewer-request:log-stream:x allowed
+  logs:PutLogEvents  arn:aws:logs:us-east-1:000000000000:log-group:/aws/lambda/usms-transcript-notifier:log-stream:x implicitDeny
+  s3:GetObject       arn:aws:s3:::usms-student-data/transcripts/x.json                                               implicitDeny
+usms-edge-exec-role
+    permissions boundary : NONE
+    ACCEPTED (HIGH) trust policy: service principal edgelambda.amazonaws.com with NO Condition (confused deputy)
+         reason      : Same trust document as usms-lambda-exec-role (Lab 10 Exercise 2 reuses policies/trust-lambda-edge.json): edgelambda.amazonaws.com cannot be conditioned on keys it is not known to send.
+--
+HIGH=0  MED=34  ACCEPTED=5  roles=11
+45:          "LambdaFunctionARN": "arn:aws:lambda:us-east-1:000000000000:function:usms-edge-viewer-request:2",
+50:          "LambdaFunctionARN": "arn:aws:lambda:us-east-1:000000000000:function:usms-edge-origin-response:3"
+export USMS_EDGE_VIEWER_VERSION=2
+export USMS_EDGE_VIEWER_VERSION_ARN=arn:aws:lambda:us-east-1:000000000000:function:usms-edge-viewer-request:2
+export USMS_EDGE_ORIGIN_VERSION=3
+export USMS_EDGE_ORIGIN_VERSION_ARN=arn:aws:lambda:us-east-1:000000000000:function:usms-edge-origin-response:3
+export USMS_EDGE_ROLE_ARN=arn:aws:iam::000000000000:role/usms-edge-exec-role
+export USMS_LAMBDA_NOTIFIER_VERSION=1
+25
+PASS=51  FAIL=0

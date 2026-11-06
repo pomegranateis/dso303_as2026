@@ -1,0 +1,37 @@
+[
+  {
+    "name": "usms-edge-origin-response",
+    "runtime": "nodejs20.x",
+    "memory": 128,
+    "timeout": 5,
+    "versions": 3,
+    "aliases": 0,
+    "env_vars": false,
+    "edge_eligible": true,
+    "not_eligible_because": []
+  },
+  {
+    "name": "usms-edge-viewer-request",
+    "runtime": "nodejs20.x",
+    "memory": 128,
+    "timeout": 5,
+    "versions": 2,
+    "aliases": 0,
+    "env_vars": false,
+    "edge_eligible": true,
+    "not_eligible_because": []
+  },
+  {
+    "name": "usms-transcript-notifier",
+    "runtime": "python3.12",
+    "memory": 256,
+    "timeout": 30,
+    "versions": 2,
+    "aliases": 1,
+    "env_vars": true,
+    "edge_eligible": false,
+    "not_eligible_because": [
+      "2 environment variables"
+    ]
+  }
+]

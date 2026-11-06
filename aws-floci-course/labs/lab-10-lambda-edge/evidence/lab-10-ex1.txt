@@ -1,0 +1,28 @@
+== Ex 1: the one-line data change ==
+14:  'content-security-policy':   { key: 'Content-Security-Policy',   value: "default-src 'self'" }
+syntax OK (node)
+3P2tGGCW2T1qWmGD/72iPWAGMifO6KMvoAOlqc69qZQ=	1124
+published version 2
+== versions and their code (immutable per version) ==
+--------------------------------------------------------------------------------------------------------------------------------------------
+|                                                          ListVersionsByFunction                                                          |
++---------+------------------------------------------------+-------+-----------------------------------------------------------------------+
+|  $LATEST|  3P2tGGCW2T1qWmGD/72iPWAGMifO6KMvoAOlqc69qZQ=  |  1124 |  USMS Lambda@Edge origin-response: security headers and cache policy  |
+|  1      |                                                |  1092 |  Lab 10 - initial edge release                                        |
+|  2      |                                                |  1124 |  Lab 10 Ex 1 - adds Content-Security-Policy                           |
++---------+------------------------------------------------+-------+-----------------------------------------------------------------------+
+== invoke: $LATEST, then --qualifier 1, counting security headers ==
+  --qualifier $LATEST  ExecutedVersion=$LATEST  security headers=5 csp=True
+  --qualifier 1        ExecutedVersion=$LATEST  security headers=5 csp=True
+  --qualifier 2        ExecutedVersion=$LATEST  security headers=5 csp=True
+q=1 location=http://localhost:4566/awslambda-us-east-1-tasks/snapshots/000000000000/usms-edge-origin-response
+  v1 index.mjs: 2130 bytes, CSP lines: 1
+q=2 location=http://localhost:4566/awslambda-us-east-1-tasks/snapshots/000000000000/usms-edge-origin-response
+  v2 index.mjs: 2130 bytes, CSP lines: 1
+45:          "LambdaFunctionARN": "arn:aws:lambda:us-east-1:000000000000:function:usms-edge-viewer-request:1",
+50:          "LambdaFunctionARN": "arn:aws:lambda:us-east-1:000000000000:function:usms-edge-origin-response:2"
+20:export USMS_EDGE_ORIGIN_VERSION=2
+21:export USMS_EDGE_ORIGIN_VERSION_ARN=arn:aws:lambda:us-east-1:000000000000:function:usms-edge-origin-response:2
+valid JSON
+  ✔ every associated ARN is version-qualified  (the edge refuses $LATEST and aliases)
+PASS=51  FAIL=0
