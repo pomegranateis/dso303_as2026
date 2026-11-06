@@ -1,0 +1,21 @@
+== Step 20 part 1 ==
+valid JSON
+5:      "LambdaFunctionArn": "arn:aws:lambda:us-east-1:000000000000:function:usms-transcript-notifier:live",
+notification configured
+== part 2: fire it ==
+uploading outputs/lab-08-scaling-evidence.json
+upload at 03:10:52
+"f2385ad60c9648876d6eb91162ecf76d"
+== verify ==
+----------------------------------------------------------------------------------------------------------------------------------
+|                                               GetBucketNotificationConfiguration                                               |
++------------------------+--------------------------------------------------------------------------------+----------------------+
+|  usms-transcript-upload|  arn:aws:lambda:us-east-1:000000000000:function:usms-transcript-notifier:live  |  s3:ObjectCreated:*  |
++------------------------+--------------------------------------------------------------------------------+----------------------+
+prefix	transcripts/
+suffix	.json
+---------------------------------------------------------------
+|                        ListObjectsV2                        |
++-----------------------------------------------------+-------+
+|  transcripts/evidence/lab-08-scaling-evidence.json  |  3128 |
++-----------------------------------------------------+-------+

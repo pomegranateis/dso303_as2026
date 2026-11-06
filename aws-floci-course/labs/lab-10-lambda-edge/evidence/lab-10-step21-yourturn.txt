@@ -1,0 +1,22 @@
+== your turn: two uploads the filter must ignore ==
+USMS_NOTIFY lines before: 2
+"e81584646c7258ec12500c2ddf21f96e"
+"4424bef42698567821c0c15acaf880d1"
+USMS_NOTIFY lines after : 2
+notifier runs in the last minute (container log): 2
+---------------------------------------------------------------
+|                        ListObjectsV2                        |
++-----------------------------------------------------+-------+
+|  notes/ignore-me.json                               |  24   |
+|  transcripts/evidence/ignore-me.txt                 |  13   |
+|  transcripts/evidence/lab-08-scaling-evidence.json  |  3128 |
++-----------------------------------------------------+-------+
+== and the control: a matching key DOES fire (so silence above is the filter, not a dead trigger) ==
+"e81584646c7258ec12500c2ddf21f96e"
+USMS_NOTIFY {"bucket": "usms-student-data", "event": "ObjectCreated:Put", "key": "transcripts/evidence/filter-control.json", "readable": true, "size": 24}
+usms-transcript-notifier: 1 record(s), channel=stdout, bucket_hint=usms-student-data
+USMS_NOTIFY {"bucket": "usms-student-data", "event": "ObjectCreated:Put", "key": "transcripts/evidence/lab-08-scaling-evidence.json", "readable": true
+usms-transcript-notifier: 1 record(s), channel=stdout, bucket_hint=usms-student-data
+USMS_NOTIFY {"bucket": "usms-student-data", "event": "ObjectCreated:Put", "key": "transcripts/evidence/synthetic-probe.json", "read_error": "ClientErr
+usms-transcript-notifier: 1 record(s), channel=stdout, bucket_hint=usms-student-data
+USMS_NOTIFY {"bucket": "usms-student-data", "event": "ObjectCreated:Put", "key": "transcripts/evidence/filter-control.json", "readable": true, "size":

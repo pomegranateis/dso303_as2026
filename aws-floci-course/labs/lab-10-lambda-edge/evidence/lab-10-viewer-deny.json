@@ -1,0 +1,1 @@
+{"status":"403","statusDescription":"Forbidden","headers":{"content-type":[{"key":"Content-Type","value":"application/json"}],"cache-control":[{"key":"Cache-Control","value":"no-store"}],"x-usms-edge":[{"key":"X-USMS-Edge","value":"viewer-request-deny"}]},"body":"{\"message\":\"transcript access requires an authenticated session\"}"}

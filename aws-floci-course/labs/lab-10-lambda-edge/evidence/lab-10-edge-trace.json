@@ -1,0 +1,20 @@
+{
+  "chain": [
+    "viewer-request",
+    "origin",
+    "origin-response"
+  ],
+  "decision": "allow",
+  "request_uri_after_normalisation": "/transcripts/2026/stu-00417.json",
+  "status": "200",
+  "headers": {
+    "content-type": "application/json",
+    "server": "AmazonS3",
+    "strict-transport-security": "max-age=31536000; includeSubDomains",
+    "x-content-type-options": "nosniff",
+    "x-frame-options": "DENY",
+    "referrer-policy": "strict-origin-when-cross-origin",
+    "cache-control": "public, max-age=300, s-maxage=3600",
+    "x-usms-edge-chain": "viewer-request-allow;student=stu-00417;origin-response"
+  }
+}

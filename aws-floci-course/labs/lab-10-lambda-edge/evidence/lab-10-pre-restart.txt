@@ -1,0 +1,7 @@
+usms-edge-origin-response	nodejs20.x	128
+usms-edge-viewer-request	nodejs20.x	128
+usms-transcript-notifier	python3.12	256
+1
+live	1
+notes/ignore-me.json	transcripts/evidence/filter-control.json	transcripts/evidence/ignore-me.txt	transcripts/evidence/lab-08-scaling-evidence.json
+usms-transcript-upload

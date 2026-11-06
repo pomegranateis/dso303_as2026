@@ -1,0 +1,42 @@
+== Step 6 part 1: the role as it is ==
+-----------------------------------------------------------------------------
+|                                  GetRole                                  |
++-----------------------------------+-------------+-------------------------+
+|              Created              | MaxSession  |          Name           |
++-----------------------------------+-------------+-------------------------+
+|  2026-08-21T05:49:50.114554+00:00 |  3600       |  usms-lambda-exec-role  |
++-----------------------------------+-------------+-------------------------+
+[
+    "lambda.amazonaws.com"
+]
+-------------------------------------------------------------------------
+|                       ListAttachedRolePolicies                        |
++------------------+----------------------------------------------------+
+|  USMSLambdaBasic |  arn:aws:iam::000000000000:policy/USMSLambdaBasic  |
++------------------+----------------------------------------------------+
+undo saved: outputs/lab-10-lambda-exec-role-trust-before.json
+valid JSON, unexpanded ${UPPER}: 0
+== part 3: replace the trust ==
+trust replaced
+arn:aws:iam::000000000000:role/usms-lambda-exec-role
+== verify ==
+principals across all statements: 2
+edgelambda.amazonaws.com
+------------------------------
+|           GetRole          |
++----------------------------+
+|          Principal         |
++----------------------------+
+|  lambda.amazonaws.com      |
++----------------------------+
+||        Conditions        ||
+|+--------------------------+|
+||  StringEquals            ||
+||  ArnLike                 ||
+|+--------------------------+|
+|           GetRole          |
++----------------------------+
+|          Principal         |
++----------------------------+
+|  edgelambda.amazonaws.com  |
++----------------------------+

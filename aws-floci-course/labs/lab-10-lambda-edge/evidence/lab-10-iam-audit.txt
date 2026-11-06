@@ -1,0 +1,4 @@
+usms-lambda-exec-role
+    permissions boundary : NONE
+    ACCEPTED (HIGH) trust policy: service principal edgelambda.amazonaws.com with NO Condition (confused deputy)
+HIGH=0  MED=33  ACCEPTED=4  roles=10

@@ -1,0 +1,25 @@
+== Step 17 ==
+syntax OK (python3)
+15:BUCKET_HINT = os.environ.get("USMS_BUCKET", "usms-student-data")
+16:CHANNEL = os.environ.get("USMS_NOTIFY_CHANNEL", "stdout")
+== Step 18 part 1 ==
+File Name                                             Modified             Size
+notifier.py                                    2026-11-06 09:00:12         2571
+arn:aws:lambda:us-east-1:000000000000:function:usms-transcript-notifier
+== part 2: publish and alias ==
+version   : 1
+alias ARN : arn:aws:lambda:us-east-1:000000000000:function:usms-transcript-notifier:live
+------------------------------------------------------
+|                     ListAliases                    |
++------+----+----------------------------------------+
+|  live|  1 |  The version S3 notifications invoke   |
++------+----+----------------------------------------+
+{
+    "Version": "$LATEST",
+    "Runtime": "python3.12",
+    "Handler": "notifier.handler",
+    "Env": {
+        "USMS_BUCKET": "usms-student-data",
+        "USMS_NOTIFY_CHANNEL": "stdout"
+    }
+}

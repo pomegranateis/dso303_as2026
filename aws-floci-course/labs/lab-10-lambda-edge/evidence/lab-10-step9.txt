@@ -1,0 +1,69 @@
+== allow ==
+{
+    "clientIp": "203.0.113.178",
+    "method": "GET",
+    "uri": "/transcripts/2026/stu-00417.json",
+    "querystring": "",
+    "headers": {
+        "host": [
+            {
+                "key": "Host",
+                "value": "transcripts.usms.example.edu"
+            }
+        ],
+        "user-agent": [
+            {
+                "key": "User-Agent",
+                "value": "curl/8.4.0"
+            }
+        ],
+        "x-usms-student": [
+            {
+                "key": "X-USMS-Student",
+                "value": "STU-00417"
+            }
+        ],
+        "x-usms-edge": [
+            {
+                "key": "X-USMS-Edge",
+                "value": "viewer-request-allow;student=stu-00417"
+            }
+        ]
+    }
+}
+viewer-request allow path: correct
+== your turn: deny ==
+valid JSON; x-usms-student present: 0
+---------------------
+|      Invoke       |
++--------+----------+
+|  Error | Status   |
++--------+----------+
+|  None  |  200     |
++--------+----------+
+{
+    "status": "403",
+    "statusDescription": "Forbidden",
+    "headers": {
+        "content-type": [
+            {
+                "key": "Content-Type",
+                "value": "application/json"
+            }
+        ],
+        "cache-control": [
+            {
+                "key": "Cache-Control",
+                "value": "no-store"
+            }
+        ],
+        "x-usms-edge": [
+            {
+                "key": "X-USMS-Edge",
+                "value": "viewer-request-deny"
+            }
+        ]
+    },
+    "body": "{\"message\":\"transcript access requires an authenticated session\"}"
+}
+viewer-request deny path: a RESPONSE object, status 403, no uri anywhere

@@ -1,0 +1,14 @@
+== part 1: make the mistake ==
+{
+    "Name": "usms-edge-viewer-request",
+    "Env": {
+        "USMS_STAGE": "lab06",
+        "USMS_AUTH_HEADER": "x-usms-student"
+    }
+}
+== part 2: undo it ==
+== negative test: the eligibility test must say NO while variables are set ==
+lab10
+  NO   1 environment variables set  <- caught
+usms-edge-viewer-request
+after the undo: 0 environment variables

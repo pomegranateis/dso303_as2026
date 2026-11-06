@@ -1,0 +1,27 @@
+[1;34m==>[0m Floci is up at http://localhost:4566
+[1;32m  [ok][0m   Created by Compose project 'floci-course'.
+[1;32m  [ok][0m   FLOCI_STORAGE_MODE=hybrid (durable)
+[1;32m  [ok][0m   bind mount -> /home/pomegranateu/floci-data
+[1;32m  [ok][0m   FLOCI_STORAGE_HOST_PERSISTENT_PATH=/home/pomegranateu/floci-data
+[1;32m  [ok][0m   /home/pomegranateu/floci-data exists (size: 2.0M)
+== Step 2 ==
+  sourced  configs/lab-01.env
+  sourced  configs/lab-02.env
+  sourced  configs/lab-03.env
+  sourced  configs/lab-04.env
+  sourced  configs/lab-05.env
+  sourced  configs/lab-06.env
+  sourced  configs/lab-09.env
+  sourced  configs/lab-07.env
+  sourced  configs/lab-08.env
+|    Account   |               Arn                |    UserId      |
+[1;32m[ok] Account 000000000000 — this is Floci, not real AWS.[0m
+bucket name  : usms-student-data
+lambda role  : arn:aws:iam::000000000000:role/usms-lambda-exec-role
+account id   : 000000000000
+== Step 3 ==
+labs/lab-10-lambda-edge/edge-origin-response/
+labs/lab-10-lambda-edge/edge-viewer-request/
+labs/lab-10-lambda-edge/evidence/
+labs/lab-10-lambda-edge/img/
+labs/lab-10-lambda-edge/transcript-notifier/

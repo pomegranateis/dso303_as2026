@@ -22,5 +22,21 @@
     "compensating": "Only eks.amazonaws.com may assume it, the cluster-sg admits tcp/443 from the VPC only, and USMSEKSClusterPolicy ends in a region Deny. Revisit once the EKS documentation for aws:SourceArn is checked.",
     "accepted_by": "usms-admin-01",
     "date": "2026-10-22"
+  },
+  {
+    "role": "usms-lambda-exec-role",
+    "finding": "service principal edgelambda.amazonaws.com with NO Condition",
+    "reason": "Lambda@Edge (Lab 10): CloudFront replicates and runs the function as edgelambda.amazonaws.com. Which source keys it sends is not verified, and a condition on a key that is never sent would stop every edge function. The lambda.amazonaws.com statement keeps its Lab 09 SourceAccount and SourceArn conditions.",
+    "compensating": "The role's only permissions are USMSLambdaBasic (log writes, s3:GetObject); the edge functions get no other permission and USMSDeployBase may pass roles to ecs-tasks only.",
+    "accepted_by": "usms-admin-01",
+    "date": "2026-11-06"
+  },
+  {
+    "role": "usms-edge-exec-role",
+    "finding": "service principal edgelambda.amazonaws.com with NO Condition",
+    "reason": "Same trust document as usms-lambda-exec-role (Lab 10 Exercise 2 reuses policies/trust-lambda-edge.json): edgelambda.amazonaws.com cannot be conditioned on keys it is not known to send.",
+    "compensating": "USMSEdgeBasic grants log writes for usms-edge-* only - no S3, no other service - so a confused deputy gains nothing but the ability to write edge logs.",
+    "accepted_by": "usms-admin-01",
+    "date": "2026-11-06"
   }
 ]

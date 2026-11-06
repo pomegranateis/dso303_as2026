@@ -1,0 +1,25 @@
+== Step 22 part 2: perturb 03:26:44 ==
+[1;34m==>[0m Floci stopped. State preserved in /home/pomegranateu/floci-data
+[1;34m==>[0m Floci is up at http://localhost:4566
+[1;32m[ok] Account 000000000000 — this is Floci, not real AWS.[0m
+IDENTICAL - every Lab 10 artefact survived the restart
+== the stronger check: the code still runs and composes ==
+  "status": "200",
+  "headers": {
+    "content-type": "application/json",
+    "server": "AmazonS3",
+    "strict-transport-security": "max-age=31536000; includeSubDomains",
+    "x-content-type-options": "nosniff",
+    "x-frame-options": "DENY",
+    "referrer-policy": "strict-origin-when-cross-origin",
+    "cache-control": "public, max-age=300, s-maxage=3600",
+    "x-usms-edge-chain": "viewer-request-allow;student=stu-00417;origin-response"
+  }
+}
+
+trace written to outputs/lab-10-edge-trace.json
+== and delivery still fires after the restart ==
+"e81584646c7258ec12500c2ddf21f96e"
+USMS_NOTIFY {"bucket": "usms-student-data", "event": "ObjectCreated:Put", "key": "transcripts/evidence/after-restart.json", "readable": true, "size": 24}
+== Lab 3 instances ==
+pending	pending	pending	pending

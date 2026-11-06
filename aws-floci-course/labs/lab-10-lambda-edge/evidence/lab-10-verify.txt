@@ -1,0 +1,62 @@
+== Environment ==
+  ✔ Floci container running
+  ✔ Storage mode is NOT memory
+  ✔ AWS CLI reaches Floci
+== Origin bucket ==
+  ✔ bucket usms-student-data exists
+  ✔ bucket is tagged Project=USMS
+  ✔ at least one object under transcripts/
+  ✔ USMSStudentDataReadWrite names this bucket, and it now resolves
+== Execution role ==
+  ✔ role usms-lambda-exec-role exists
+  ✔ role trusts lambda.amazonaws.com
+  ✔ role trusts edgelambda.amazonaws.com  (Lambda@Edge requirement)
+  ✔ USMSLambdaBasic is attached to the role
+== Edge function 1: viewer-request ==
+  ✔ usms-edge-viewer-request exists
+  ✔ runtime is node or python  (the only two the edge accepts)
+  ✔ handler is index.handler
+  ✔ memory is within the 128 MB viewer cap
+  ✔ timeout is within the 5 s viewer cap
+  ✔ NO environment variables  (forbidden at the edge)
+  ✔ at least one published version exists
+== Edge function 2: origin-response ==
+  ✔ usms-edge-origin-response exists
+  ✔ runtime is node or python
+  ✔ memory is within the cap chosen for it
+  ✔ NO environment variables
+  ✔ at least one published version exists
+== Regional function: transcript notifier ==
+  ✔ usms-transcript-notifier exists
+  ✔ handler is notifier.handler
+  ✔ HAS environment variables  (legal here, and the contrast is the point)
+  ✔ alias live exists
+  ✔ alias live points at a numbered version, not $LATEST
+  ✔ resource policy allows s3.amazonaws.com
+  ✔ resource policy is scoped to this bucket  (no confused deputy)
+== S3 notification ==
+  ✔ bucket notification usms-transcript-upload exists
+  ✔ notification targets the live alias
+  ✔ notification is filtered to transcripts/
+== CloudFront association configuration ==
+  ✔ distribution config file exists
+  ✔ distribution config is valid JSON
+  ✔ exactly two associations declared
+  ✔ viewer-request is associated
+  ✔ origin-response is associated
+  ✔ every associated ARN is version-qualified  (the edge refuses $LATEST and aliases)
+  ✔ cache key forwards no cookies
+== Source, scripts and Git hygiene ==
+  ✔ viewer-request handler source exists
+  ✔ origin-response handler source exists
+  ✔ notifier handler source exists
+  ✔ viewer handler kept its template literal  (heredoc was quoted)
+  ✔ usms-edge-simulate.sh is executable and valid bash
+  ✔ edge trace records the full three-stage chain
+  ✔ configs/lab-10.env exists
+  ✔ configs/lab-10.env has 25 exports
+  ✔ configs/lab-10.env has no empty values
+  ✔ no secret is tracked
+  ✔ no deployment archive is tracked
+
+PASS=51  FAIL=0

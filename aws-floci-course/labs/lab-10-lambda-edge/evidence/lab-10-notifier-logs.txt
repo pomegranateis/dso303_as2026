@@ -1,0 +1,1 @@
+USMS_NOTIFY {"bucket": "usms-student-data", "event": "ObjectCreated:Put", "key": "transcripts/evidence/lab-08-scaling-evidence.json", "readable": true, "size": 3128}	USMS_NOTIFY {"bucket": "usms-student-data", "event": "ObjectCreated:Put", "key": "transcripts/evidence/synthetic-probe.json", "read_error": "ClientError", "readable": false, "size": 1024}

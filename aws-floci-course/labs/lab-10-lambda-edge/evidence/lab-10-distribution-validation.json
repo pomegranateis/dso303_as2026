@@ -1,0 +1,17 @@
+{
+  "mode": "PATH B - structural validation only",
+  "checks": [
+    "ok    one origin declared",
+    "ok    origin id matches the behaviour target",
+    "ok    origin is the USMS bucket",
+    "ok    association quantity matches item count",
+    "ok    two trigger points associated",
+    "ok    trigger points are viewer-request and origin-response",
+    "ok    every ARN is version-qualified",
+    "ok    IncludeBody only on a request trigger",
+    "ok    viewer protocol policy is not allow-all",
+    "ok    cache key forwards no cookies",
+    "ok    cache key forwards exactly one header"
+  ],
+  "errors": []
+}

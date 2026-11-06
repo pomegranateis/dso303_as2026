@@ -1,0 +1,86 @@
+== Step 12 ==
+syntax OK (node)
+File Name                                             Modified             Size
+index.mjs                                      2026-11-06 08:50:40         2032
+arn:aws:lambda:us-east-1:000000000000:function:usms-edge-origin-response
+------------------------------------------
+|        GetFunctionConfiguration        |
++----------+-----------------------------+
+|  Handler |  index.handler              |
+|  Mem     |  128                        |
+|  Name    |  usms-edge-origin-response  |
+|  Runtime |  nodejs20.x                 |
+|  State   |  Active                     |
+|  Timeout |  5                          |
++----------+-----------------------------+
+== Step 13 ==
+valid JSON
+---------------------
+|      Invoke       |
++--------+----------+
+|  Error | Status   |
++--------+----------+
+|  None  |  200     |
++--------+----------+
+{
+    "status": "200",
+    "statusDescription": "OK",
+    "headers": {
+        "content-type": [
+            {
+                "key": "Content-Type",
+                "value": "application/json"
+            }
+        ],
+        "etag": [
+            {
+                "key": "ETag",
+                "value": "\"9f86d081884c7d659a2feaa0c55ad015\""
+            }
+        ],
+        "server": [
+            {
+                "key": "Server",
+                "value": "AmazonS3"
+            }
+        ],
+        "strict-transport-security": [
+            {
+                "key": "Strict-Transport-Security",
+                "value": "max-age=31536000; includeSubDomains"
+            }
+        ],
+        "x-content-type-options": [
+            {
+                "key": "X-Content-Type-Options",
+                "value": "nosniff"
+            }
+        ],
+        "x-frame-options": [
+            {
+                "key": "X-Frame-Options",
+                "value": "DENY"
+            }
+        ],
+        "referrer-policy": [
+            {
+                "key": "Referrer-Policy",
+                "value": "strict-origin-when-cross-origin"
+            }
+        ],
+        "cache-control": [
+            {
+                "key": "Cache-Control",
+                "value": "public, max-age=300, s-maxage=3600"
+            }
+        ],
+        "x-usms-edge-chain": [
+            {
+                "key": "X-USMS-Edge-Chain",
+                "value": "viewer-request-allow;student=stu-00417;origin-response"
+            }
+        ]
+    }
+}
+qualified ARN: arn:aws:lambda:us-east-1:000000000000:function:usms-edge-origin-response:1
+origin-response: 4 security headers + cache-control + chain marker

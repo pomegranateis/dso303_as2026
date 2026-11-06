@@ -1,0 +1,25 @@
+== Step 5: the origin bucket ==
+/usms-student-data
+usms-student-data
+{
+    "BucketRegion": "us-east-1"
+}
+head-bucket: exit 0
+---------------------
+| GetBucketTagging  |
++----------+--------+
+|  Project |  USMS  |
+|  Tier    |  data  |
+|  Lab     |  10    |
++----------+--------+
+[
+    "arn:aws:s3:::usms-student-data",
+    "arn:aws:s3:::usms-student-data/*",
+    "arn:aws:s3:::usms-student-data"
+]
+--- the same ARNs, as the simulator now sees them for each holder (Lab 09 found three roles) ---
+  usms-ec2-app-role              GetObject=allowed PutObject=allowed
+  usms-ecs-task-role             GetObject=allowed PutObject=allowed
+  usms-eks-node-role             GetObject=allowed PutObject=allowed
+  usms-transcripts-reader-role   GetObject=allowed PutObject=explicitDeny
+  usms-lambda-exec-role          GetObject=allowed PutObject=implicitDeny

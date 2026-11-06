@@ -1,0 +1,17 @@
+Lambda@Edge eligibility - 2026-11-06T02:52:08Z
+
+usms-edge-viewer-request
+  ok   no environment variables
+  ok   memory 128 MB (cap 128)
+  ok   timeout 5 s
+  ok   runtime nodejs20.x
+  ok   no VPC configuration
+  ok   1 published version(s)
+
+usms-edge-origin-response
+  ok   no environment variables
+  ok   memory 128 MB (cap 128)
+  ok   timeout 5 s
+  ok   runtime nodejs20.x
+  ok   no VPC configuration
+  ok   1 published version(s)

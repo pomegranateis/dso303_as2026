@@ -1,0 +1,24 @@
+== Step 21 part 1: the log ==
+-----------------------------------------------
+|              DescribeLogGroups              |
++----------------------------------------+----+
+|  /aws/lambda/usms-transcript-notifier  |  0 |
++----------------------------------------+----+
+USMS_NOTIFY {"bucket": "usms-student-data", "event": "ObjectCreated:Put", "key": "transcripts/evidence/lab-08-scaling-evidence.json", "readable": true, "size": 3128}
+(stream names: 2026/11/06/[$LATEST]348ed455)
+== part 2: the synthetic-event route, run as well for comparison ==
+valid JSON
+-------------------------------------------------
+|                    Invoke                     |
++-------+------------+----------------+---------+
+| Error | Executed   | HasLogResult   | Status  |
++-------+------------+----------------+---------+
+|  None |  $LATEST   |  False         |  200    |
++-------+------------+----------------+---------+
+{
+    "processed": 1,
+    "keys": [
+        "transcripts/evidence/synthetic-probe.json"
+    ]
+}
+USMS_NOTIFY {"bucket": "usms-student-data", "event": "ObjectCreated:Put", "key": "transcripts/evidence/lab-08-scaling-evidence.json", "readable": true, "size": 3128}	USMS_NOTIFY {"bucket": "usms-student-data", "event": "ObjectCreated:Put", "key": "transcripts/evidence/synthetic-probe.json", "read_error": "ClientError", "readable": false, "size": 1024}

@@ -1,0 +1,16 @@
+Floci support probe for Lab 10 - 2026-11-06T02:27:47Z (server 1.5.34)
+
+  SUPPORTED    lambda  (list-functions)
+  SUPPORTED    lambda  (list-layers)
+  SUPPORTED    s3      (list-buckets)
+  SUPPORTED    logs    (describe-log-groups)
+  SUPPORTED    cloudfront (list-distributions)
+  SUPPORTED    iam     (get-role)
+  UNSUPPORTED  iam     (get-role --role-name <ARN from lab-01.env>, as the lab passes it)
+Step 10: invoke --log-type Tail returns NO LogResult key on this build (only StatusCode, ExecutedVersion); the log group /aws/lambda/usms-edge-viewer-request and one stream are created but hold no events. 'None' piped to openssl base64 -d prints garbage bytes. Returned payloads are used as evidence.
+Step 15 Path A: create-distribution succeeds (E1OWPB9TTQNP7G, Deployed) but the stored DefaultCacheBehavior has LambdaFunctionAssociations Quantity 0, no ForwardedValues/TTLs, and AllowedMethods merged with CachedMethods (4 items, duplicated). Path B validation run on the config as well.
+Step 18: get-function-configuration ignores --qualifier (live, 1 and $LATEST all report Version $LATEST and the unqualified ARN). Correction: Step 14's 'version 1 never had the variables: None' came from $LATEST, so it is not evidence about version 1.
+Step 19: add-permission --source-account is DROPPED (only ArnLike AWS:SourceArn stored) and --qualifier live is ignored (Resource is the unqualified function ARN; get-policy without a qualifier returns the same statement). The lab's assertion only checks the bucket name, so it passes anyway.
+Step 21: invoke --qualifier live reports ExecutedVersion $LATEST - Floci records versions and aliases but always runs $LATEST. S3 event delivery DOES work (the upload invoked the function), and boto3 inside the container reached Floci's S3 (readable: true).
+Step 23: list-distributions answers with XML root <ListDistributionsResult> (should be <DistributionList>); the CLI parses it to nothing, so the Step 4 probe's SUPPORTED only meant exit 0. DIST_ID and DOMAIN taken from create-distribution and confirmed with get-distribution.
+Ex 1: get-function --qualifier N returns the same Code.Location for every version (one snapshot per function, already containing the new code); invoke --qualifier N runs $LATEST. Versions are metadata only on Floci 1.5.34 - only CodeSize recorded at publish time differs (v1 1092, v2 1124).

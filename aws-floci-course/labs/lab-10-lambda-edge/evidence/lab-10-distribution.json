@@ -1,0 +1,68 @@
+{
+    "Location": "http://localhost:4566/2020-05-31/distribution/E1OWPB9TTQNP7G",
+    "ETag": "afa55fd9-1a41-49d2-b111-bddd51913b2d",
+    "Distribution": {
+        "Id": "E1OWPB9TTQNP7G",
+        "ARN": "arn:aws:cloudfront::000000000000:distribution/E1OWPB9TTQNP7G",
+        "Status": "Deployed",
+        "LastModifiedTime": "2026-11-06T02:52:37.866961+00:00",
+        "DomainName": "E1OWPB9TTQNP7G.cloudfront.net",
+        "DistributionConfig": {
+            "CallerReference": "usms-transcript-cdn-1793933557",
+            "Aliases": {
+                "Quantity": 0
+            },
+            "DefaultRootObject": "",
+            "Origins": {
+                "Quantity": 1,
+                "Items": [
+                    {
+                        "Id": "usms-student-data-origin",
+                        "DomainName": "usms-student-data.s3.us-east-1.amazonaws.com",
+                        "OriginPath": "",
+                        "S3OriginConfig": {
+                            "OriginAccessIdentity": ""
+                        },
+                        "ConnectionAttempts": 3,
+                        "ConnectionTimeout": 10
+                    }
+                ]
+            },
+            "DefaultCacheBehavior": {
+                "TargetOriginId": "usms-student-data-origin",
+                "ViewerProtocolPolicy": "redirect-to-https",
+                "AllowedMethods": {
+                    "Quantity": 4,
+                    "Items": [
+                        "GET",
+                        "HEAD",
+                        "GET",
+                        "HEAD"
+                    ]
+                },
+                "Compress": true,
+                "LambdaFunctionAssociations": {
+                    "Quantity": 0
+                },
+                "FunctionAssociations": {
+                    "Quantity": 0
+                }
+            },
+            "CacheBehaviors": {
+                "Quantity": 0
+            },
+            "CustomErrorResponses": {
+                "Quantity": 0
+            },
+            "Comment": "usms-transcript-cdn - USMS transcript delivery with edge functions",
+            "PriceClass": "PriceClass_All",
+            "Enabled": true,
+            "ViewerCertificate": {
+                "CloudFrontDefaultCertificate": true,
+                "MinimumProtocolVersion": "TLSv1.2_2021"
+            },
+            "HttpVersion": "http2",
+            "IsIPV6Enabled": true
+        }
+    }
+}

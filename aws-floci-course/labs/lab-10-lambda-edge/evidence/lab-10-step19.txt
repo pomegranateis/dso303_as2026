@@ -1,0 +1,39 @@
+== Step 19: add-permission on :live ==
+{
+    "Sid": "usms-s3-transcript-upload",
+    "Effect": "Allow",
+    "Principal": {
+        "Service": "s3.amazonaws.com"
+    },
+    "Action": "lambda:InvokeFunction",
+    "Resource": "arn:aws:lambda:us-east-1:000000000000:function:usms-transcript-notifier",
+    "Condition": {
+        "ArnLike": {
+            "AWS:SourceArn": "arn:aws:s3:::usms-student-data"
+        }
+    }
+}
+== verify ==
+{
+    "Version": "2012-10-17",
+    "Id": "default",
+    "Statement": [
+        {
+            "Sid": "usms-s3-transcript-upload",
+            "Effect": "Allow",
+            "Principal": {
+                "Service": "s3.amazonaws.com"
+            },
+            "Action": "lambda:InvokeFunction",
+            "Resource": "arn:aws:lambda:us-east-1:000000000000:function:usms-transcript-notifier",
+            "Condition": {
+                "ArnLike": {
+                    "AWS:SourceArn": "arn:aws:s3:::usms-student-data"
+                }
+            }
+        }
+    ]
+}
+resource policy: scoped to one bucket in one account
+--- is the statement on :live only, or also on the unqualified function? ---
+{"Version":"2012-10-17","Id":"default","Statement":[{"Sid":"usms-s3-transcript-upload","Effect":"Allow","Principal":{"Service":"s3.amazonaws.com"},"Action":"lam

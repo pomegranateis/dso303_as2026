@@ -1,0 +1,14 @@
+valid JSON
+45:          "LambdaFunctionARN": "arn:aws:lambda:us-east-1:000000000000:function:usms-edge-viewer-request:1",
+50:          "LambdaFunctionARN": "arn:aws:lambda:us-east-1:000000000000:function:usms-edge-origin-response:1"
+== PATH A: create-distribution ==
+exit 0
+distribution : E1OWPB9TTQNP7G
+domain       : E1OWPB9TTQNP7G.cloudfront.net
+----------------------------------------------------------------------------
+|                              GetDistribution                             |
++--------------------------------+----------+-----------------+------------+
+|             Domain             | Enabled  |       Id        |  Status    |
++--------------------------------+----------+-----------------+------------+
+|  E1OWPB9TTQNP7G.cloudfront.net |  True    |  E1OWPB9TTQNP7G |  Deployed  |
++--------------------------------+----------+-----------------+------------+
