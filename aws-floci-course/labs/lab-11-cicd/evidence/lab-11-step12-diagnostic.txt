@@ -1,0 +1,16 @@
+== diagnostic: a buildspec that can only fail ==
+usms-enrolment-build:3
+status with 'exit 1' buildspec: FAILED
+-------------------------------------------------------
+|                   BatchGetBuilds                    |
++-----------------------------+------------+----------+
+|           Context           |   Phase    | Status   |
++-----------------------------+------------+----------+
+|  Exit code 1: about-to-fail |  BUILD     |  FAILED  |
+|  None                       |  COMPLETED |  FAILED  |
++-----------------------------+------------+----------+
+2026-11-09 04:09:00,262 ERROR [io.git.hec.flo.ser.cod.CodeBuildRunner] Unexpected error in build usms-enrolment-build:1: com.github.dockerjava.api.exception.NotFoundException: Status 404: {"message":"
+2026-11-09 04:09:57,849 INFO  [io.git.hec.flo.cor.com.doc.ContainerLifecycleManager] Started container a13ecebd0d98d077990c75f3c51901d0219b66b97d66c8c2feceaa3eba10d440
+2026-11-09 04:09:57,965 INFO  [io.git.hec.flo.cor.com.doc.ContainerLifecycleManager] Stopping container a13ecebd0d98d077990c75f3c51901d0219b66b97d66c8c2feceaa3eba10d440
+2026-11-09 04:10:45,727 INFO  [io.git.hec.flo.cor.com.doc.ContainerLifecycleManager] Started container 42d13bed4ec5528541d422b8636520c80bd066b843914fa4faac18045b95f482
+2026-11-09 04:10:45,813 INFO  [io.git.hec.flo.cor.com.doc.ContainerLifecycleManager] Stopping container 42d13bed4ec5528541d422b8636520c80bd066b843914fa4faac18045b95f482

@@ -1,0 +1,16 @@
+policies/trust-codepipeline.json is valid JSON
+policies/usms-codepipeline-policy.json is valid JSON
+== Step 15 ==
+arn:aws:iam::000000000000:role/usms-codepipeline-role
+arn:aws:iam::000000000000:role/usms-codepipeline-role
+-------------------------------------------------
+|                   GetPolicy                   |
++-----------+----------+------------------------+
+| Attached  | Default  |         Name           |
++-----------+----------+------------------------+
+|  1        |  v1      |  USMSCodePipelineBase  |
++-----------+----------+------------------------+
+-- PassRole, simulated with iam:PassedToService --
+  pass usms-codebuild-role  to codebuild.amazonaws.com    allowed
+  pass usms-codebuild-role  to ec2.amazonaws.com          implicitDeny
+  pass usms-deploy-role     to codebuild.amazonaws.com    implicitDeny

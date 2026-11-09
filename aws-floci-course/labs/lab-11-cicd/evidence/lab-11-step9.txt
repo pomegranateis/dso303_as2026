@@ -1,0 +1,22 @@
+policies/trust-codebuild.json is valid JSON
+policies/usms-codebuild-policy.json is valid JSON
+== Step 9 ==
+arn:aws:iam::000000000000:role/usms-codebuild-role
+arn:aws:iam::000000000000:role/usms-codebuild-role
+-------------------------------------------------------------------------------
+|                          ListAttachedRolePolicies                           |
++-----------------------------------------------------------------------------+
+||                             AttachedPolicies                              ||
+|+-----------------------------------------------------+---------------------+|
+||                      PolicyArn                      |     PolicyName      ||
+|+-----------------------------------------------------+---------------------+|
+||  arn:aws:iam::000000000000:policy/USMSCodeBuildBase |  USMSCodeBuildBase  ||
+|+-----------------------------------------------------+---------------------+|
+{
+    "Service": "codebuild.amazonaws.com"
+}
+-- the simulator on the build role (path A, as in Lab 09) --
+  s3:PutObject       arn:aws:s3:::usms-pipeline-artifacts/build/x.zip                                         allowed
+  s3:GetObject       arn:aws:s3:::usms-student-data/transcripts/x.json                                        explicitDeny
+  logs:PutLogEvents  arn:aws:logs:us-east-1:000000000000:log-group:/aws/codebuild/usms-enrolment-build:log-stream:x allowed
+  logs:PutLogEvents  arn:aws:logs:us-east-1:000000000000:log-group:/aws/lambda/usms-transcript-notifier:log-stream:x implicitDeny

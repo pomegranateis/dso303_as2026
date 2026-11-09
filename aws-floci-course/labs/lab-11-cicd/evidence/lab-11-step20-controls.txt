@@ -1,0 +1,11 @@
+== control 1: the local runner on the broken tree ==
+=== phase: install ===
+=== phase: pre_build ===
+config/service.json names the wrong container
+--- local build exit status: 1 ---
+== control 2: standalone CodeBuild on the same zip, S3 source (temporary) ==
+S3
+usms-enrolment-build:9
+status: SUCCEEDED
+== restore the pipeline handoff ==
+CODEPIPELINE	python:3.12-slim	CODEPIPELINE

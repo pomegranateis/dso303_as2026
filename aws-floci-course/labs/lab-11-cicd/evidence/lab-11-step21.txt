@@ -1,0 +1,1 @@
+bucket=usms-pipeline-artifacts versioning=Enabled project=usms-enrolment-build stages=2 release=r5 path=A

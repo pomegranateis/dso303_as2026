@@ -1,0 +1,129 @@
+{
+    "builds": [
+        {
+            "id": "usms-enrolment-build:2",
+            "arn": "arn:aws:codebuild:us-east-1:000000000000:build/usms-enrolment-build:2",
+            "buildNumber": 2,
+            "startTime": "2026-11-09T10:09:32.931000+06:00",
+            "endTime": "2026-11-09T10:09:57.964000+06:00",
+            "currentPhase": "COMPLETED",
+            "buildStatus": "SUCCEEDED",
+            "projectName": "usms-enrolment-build",
+            "phases": [
+                {
+                    "phaseType": "SUBMITTED",
+                    "phaseStatus": "SUCCEEDED",
+                    "startTime": "2026-11-09T10:09:32.931000+06:00",
+                    "endTime": "2026-11-09T10:09:32.931000+06:00",
+                    "durationInSeconds": 0
+                },
+                {
+                    "phaseType": "QUEUED",
+                    "phaseStatus": "SUCCEEDED",
+                    "startTime": "2026-11-09T10:09:32.931000+06:00",
+                    "endTime": "2026-11-09T10:09:32.931000+06:00",
+                    "durationInSeconds": 0
+                },
+                {
+                    "phaseType": "PROVISIONING",
+                    "phaseStatus": "SUCCEEDED",
+                    "startTime": "2026-11-09T10:09:32.931000+06:00",
+                    "endTime": "2026-11-09T10:09:32.931000+06:00",
+                    "durationInSeconds": 0
+                },
+                {
+                    "phaseType": "DOWNLOAD_SOURCE",
+                    "phaseStatus": "SUCCEEDED",
+                    "startTime": "2026-11-09T10:09:32.931000+06:00",
+                    "endTime": "2026-11-09T10:09:32.932000+06:00",
+                    "durationInSeconds": 0
+                },
+                {
+                    "phaseType": "INSTALL",
+                    "phaseStatus": "SUCCEEDED",
+                    "startTime": "2026-11-09T10:09:57.962000+06:00",
+                    "endTime": "2026-11-09T10:09:57.962000+06:00",
+                    "durationInSeconds": 0
+                },
+                {
+                    "phaseType": "PRE_BUILD",
+                    "phaseStatus": "SUCCEEDED",
+                    "startTime": "2026-11-09T10:09:57.962000+06:00",
+                    "endTime": "2026-11-09T10:09:57.962000+06:00",
+                    "durationInSeconds": 0
+                },
+                {
+                    "phaseType": "BUILD",
+                    "phaseStatus": "SUCCEEDED",
+                    "startTime": "2026-11-09T10:09:57.962000+06:00",
+                    "endTime": "2026-11-09T10:09:57.962000+06:00",
+                    "durationInSeconds": 0
+                },
+                {
+                    "phaseType": "POST_BUILD",
+                    "phaseStatus": "SUCCEEDED",
+                    "startTime": "2026-11-09T10:09:57.962000+06:00",
+                    "endTime": "2026-11-09T10:09:57.962000+06:00",
+                    "durationInSeconds": 0
+                },
+                {
+                    "phaseType": "UPLOAD_ARTIFACTS",
+                    "phaseStatus": "SUCCEEDED",
+                    "startTime": "2026-11-09T10:09:57.962000+06:00",
+                    "endTime": "2026-11-09T10:09:57.964000+06:00",
+                    "durationInSeconds": 0
+                },
+                {
+                    "phaseType": "FINALIZING",
+                    "phaseStatus": "SUCCEEDED",
+                    "startTime": "2026-11-09T10:09:57.964000+06:00",
+                    "endTime": "2026-11-09T10:09:57.964000+06:00",
+                    "durationInSeconds": 0
+                },
+                {
+                    "phaseType": "COMPLETED",
+                    "phaseStatus": "SUCCEEDED",
+                    "startTime": "2026-11-09T10:09:57.964000+06:00",
+                    "endTime": "2026-11-09T10:09:57.964000+06:00",
+                    "durationInSeconds": 0
+                }
+            ],
+            "source": {
+                "type": "S3",
+                "location": "usms-pipeline-artifacts/source/usms-enrolment-src.zip",
+                "buildspec": "buildspec.yml"
+            },
+            "artifacts": {
+                "location": "usms-pipeline-artifacts"
+            },
+            "environment": {
+                "type": "LINUX_CONTAINER",
+                "image": "python:3.12-slim",
+                "computeType": "BUILD_GENERAL1_SMALL",
+                "environmentVariables": [
+                    {
+                        "name": "USMS_PROJECT",
+                        "value": "USMS",
+                        "type": "PLAINTEXT"
+                    },
+                    {
+                        "name": "USMS_SERVICE",
+                        "value": "enrolment",
+                        "type": "PLAINTEXT"
+                    }
+                ],
+                "privilegedMode": false
+            },
+            "logs": {
+                "groupName": "/aws/codebuild/usms-enrolment-build",
+                "streamName": "2026/11/09/usms-enrolment-build/2",
+                "cloudWatchLogsArn": "arn:aws:logs:us-east-1:000000000000:log-group:/aws/codebuild/usms-enrolment-build:log-stream:2026/11/09/usms-enrolment-build/2"
+            },
+            "timeoutInMinutes": 15,
+            "queuedTimeoutInMinutes": 30,
+            "buildComplete": true,
+            "initiator": "user"
+        }
+    ],
+    "buildsNotFound": []
+}

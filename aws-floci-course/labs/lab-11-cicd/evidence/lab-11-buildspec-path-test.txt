@@ -1,0 +1,4 @@
+== hypothesis: the buildspec field is read as inline YAML, not as a path (source = the BROKEN zip) ==
+override = the PATH 'buildspec.yml'                        16     SUCCEEDED None
+override = the CONTENTS of labs/lab-11-cicd/app/buildspec.yml 17     FAILED    PRE_BUILD	Exit code 1: --- pre_build ---
+config/service.json names the wrong container

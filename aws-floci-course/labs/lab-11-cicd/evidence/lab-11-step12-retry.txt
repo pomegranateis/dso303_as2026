@@ -1,0 +1,13 @@
+{
+    "Image": "python:3.12-slim",
+    "Vars": [
+        "USMS_PROJECT",
+        "USMS_SERVICE"
+    ]
+}
+== Step 12 again, on python:3.12-slim ==
+usms-enrolment-build:2
+   1  04:09:34  status=IN_PROGRESS  phase=DOWNLOAD_SOURCE
+   2  04:09:45  status=IN_PROGRESS  phase=DOWNLOAD_SOURCE
+   3  04:09:57  status=IN_PROGRESS  phase=DOWNLOAD_SOURCE
+   4  04:10:08  status=SUCCEEDED    phase=COMPLETED

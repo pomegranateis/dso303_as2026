@@ -1,0 +1,9 @@
+== your turn: port 8080 must stop the build in pre_build ==
+  "port": 8080,
+=== phase: install ===
+=== phase: pre_build ===
+config/service.json: "port" must be 80 - the port enrolment-api listens on and the target group checks. Fix the port line in config/service.json, then upload the source again.
+--- local build exit status: 1 ---
+  "port": 80,
+--- local build exit status: 0 ---
+(service.json restored)

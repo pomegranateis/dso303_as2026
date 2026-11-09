@@ -1,0 +1,19 @@
+----------------------------------------------
+|               BatchGetBuilds               |
++------------------+-----------+-------------+
+|       Phase      |  Seconds  |   Status    |
++------------------+-----------+-------------+
+|  SUBMITTED       |  0        |  SUCCEEDED  |
+|  QUEUED          |  0        |  SUCCEEDED  |
+|  PROVISIONING    |  0        |  SUCCEEDED  |
+|  DOWNLOAD_SOURCE |  0        |  SUCCEEDED  |
+|  INSTALL         |  0        |  SUCCEEDED  |
+|  PRE_BUILD       |  0        |  SUCCEEDED  |
+|  BUILD           |  0        |  SUCCEEDED  |
+|  POST_BUILD      |  0        |  SUCCEEDED  |
+|  UPLOAD_ARTIFACTS|  0        |  SUCCEEDED  |
+|  FINALIZING      |  0        |  SUCCEEDED  |
+|  COMPLETED       |  0        |  SUCCEEDED  |
++------------------+-----------+-------------+
+group=/aws/codebuild/usms-enrolment-build stream=2026/11/09/usms-enrolment-build/2
+== artifact ==

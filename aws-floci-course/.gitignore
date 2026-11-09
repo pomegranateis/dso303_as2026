@@ -32,3 +32,6 @@ Thumbs.db
 # ---- Python bytecode (Lab 10: py_compile leaves __pycache__ next to the handler) ----
 __pycache__/
 *.pyc
+
+# ---- Lab 11: build output of the local buildspec runner ----
+labs/lab-11-cicd/app/dist/

@@ -1,0 +1,7 @@
+== what does a CodeBuild container on this build actually see? (S3 source, temporary) ==
+S3
+usms-enrolment-build:10
+status: FAILED
+Exit code 1: pwd=/codebuild/output/src/src files=[VERSION buildspec.yml config src tests ] buildspec=present CODEBUILD_SRC_DIR=/codebuild/output/src/src
+== restore ==
+CODEPIPELINE	CODEPIPELINE	python:3.12-slim

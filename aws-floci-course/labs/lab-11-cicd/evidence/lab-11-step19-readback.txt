@@ -1,0 +1,44 @@
+== everything in the artifact store ==
+source/usms-enrolment-src.zip	3000	2026-11-09T04:17:27+00:00
+{
+    "pipelineExecution": {
+        "pipelineName": "usms-enrolment-pipeline",
+        "pipelineVersion": 1,
+        "pipelineExecutionId": "c8eebd61-2bc8-4766-a4a9-15583278abca",
+        "status": "Succeeded",
+        "statusSummary": "Pipeline execution succeeded.",
+        "artifactRevisions": [
+            {
+                "name": "FetchSource",
+                "revisionId": "bebadecc-9c3e-4719-86f6-187a5ddd8afb",
+                "revisionChangeIdentifier": "\"5fc2ecef8b5c673da3cace99b1239e53\"",
+                "revisionSummary": "usms-pipeline-artifacts/source/usms-enrolment-src.zip",
+                "created": "2026-11-09T10:17:27.875000+06:00",
+                "revisionUrl": "s3://usms-pipeline-artifacts/source/usms-enrolment-src.zip"
+            }
+        ],
+        "variables": [],
+        "trigger": {
+            "triggerType": "StartPipelineExecution",
+            "triggerDetail": "manual"
+        },
+        "executionMode": "SUPERSEDED",
+        "executionType": "STANDARD"
+    }
+}
+Source	FetchSource	Succeeded	None
+Build	BuildArtifact	Succeeded	None
+-- recent builds --
+usms-enrolment-build:6 SUCCEEDED	CODEPIPELINE	None
+usms-enrolment-build:5 SUCCEEDED	CODEPIPELINE	None
+usms-enrolment-build:4 SUCCEEDED	CODEPIPELINE	None
+2026-11-09 04:16:18,782 INFO  [io.git.hec.flo.cor.com.AwsJson11Controller] AwsJson11Controller codepipeline action: ListPipelineExecutions
+2026-11-09 04:16:27,503 INFO  [io.git.hec.flo.cor.com.AwsJson11Controller] AwsJson11Controller codebuild action: UpdateProject
+2026-11-09 04:16:28,238 INFO  [io.git.hec.flo.cor.com.AwsJson11Controller] AwsJson11Controller codebuild action: StartBuild
+2026-11-09 04:16:28,412 INFO  [io.git.hec.flo.ser.clo.log.CloudWatchLogsService] Created log stream: /aws/codebuild/usms-enrolment-build/2026/11/09/usms-enrolment-build/4
+2026-11-09 04:16:53,887 INFO  [io.git.hec.flo.cor.com.AwsJson11Controller] AwsJson11Controller codebuild action: StartBuild
+2026-11-09 04:16:54,031 INFO  [io.git.hec.flo.ser.clo.log.CloudWatchLogsService] Created log stream: /aws/codebuild/usms-enrolment-build/2026/11/09/usms-enrolment-build/5
+2026-11-09 04:17:29,354 INFO  [io.git.hec.flo.cor.com.AwsJson11Controller] AwsJson11Controller codepipeline action: StartPipelineExecution
+2026-11-09 04:17:29,494 INFO  [io.git.hec.flo.ser.clo.log.CloudWatchLogsService] Created log stream: /aws/codebuild/usms-enrolment-build/2026/11/09/usms-enrolment-build/6
+2026-11-09 04:17:40,364 INFO  [io.git.hec.flo.cor.com.AwsJson11Controller] AwsJson11Controller codepipeline action: ListActionExecutions
+2026-11-09 04:17:41,091 INFO  [io.git.hec.flo.cor.com.AwsJson11Controller] AwsJson11Controller codebuild action: ListBuildsForProject

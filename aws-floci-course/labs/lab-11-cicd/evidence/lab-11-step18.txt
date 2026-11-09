@@ -1,0 +1,14 @@
+== Step 18 ==
+--------------------------------------------------------------
+|                        UpdateProject                       |
++--------------+--------------------+----------------+-------+
+|   Artifacts  |       Image        |    Source      | Vars  |
++--------------+--------------------+----------------+-------+
+|  CODEPIPELINE|  python:3.12-slim  |  CODEPIPELINE  |  2    |
++--------------+--------------------+----------------+-------+
+-- the cost: a direct start-build should now be refused --
+usms-enrolment-build:4
+build 4 (direct start on a CODEPIPELINE project): SUCCEEDED	CODEPIPELINE
+-- the escape hatch: --source-type-override S3 --
+usms-enrolment-build:5
+SUCCEEDED	CODEPIPELINE	None

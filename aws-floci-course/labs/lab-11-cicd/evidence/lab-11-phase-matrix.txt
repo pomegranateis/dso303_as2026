@@ -1,0 +1,6 @@
+== which phases does Floci's CodeBuild execute? (each buildspec fails in exactly one place) ==
+install: exit 1                              FAILED    INSTALL	Exit code 1: fail-in-install
+pre_build: exit 1                            FAILED    PRE_BUILD	Exit code 1: fail-in-pre_build
+build: exit 1                                FAILED    BUILD	Exit code 1: fail-in-build
+post_build: exit 1                           FAILED    POST_BUILD	Exit code 1: fail-in-post_build
+build: '- |' block that fails                FAILED    BUILD	Exit code 1: fail-in-a-literal-block

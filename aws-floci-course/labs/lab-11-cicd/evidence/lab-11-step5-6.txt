@@ -1,0 +1,40 @@
+== Step 5 ==
+{
+    "Location": "/usms-pipeline-artifacts"
+}
+-----------------------
+| GetBucketVersioning |
++---------+-----------+
+|  Status |  Enabled  |
++---------+-----------+
+-------------------------
+|   GetBucketTagging    |
++----------+------------+
+|  Project |  USMS      |
+|  Tier    |  pipeline  |
+|  Lab     |  11        |
++----------+------------+
+-------------------------------------
+|       GetPublicAccessBlock        |
++-----------------------------------+
+|| PublicAccessBlockConfiguration  ||
+|+-------------------------+-------+|
+||  BlockPublicAcls        |  True ||
+||  BlockPublicPolicy      |  True ||
+||  IgnorePublicAcls       |  True ||
+||  RestrictPublicBuckets  |  True ||
+|+-------------------------+-------+|
+== Step 6: prove versioning ==
+------------------------------------------------------------
+|                    ListObjectVersions                    |
++--------+-------+-----------------------------------------+
+| Latest | Size  |                 Version                 |
++--------+-------+-----------------------------------------+
+|  True  |  7    |  6f94a5df-9a29-4612-a4b6-aa4a2f955200   |
+|  False |  6    |  5d36eb1b-be31-4398-b031-86a1eafed6e9   |
++--------+-------+-----------------------------------------+
+--- and the old version is still readable by its id ---
+version 5d36eb1b-be31-4398-b031-86a1eafed6e9 contains: first
+deleted probe/versioning.txt 6f94a5df-9a29-4612-a4b6-aa4a2f955200
+deleted probe/versioning.txt 5d36eb1b-be31-4398-b031-86a1eafed6e9
+probe versions left: 0

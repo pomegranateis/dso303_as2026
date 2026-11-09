@@ -1,0 +1,13 @@
+== executions, oldest first: status and the source version each recorded ==
+c8eebd61-2bc8-4766-a4a9-15583278abca	Succeeded	bebadecc-9c3e-4719-86f6-187a5ddd8afb
+bc3851d7-d661-455a-b99a-d573c45ebcfc	Succeeded	2c559647-dea7-4f90-9adb-97c6df208581
+bedcb3df-53d5-4caf-89a4-10dff247a6e1	Succeeded	09ee9605-18eb-4fc0-a1f7-6a2b790f037c
+f6980931-5629-45c1-812b-bea1ce8c52dc	Succeeded	fdd913ad-7509-40ae-aa64-5ae56a177aef
+== versions of source/usms-enrolment-src.zip (newest first) ==
+fdd913ad-7509-40ae-aa64-5ae56a177aef	True	2026-11-09T04:22:24+00:00
+09ee9605-18eb-4fc0-a1f7-6a2b790f037c	False	2026-11-09T04:18:36+00:00
+2c559647-dea7-4f90-9adb-97c6df208581	False	2026-11-09T04:18:06+00:00
+bebadecc-9c3e-4719-86f6-187a5ddd8afb	False	2026-11-09T04:17:27+00:00
+0398a32c-de5b-446f-8d38-3e21ea555d66	False	2026-11-09T04:08:40+00:00
+== every object in the artifact store ==
+source/usms-enrolment-src.zip

@@ -1,0 +1,14 @@
+[
+    {
+        "Stage": "Source",
+        "Status": null,
+        "Summary": "Action completed.",
+        "Error": null
+    },
+    {
+        "Stage": "Build",
+        "Status": null,
+        "Summary": "Action completed.",
+        "Error": null
+    }
+]

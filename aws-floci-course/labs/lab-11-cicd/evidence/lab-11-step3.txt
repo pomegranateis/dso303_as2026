@@ -1,0 +1,13 @@
+== CodeBuild ==
+  ok   codebuild list-projects answers
+  ok   codebuild create-project accepted
+  ok   probe project deleted
+== CodePipeline ==
+  ok   codepipeline list-pipelines answers
+== Deploy targets (informational, used by Lab 12) ==
+  ok   ecr describe-repositories answers
+  ok   codedeploy list-applications answers
+
+PATH A - CodeBuild and CodePipeline both present.
+         Follow every step as written.
+recorded in outputs/lab-11-support-probe.txt

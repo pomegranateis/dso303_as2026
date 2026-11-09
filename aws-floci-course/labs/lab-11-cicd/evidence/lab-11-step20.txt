@@ -1,0 +1,19 @@
+09ee9605-18eb-4fc0-a1f7-6a2b790f037c
+execution: bedcb3df-53d5-4caf-89a4-10dff247a6e1
+[
+    {
+        "Stage": "Source",
+        "Status": null,
+        "Summary": "Action completed.",
+        "Error": null
+    },
+    {
+        "Stage": "Build",
+        "Status": null,
+        "Summary": "Action completed.",
+        "Error": null
+    }
+]
+Succeeded	Pipeline execution succeeded.
+last build: usms-enrolment-build:8
+SUCCEEDED

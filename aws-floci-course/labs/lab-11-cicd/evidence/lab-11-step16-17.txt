@@ -1,0 +1,32 @@
+pipeline template is valid JSON
+0
+== Step 17: create ==
+---------------------------------------------------------------------
+|                          CreatePipeline                           |
++--------+----------------------------------------------------------+
+|  Name  |  usms-enrolment-pipeline                                 |
+|  Role  |  arn:aws:iam::000000000000:role/usms-codepipeline-role   |
+|  Stages|  2                                                       |
++--------+----------------------------------------------------------+
+Source	None	None Build	None	None 
+Source	None	None Build	None	None 
+Source	None	None Build	None	None 
+Source	None	None Build	None	None 
+Source	None	None Build	None	None 
+Source	None	None Build	None	None 
+Source	None	None Build	None	None 
+Source	None	None Build	None	None 
+Source	None	None Build	None	None 
+Source	None	None Build	None	None 
+Source	None	None Build	None	None 
+Source	None	None Build	None	None 
+-------------------------------------------------------
+|                  GetPipelineState                   |
++----------------+----------------+---------+---------+
+|     Action     | ActionStatus   |  Stage  | Status  |
++----------------+----------------+---------+---------+
+|  FetchSource   |  None          |  Source |  None   |
+|  BuildArtifact |  None          |  Build  |  None   |
++----------------+----------------+---------+---------+
+== artifact store after the first execution ==
+source/usms-enrolment-src.zip	3000

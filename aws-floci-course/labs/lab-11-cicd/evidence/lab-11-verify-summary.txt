@@ -1,0 +1,11 @@
+== 8.1 verify as given ==
+  FAIL project image is standard:7.0
+  FAIL no secret is tracked
+PASS=44  FAIL=2
+== 8.1 verify after the .gitkeep fix (only script change) ==
+  FAIL project image is standard:7.0
+PASS=45  FAIL=1
+== live image readback (Known Issues Lab 11: judge the workaround by live get-project) ==
+python:3.12-slim  LINUX_CONTAINER  BUILD_GENERAL1_SMALL
+== 8.2 cleanup ==
+scripts/cleanup/lab-11-cleanup.sh: bash -n OK, NOT run

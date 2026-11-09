@@ -1,0 +1,19 @@
+packed with zip
+--- archive contents ---
+Archive:  /home/pomegranateu/dso303_as2026/aws-floci-course/outputs/usms-enrolment-src.zip
+  Length      Date    Time    Name
+---------  ---------- -----   ----
+        0  2026-11-09 10:05   src/
+        3  2026-11-09 10:05   src/healthz.html
+      300  2026-11-09 10:05   src/index.html
+        3  2026-11-09 10:05   VERSION
+        0  2026-11-09 10:05   tests/
+      942  2026-11-09 10:05   tests/smoke.sh
+        0  2026-11-09 10:05   config/
+      200  2026-11-09 10:05   config/service.json
+     2061  2026-11-09 10:05   buildspec.yml
+---------                     -------
+     3509                     9 files
+source version (r3): 0398a32c-de5b-446f-8d38-3e21ea555d66
+aws-floci-course/.gitignore:7:outputs/*	outputs/usms-enrolment-src.zip
+entries under app/ (must be 0): 0

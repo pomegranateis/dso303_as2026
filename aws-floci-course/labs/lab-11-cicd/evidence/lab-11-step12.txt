@@ -1,0 +1,12 @@
+build: usms-enrolment-build:1 (image aws/codebuild/standard:7.0)
+   1  04:08:55  status=IN_PROGRESS  phase=DOWNLOAD_SOURCE
+   2  04:09:06  status=FAULT        phase=COMPLETED
+--- Floci log ---
+2026-11-09 04:09:00,258 ERROR [com.git.doc.api.asy.ResultCallbackTemplate] Error during callback: com.github.dockerjava.api.exception.NotFoundException: Status 404: {"message":"pull access denied for 
+	at org.graalvm.nativeimage.builder/com.oracle.svm.core.thread.PlatformThreads.threadStartRoutine(PlatformThreads.java:832)
+	at org.graalvm.nativeimage.builder/com.oracle.svm.core.thread.PlatformThreads.threadStartRoutine(PlatformThreads.java:808)
+2026-11-09 04:09:00,262 ERROR [io.git.hec.flo.ser.cod.CodeBuildRunner] Unexpected error in build usms-enrolment-build:1: com.github.dockerjava.api.exception.NotFoundException: Status 404: {"message":"
+	at org.graalvm.nativeimage.builder/com.oracle.svm.core.thread.PlatformThreads.threadStartRoutine(PlatformThreads.java:832)
+	at org.graalvm.nativeimage.builder/com.oracle.svm.core.thread.PlatformThreads.threadStartRoutine(PlatformThreads.java:808)
+2026-11-09 04:09:05,893 INFO  [io.git.hec.flo.cor.com.AwsJson11Controller] AwsJson11Controller codebuild action: BatchGetBuilds
+2026-11-09 04:09:06,609 INFO  [io.git.hec.flo.cor.com.AwsJson11Controller] AwsJson11Controller codebuild action: BatchGetBuilds

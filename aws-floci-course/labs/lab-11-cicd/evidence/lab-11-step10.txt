@@ -1,0 +1,21 @@
+project template is valid JSON
+0
+== create ==
+------------------------------------------------------------------
+|                          CreateProject                         |
++--------+-------------------------------------------------------+
+|  Image |  aws/codebuild/standard:7.0                           |
+|  Name  |  usms-enrolment-build                                 |
+|  Role  |  arn:aws:iam::000000000000:role/usms-codebuild-role   |
+|  Source|  S3                                                   |
++--------+-------------------------------------------------------+
+----------------------------------------------------------------------------------------
+|                                   BatchGetProjects                                   |
++-----------+--------------------------------------------------------------------------+
+|  Arn      |  arn:aws:codebuild:us-east-1:000000000000:project/usms-enrolment-build   |
+|  Artifacts|  S3                                                                      |
+|  Location |  usms-pipeline-artifacts/source/usms-enrolment-src.zip                   |
+|  Name     |  usms-enrolment-build                                                    |
+|  Source   |  S3                                                                      |
+|  Timeout  |  15                                                                      |
++-----------+--------------------------------------------------------------------------+

@@ -1,0 +1,52 @@
+buildspec parsed with PyYAML; 4 phases
+--- generated script: /tmp/usms-buildspec-46147.sh ---
+generated script is valid bash
+--- running in /home/pomegranateu/dso303_as2026/aws-floci-course/labs/lab-11-cicd/app ---
+=== phase: install ===
+--- install ---
+Python 3.10.12
+sed (GNU sed) 4.8
+=== phase: pre_build ===
+--- pre_build ---
+configuration validated
+=== phase: build ===
+--- build ---
+release=r3 builtAt=2026-11-09T04:11:12Z
+=== phase: post_build ===
+--- post_build ---
+== smoke tests ==
+  ok   dist/index.html exists
+  ok   dist/healthz.html exists
+  ok   release placeholder was replaced
+  ok   build-time placeholder was replaced
+  ok   health endpoint says ok
+  ok   build metadata is valid JSON
+  ok   container name matches the task def
+smoke tests failed: 0
+total 16
+-rw-rw-r-- 1 pomegranateu pomegranateu 135 Nov  9 10:11 build-metadata.json
+-rw-rw-r-- 1 pomegranateu pomegranateu   3 Nov  9 10:11 healthz.html
+-rw-rw-r-- 1 pomegranateu pomegranateu 299 Nov  9 10:11 index.html
+-rw-rw-r-- 1 pomegranateu pomegranateu 200 Nov  9 10:11 service.json
+{
+  "service": "enrolment",
+  "release": "r3",
+  "builtAt": "2026-11-09T04:11:12Z",
+  "buildId": "local",
+  "sourceVersion": "local"
+}
+=== all phases completed ===
+--- local build exit status: 0 ---
+== verify ==
+{
+  "service": "enrolment",
+  "release": "r3",
+  "builtAt": "2026-11-09T04:11:12Z",
+  "buildId": "local",
+  "sourceVersion": "local"
+}
+7:    <p id="release">release: r3</p>
+build-metadata.json
+healthz.html
+index.html
+service.json

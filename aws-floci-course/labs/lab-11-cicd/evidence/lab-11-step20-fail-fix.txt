@@ -1,0 +1,26 @@
+== 1. local runner on a broken copy of the source (container enrolment-api-v2) ==
+  "container": "enrolment-api-v2",
+--- pre_build ---
+config/service.json names the wrong container
+--- local build exit status: 1 ---
+== 2. Floci on the broken zip: buildspec given as a path (16) vs as the file's contents (17) ==
+usms-enrolment-build:16	SUCCEEDED	usms-pipeline-artifacts/source/usms-enrolment-src.zip
+usms-enrolment-build:17	FAILED	usms-pipeline-artifacts/source/usms-enrolment-src.zip
+== 3. the lab's diagnostic chain on build 17: stage -> build -> phase -> command ==
+PRE_BUILD	FAILED	Exit code 1: --- pre_build ---
+config/service.json names the wrong container
+POST_BUILD	FAILED	Exit code 1: --- post_build ---
+== smoke tests ==
+  FAIL dist/index.html exists
+  FAIL dist/healthz.html exists
+  ok   release placeholder was replaced
+  ok   build-time placeholder was replaced
+  FAIL health endpoint says ok
+  FAIL build metadata is valid JSON
+  FAIL container name matches the task def
+smoke tests failed: 5
+COMPLETED	FAILED	None
+== 4. the fix: tree restored, local runner, and the pipeline run on the fixed version ==
+  "container": "enrolment-api",
+local build passes again
+f6980931-5629-45c1-812b-bea1ce8c52dc	Succeeded	fdd913ad-7509-40ae-aa64-5ae56a177aef

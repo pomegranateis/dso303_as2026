@@ -1,0 +1,16 @@
+  sourced  configs/lab-01.env
+  sourced  configs/lab-02.env
+  sourced  configs/lab-03.env
+  sourced  configs/lab-04.env
+  sourced  configs/lab-05.env
+  sourced  configs/lab-06.env
+  sourced  configs/lab-09.env
+  sourced  configs/lab-07.env
+  sourced  configs/lab-08.env
+  sourced  configs/lab-10.env
+[1;32m[ok] Account 000000000000 — this is Floci, not real AWS.[0m
+cluster   : usms-ecs-cluster
+service   : usms-enrolment-svc
+container : enrolment-api
+target grp: arn:aws:elasticloadbalancing:us-east-1:000000000000:targetgroup/usms-enrolment-tg/2414901868f64c56
+exec role : arn:aws:iam::000000000000:role/usms-ecs-exec-role
