@@ -1,0 +1,41 @@
+== Ex5: pack, upload, run the pipeline ==
+    src/
+    src/healthz.html
+    src/index.html
+    VERSION
+    tests/
+    tests/smoke.sh
+    config/
+    config/service.json
+    buildspec.yml
+source version: 33511987-9639-4bc6-a519-3b3797248fc8
+1968936b-467c-4915-bdc6-3a1d8a666a3b	Succeeded	33511987-9639-4bc6-a519-3b3797248fc8
+== download the artifact: what is under usms-enrolment-pipeline/ ? ==
+source/usms-enrolment-src.zip	source/usms-results-src.zip	usms-results-build-2.zip	usms-results-build-3.zip
+== diagnostic: the same uploaded source, built by Floci with the buildspec inline + 'ls dist; cat imagedefinitions.json; exit 1' ==
+S3
+Ex5 diagnostic readback                          usms-enrolment-build:21  FAILED
+      POST_BUILD	Exit code 1: 100 Nov  9 04:46 imagedefinitions.json
+      -rw-r--r-- 1 root root 299 Nov  9 04:46 index.html
+      -rw-r--r-- 1 root root 200 Nov  9 04:46 service.json
+      {
+        "service": "enrolment",
+        "release": "r5",
+        "builtAt": "2026-11-09T04:46:59Z",
+        "buildId": "usms-enrolment-build:21",
+        "sourceVersion": "local"
+      }
+      == dist/ as the container left it ==
+      build-metadata.json
+      healthz.html
+      imagedefinitions.json
+      index.html
+      service.json
+      [
+        {
+          "name": "enrolment-api",
+          "imageUri": "public.ecr.aws/nginx/nginx:stable-alpine"
+        }
+      ]
+      COMPLETED	None
+CODEPIPELINE	CODEPIPELINE

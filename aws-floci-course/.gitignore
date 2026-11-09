@@ -35,3 +35,4 @@ __pycache__/
 
 # ---- Lab 11: build output of the local buildspec runner ----
 labs/lab-11-cicd/app/dist/
+labs/lab-11-cicd/app-results/dist/

@@ -1,0 +1,23 @@
+== Ex4: target role and policy ==
+arn:aws:iam::000000000000:role/usms-events-pipeline-role
+arn:aws:iam::000000000000:policy/USMSEventsStartPipeline
+attached
+  codepipeline:StartPipelineExecution    arn:aws:codepipeline:us-east-1:000000000000:usms-enrolment-pipeline              allowed
+  codepipeline:StartPipelineExecution    arn:aws:codepipeline:us-east-1:000000000000:some-other-pipeline                  implicitDeny
+  codepipeline:UpdatePipeline            arn:aws:codepipeline:us-east-1:000000000000:usms-enrolment-pipeline              implicitDeny
+  iam:PassRole                           arn:aws:iam::000000000000:role/usms-codepipeline-role                            implicitDeny
+== rule and target ==
+arn:aws:events:us-east-1:000000000000:rule/usms-enrolment-source-changed
+0
+usms-enrolment-source-changed	ENABLED	{
+  "source": ["aws.s3"],
+  "detail-type": ["Object Created"],
+  "detail": {
+    "bucket": { "name": ["usms-pipeline-artifacts"] },
+    "object": { "key": ["source/usms-enrolment-src.zip"] }
+  }
+}
+
+start-usms-enrolment-pipeline	arn:aws:codepipeline:us-east-1:000000000000:usms-enrolment-pipeline	None
+== bucket: send events to EventBridge ==
+put-bucket-notification-configuration OK

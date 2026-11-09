@@ -1,0 +1,16 @@
+artifact: usms-enrolment-build-22.zip
+imagedefinitions.json:
+[
+  {
+    "name": "enrolment-api",
+    "imageUri": "public.ecr.aws/nginx/nginx:stable-alpine"
+  }
+]
+
+# provenance - Lab 11 Exercise 5, generated 2026-11-09T04:48:24Z from live state
+# bucket          usms-pipeline-artifacts (key at the bucket root: Floci ignores artifacts.path and artifacts.name)
+# built by        usms-enrolment-build:22 SUCCEEDED, buildspec passed inline (Floci does not open buildspec.yml from the source)
+# source          source/usms-enrolment-src.zip versionId 33511987-9639-4bc6-a519-3b3797248fc8 (release r5)
+# pipeline run    1968936b-467c-4915-bdc6-3a1d8a666a3b Succeeded, recorded versionId 33511987-9639-4bc6-a519-3b3797248fc8 - objects under usms-enrolment-pipeline/: 0 (Floci writes no BuildOutput)
+# real AWS key    usms-enrolment-pipeline/BuildOutput/<id>.zip, read from the Build action's output artifact
+# local copy      labs/lab-11-cicd/app/dist/imagedefinitions.json is identical

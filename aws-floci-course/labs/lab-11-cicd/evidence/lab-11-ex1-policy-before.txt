@@ -1,0 +1,7 @@
+== USMSCodeBuildBase v1: what a results build needs ==
+  s3:GetObject           arn:aws:s3:::usms-pipeline-artifacts/source/usms-results-src.zip                                allowed
+  s3:GetObjectVersion    arn:aws:s3:::usms-pipeline-artifacts/source/usms-results-src.zip                                allowed
+  s3:PutObject           arn:aws:s3:::usms-pipeline-artifacts/build/usms-results-build.zip                               allowed
+  logs:CreateLogStream   arn:aws:logs:us-east-1:000000000000:log-group:/aws/codebuild/usms-results-build:log-stream:x    implicitDeny
+  logs:PutLogEvents      arn:aws:logs:us-east-1:000000000000:log-group:/aws/codebuild/usms-results-build:log-stream:x    implicitDeny
+v1

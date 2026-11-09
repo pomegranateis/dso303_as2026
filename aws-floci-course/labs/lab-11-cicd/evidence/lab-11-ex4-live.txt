@@ -1,0 +1,15 @@
+== Ex4 live: does a new version of the source key start the pipeline? ==
+executions before: 5
+uploaded source version: 183ce3ce-477b-4116-88d4-57d2d7165eb2 (same bytes as 33511987-9639-4bc6-a519-3b3797248fc8)
+executions 30 s later: 5
+-- Floci log from the upload (2026-11-09T04:51:48Z), every line:
+2026-11-09 04:51:48,104 INFO  [io.git.hec.flo.cor.com.AwsJson11Controller] AwsJson11Controller codepipeline action: ListPipelineExecutions
+2026-11-09 04:51:48,870 WARN  [io.git.hec.flo.ser.eve.EventBridgeInvoker] EventBridge: unsupported target ARN type: arn:aws:codepipeline:us-east-1:000000000000:usms-enrolment-pipeline
+2026-11-09 04:52:19,626 INFO  [io.git.hec.flo.cor.com.AwsJson11Controller] AwsJson11Controller codepipeline action: ListPipelineExecutions
+2026-11-09 04:52:20,422 INFO  [io.git.hec.flo.cor.com.AwsJson11Controller] AwsJson11Controller events action: DescribeRule
+   (ContainerLogStreamer lines = the Lab 04 nginx health checks, omitted)
+-- negative: new version of source/usms-results-src.zip (f339aa31-829a-471a-ba3e-faccb8fdcbae) at 2026-11-09T04:52:46+00:00 - invoker lines since then:
+   EventBridgeInvoker lines: 0
+-- executions now: 5
+-- target as stored: arn:aws:codepipeline:us-east-1:000000000000:usms-enrolment-pipeline	None
+-- bucket notification as stored: ''

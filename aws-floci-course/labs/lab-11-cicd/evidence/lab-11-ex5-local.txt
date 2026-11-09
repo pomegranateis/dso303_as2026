@@ -1,0 +1,36 @@
+== Ex5.1 local build, default IMAGE_URI ==
+exit=0
+== smoke tests ==
+  ok   dist/index.html exists
+  ok   dist/healthz.html exists
+  ok   release placeholder was replaced
+  ok   build-time placeholder was replaced
+  ok   health endpoint says ok
+  ok   build metadata is valid JSON
+  ok   container name matches the task def
+  ok   imagedefinitions.json is a one-element array
+smoke tests failed: 0
+-- dist/ (the artifact root, base-directory: dist):
+build-metadata.json
+healthz.html
+imagedefinitions.json
+index.html
+service.json
+-- dist/imagedefinitions.json:
+[
+  {
+    "name": "enrolment-api",
+    "imageUri": "public.ecr.aws/nginx/nginx:stable-alpine"
+  }
+]
+== Ex5.2 IMAGE_URI from the environment wins (as a CodeBuild project variable would) ==
+exit=0
+[{'name': 'enrolment-api', 'imageUri': 'registry.example.invalid/usms-enrolment:r5'}]
+== Ex5.3 the eighth assertion rejects the three ways the file goes wrong ==
+  object instead of array  ->   FAIL imagedefinitions.json is a one-element array
+  two entries              ->   FAIL imagedefinitions.json is a one-element array
+  empty imageUri           ->   FAIL imagedefinitions.json is a one-element array
+  wrong name               ->   FAIL imagedefinitions.json is a one-element array
+== Ex5.4 Lab 12 Step 14 part 2, run against a copy of smoke.sh ==
+already present - nothing to do
+assertions in smoke.sh: 8

@@ -1,0 +1,25 @@
+== diff: Step 10 template -> results template (5 lines) ==
+2,3c2,3
+<   "name": "usms-enrolment-build",
+<   "description": "Builds the USMS enrolment service artifact from labs/lab-11-cicd/app",
+---
+>   "name": "usms-results-build",
+>   "description": "Builds the USMS results service artifact from labs/lab-11-cicd/app-results",
+6c6
+<     "location": "usms-pipeline-artifacts/source/usms-enrolment-src.zip",
+---
+>     "location": "usms-pipeline-artifacts/source/usms-results-src.zip",
+13c13
+<     "name": "usms-enrolment-build.zip",
+---
+>     "name": "usms-results-build.zip",
+24c24
+<       { "name": "USMS_SERVICE", "value": "enrolment", "type": "PLAINTEXT" }
+---
+>       { "name": "USMS_SERVICE", "value": "results", "type": "PLAINTEXT" }
+== valid JSON, unexpanded $ count ==
+valid JSON
+0
+== logs: the shared group (as the template keeps it) vs a group of its own ==
+  logs:PutLogEvents  /aws/codebuild/usms-enrolment-build   allowed
+  logs:PutLogEvents  /aws/codebuild/usms-results-build     implicitDeny

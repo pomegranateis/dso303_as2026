@@ -1,0 +1,28 @@
+== Exercise 3: trust-codebuild.json, two conditions ==
+valid JSON
+10c10,16
+<         "StringEquals": { "aws:SourceAccount": "000000000000" }
+---
+>         "StringEquals": { "aws:SourceAccount": "000000000000" },
+>         "ArnLike": {
+>           "aws:SourceArn": [
+>             "arn:aws:codebuild:us-east-1:000000000000:project/usms-enrolment-build",
+>             "arn:aws:codebuild:us-east-1:000000000000:project/usms-results-build"
+>           ]
+>         }
+update-assume-role-policy OK
+== read back from IAM ==
+{
+    "StringEquals": {
+        "aws:SourceAccount": "000000000000"
+    },
+    "ArnLike": {
+        "aws:SourceArn": [
+            "arn:aws:codebuild:us-east-1:000000000000:project/usms-enrolment-build",
+            "arn:aws:codebuild:us-east-1:000000000000:project/usms-results-build"
+        ]
+    }
+}
+== do the project ARNs in the condition match the live projects exactly? ==
+  listed: arn:aws:codebuild:us-east-1:000000000000:project/usms-enrolment-build
+  listed: arn:aws:codebuild:us-east-1:000000000000:project/usms-results-build

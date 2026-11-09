@@ -1,0 +1,26 @@
+== Ex1 revisited: artifacts Floci wrote for the results builds ==
+usms-results-build-2.zip	542	2026-11-09T04:42:55+00:00
+usms-results-build-3.zip	543	2026-11-09T04:42:57+00:00
+S3	usms-pipeline-artifacts	build	usms-results-build.zip	ZIP	NONE
+-- usms-results-build-2.zip:
+     index.html
+     build-metadata.json
+{
+  "service": "results",
+  "release": "r1",
+  "builtAt": "2026-11-09T04:42:55Z",
+  "buildId": "usms-results-build:2",
+  "sourceVersion": "local"
+}
+-- usms-results-build-3.zip:
+     index.html
+     build-metadata.json
+{
+  "service": "results",
+  "release": "r1",
+  "builtAt": "2026-11-09T04:42:56Z",
+  "buildId": "usms-results-build:3",
+  "sourceVersion": "local"
+}
+usms-results-build:2	SUCCEEDED	usms-pipeline-artifacts
+usms-results-build:3	FAILED	usms-pipeline-artifacts

@@ -1,0 +1,16 @@
+== 3. Floci: enrolment buildspec inline, source = a zip whose healthz.html says 'degraded' ==
+S3
+Ex2 broken test, finally block                   usms-enrolment-build:19  FAILED
+      POST_BUILD	Exit code 1: --- post_build ---
+      == smoke tests ==
+        ok   dist/index.html exists
+        ok   dist/healthz.html exists
+        ok   release placeholder was replaced
+        ok   build-time placeholder was replaced
+        FAIL health endpoint says ok
+        ok   build metadata is valid JSON
+        ok   container name matches the task def
+      smoke tests failed: 1
+      COMPLETED	None
+== restore the pipeline hand-off ==
+CODEPIPELINE	CODEPIPELINE

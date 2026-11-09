@@ -1,0 +1,30 @@
+== (a) plain start: Floci treats buildspec=buildspec.yml as inline YAML, so nothing runs ==
+(a) plain start-build                            usms-results-build:1     SUCCEEDED
+== (b) the buildspec's own contents passed inline: the real build ==
+(b) --buildspec-override "$(cat buildspec.yml)"  usms-results-build:2     SUCCEEDED
+== (c) diagnostic: same buildspec + 'ls dist; cat build-metadata.json; exit 1' ==
+(c) diagnostic readback                          usms-results-build:3     FAILED
+      POST_BUILD	Exit code 1: --- post_build ---
+      {
+          "service": "results",
+          "release": "r1",
+          "builtAt": "2026-11-09T04:42:56Z",
+          "buildId": "usms-results-build:3",
+          "sourceVersion": "local"
+      }
+      == dist/ as the container left it ==
+      build-metadata.json
+      index.html
+      {
+        "service": "results",
+        "release": "r1",
+        "builtAt": "2026-11-09T04:42:56Z",
+        "buildId": "usms-results-build:3",
+        "sourceVersion": "local"
+      }
+      COMPLETED	None
+== (d) anything under build/ in the artifact store? ==
+0
+{
+    "location": "usms-pipeline-artifacts"
+}

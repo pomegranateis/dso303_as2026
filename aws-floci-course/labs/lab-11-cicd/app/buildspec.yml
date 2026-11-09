@@ -19,15 +19,16 @@ phases:
       - test -f VERSION || { echo "VERSION file is missing"; exit 1; }
       - python3 -m json.tool config/service.json > /dev/null
       - |
-        grep -q '"container": "enrolment-api"' config/service.json || {
-          echo "config/service.json names the wrong container"
-          exit 1
-        }
-      - |
-        grep -qE '"port": 80,?[[:space:]]*$' config/service.json || {
-          echo "config/service.json: \"port\" must be 80 - the port enrolment-api listens on and the target group checks. Fix the port line in config/service.json, then upload the source again."
-          exit 1
-        }
+        python3 - << 'CHECK'
+        import json, sys
+        cfg = json.load(open("config/service.json"))
+        got = cfg.get("container")
+        if got != "enrolment-api":
+            sys.exit('config/service.json names the wrong container: expected "enrolment-api", found %s' % json.dumps(got))
+        got = cfg.get("port")
+        if got != 80:
+            sys.exit('config/service.json: "port" must be 80 - the port enrolment-api listens on and the target group checks - found %s' % json.dumps(got))
+        CHECK
       - echo "configuration validated"
 
   build:
@@ -52,13 +53,35 @@ phases:
         }
         META
       - cp config/service.json "$ARTIFACT_DIR/service.json"
+      - |
+        IMAGE_URI="${IMAGE_URI:-public.ecr.aws/nginx/nginx:stable-alpine}" python3 - > "$ARTIFACT_DIR/imagedefinitions.json" << 'IMGDEF'
+        import json, os
+        cfg = json.load(open("config/service.json"))
+        print(json.dumps([{"name": cfg["container"], "imageUri": os.environ["IMAGE_URI"]}], indent=2))
+        IMGDEF
+      - cat "$ARTIFACT_DIR/imagedefinitions.json"
 
   post_build:
     commands:
       - echo "--- post_build ---"
-      - bash tests/smoke.sh
+      - echo "not-run" > /tmp/usms-smoke-exit
+      - |
+        rc=0
+        bash tests/smoke.sh || rc=$?
+        echo "$rc" > /tmp/usms-smoke-exit
+        [ "$rc" -eq 0 ]
       - ls -l "$ARTIFACT_DIR"
       - cat "$ARTIFACT_DIR/build-metadata.json"
+    finally:
+      - mkdir -p "$ARTIFACT_DIR"
+      - |
+        SMOKE_EXIT="$(cat /tmp/usms-smoke-exit 2>/dev/null || echo not-run)"
+        case "$SMOKE_EXIT" in 0) TESTS=passed ;; not-run) TESTS=not-run ;; *) TESTS=failed ;; esac
+        printf 'release=%s tests=%s smoke_exit=%s build=%s finishedAt=%s\n' \
+          "$(tr -d '[:space:]' < VERSION)" "$TESTS" "$SMOKE_EXIT" \
+          "${CODEBUILD_BUILD_ID:-local}" "$(date -u +%Y-%m-%dT%H:%M:%SZ)" \
+          > "$ARTIFACT_DIR/build-summary.txt"
+        cat "$ARTIFACT_DIR/build-summary.txt"
 
 artifacts:
   base-directory: dist

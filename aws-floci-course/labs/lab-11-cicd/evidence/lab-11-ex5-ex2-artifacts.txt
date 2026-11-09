@@ -1,0 +1,49 @@
+== Ex5: standalone build of the uploaded source (buildspec inline), S3 artifacts, then download ==
+usms-pipeline-artifacts/source/usms-enrolment-src.zip
+Ex5 artifact build                               usms-enrolment-build:22  SUCCEEDED
+   artifact key: usms-enrolment-build-22.zip
+      service.json
+      healthz.html
+      imagedefinitions.json
+      index.html
+      build-metadata.json
+   -- imagedefinitions.json:
+     [
+       {
+         "name": "enrolment-api",
+         "imageUri": "public.ecr.aws/nginx/nginx:stable-alpine"
+       }
+     ]
+   -- build-metadata.json:
+     {
+       "service": "enrolment",
+       "release": "r5",
+       "builtAt": "2026-11-09T04:47:50Z",
+       "buildId": "usms-enrolment-build:22",
+       "sourceVersion": "local"
+     }
+== Ex2 on Floci: broken health page, S3 artifacts - is build-summary.txt in the artifact? ==
+usms-pipeline-artifacts/scratch/ex2-broken-src.zip
+Ex2 broken test, artifact                        usms-enrolment-build:23  FAILED
+      POST_BUILD	Exit code 1: --- post_build ---
+      == smoke tests ==
+        ok   dist/index.html exists
+        ok   dist/healthz.html exists
+        ok   release placeholder was replaced
+        ok   build-time placeholder was replaced
+        FAIL health endpoint says ok
+        ok   build metadata is valid JSON
+        ok   container name matches the task def
+        ok   imagedefinitions.json is a one-element array
+      smoke tests failed: 1
+      COMPLETED	None
+   artifact key: usms-enrolment-build-23.zip
+      service.json
+      healthz.html
+      imagedefinitions.json
+      index.html
+      build-metadata.json
+   -- build-summary.txt:
+== restore the pipeline hand-off ==
+CODEPIPELINE	CODEPIPELINE
+build-summary.txt entries in usms-enrolment-build-23.zip: 0

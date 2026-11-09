@@ -1,0 +1,6 @@
+== Exercise 3: the same service.json in five shapes ==
+indent=2 (as committed)            old-container-grep=pass old-port-grep=pass new-build=pass 
+indent=4 (the lab's test)          old-container-grep=pass old-port-grep=pass new-build=pass 
+compact, no spaces                 old-container-grep=FAIL old-port-grep=FAIL new-build=pass 
+indent=4, container wrong          old-container-grep=FAIL old-port-grep=pass new-build=FAIL config/service.json names the wrong container: expected "enrolment-api", found "enrolment-api-v2"
+indent=4, port 8080                old-container-grep=pass old-port-grep=FAIL new-build=FAIL config/service.json: "port" must be 80 - the port enrolment-api listens on and the target group checks - found 8080

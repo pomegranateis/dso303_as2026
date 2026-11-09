@@ -1,0 +1,6 @@
+== does Floci run 'finally'? ==
+probe A: commands ok, finally exits 3            usms-results-build:4     SUCCEEDED
+probe B: commands exit 1, finally exits 3        usms-results-build:5     FAILED
+      POST_BUILD	Exit code 1: commands-ran
+      COMPLETED	None
+(real AWS, buildspec reference: finally runs even if a command in commands fails; a failing finally command fails the phase)

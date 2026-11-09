@@ -1,0 +1,8 @@
+== 1. the lab's runner alone (no finally support) on the intact tree ==
+runner exit=0; dist/build-summary.txt: ABSENT
+== 2a. runner + finally, intact tree ==
+runner exit=0; finally ran; dist/build-summary.txt: release=r5 tests=passed smoke_exit=0 build=local finishedAt=2026-11-09T04:45:02Z
+== 2b. runner + finally, a copy whose healthz.html says 'degraded' (one smoke test broken on purpose) ==
+runner exit=1; finally ran; dist/build-summary.txt: release=r5 tests=failed smoke_exit=1 build=local finishedAt=2026-11-09T04:45:03Z
+        FAIL health endpoint says ok
+      smoke tests failed: 1

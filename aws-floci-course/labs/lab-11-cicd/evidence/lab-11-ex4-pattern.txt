@@ -1,0 +1,6 @@
+== Ex4: test-event-pattern (Floci) ==
+sample event                                         S3-native rule CloudTrail rule
+Object Created source/usms-enrolment-src.zip         True           False
+Object Created source/usms-results-src.zip           False          False
+CloudTrail PutObject source/usms-enrolment-src.zip   False          True
+CloudTrail PutObject source/usms-results-src.zip     False          False
