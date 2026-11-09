@@ -249,23 +249,3 @@ Second, the version finding changed what I think the lab can prove. Immutable ve
 
 Third, a security fix from Lab 09 nearly got undone by a later lab's well-meaning instruction, because `update-assume-role-policy` replaces the whole document. Replace-only APIs are a category, as Section 16 says, and the habit that protected the fix was reading the current document before replacing it.
 
-## 10. Screenshot checklist
-
-All `.png`, in `labs/lab-10-lambda-edge/img/`, all present.
-
-| # | File | Shows |
-|---|---|---|
-| 01 | `lab10-01-bucket-trust` | the bucket and the two-principal trust |
-| 02 | `lab10-02-viewer-allow-deny` | the allow and deny paths |
-| 03 | `lab10-03-versions-origin-response` | versions and the origin-response headers |
-| 04 | `lab10-04-eligibility-distribution` | edge eligibility and the stored distribution |
-| 05 | `lab10-05-edge-chain` | the edge chain, end to end |
-| 06 | `lab10-06-notifier-alias` | the notifier and its alias |
-| 07 | `lab10-07-notification-fired` | the notification and the notifier's runs |
-| 08 | `lab10-08-persistence` | persistence |
-| 09 | `lab10-09-verify` | verify-lab-10 |
-| 10 | `lab10-10-exercises` | Exercises 1, 2, 3 and 5 |
-
-## 11. Commits
-
-The main lab (handlers, policies, templates, scripts, env file, notes, evidence); the exercises; this report and its screenshots. They're committed and not pushed, because you push them yourself.
