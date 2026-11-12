@@ -176,11 +176,3 @@ Answered in prose in `notes/lab-04-notes.md`.
 ## 9. Reflection
 
 Three things stood out. First, the two roles look almost identical on paper (same trust policy, both ending in an ARN in the task definition) but fail in completely different ways, so keeping them separate is what makes a failure diagnosable. Second, the security group rule names a group, not an address range, because tasks have no stable addresses and the web tier will change too. That was easy to say and also checkable (the rule file, the group web-01 carries, and zero CIDR rules). Third, Floci kept confirming the shape of the configuration while quietly dropping parts of it: the log configuration, the deployment record, the group source. Reading the field back after every step caught the log configuration being dropped, which a successful `register-task-definition` message would not have told me.
-
-## 10. Screenshot checklist
-
-`lab04-01-support-probe` (still to capture), `lab04-02-cluster`, `lab04-03-policy-reuse`, `lab04-03b-policy-document`, `lab04-04-enrolment-sg`, `lab04-05-taskdef`, `lab04-05b-logconfig-null`, `lab04-06-service`, `lab04-07-manual-scale`, `lab04-08-verify`, `lab04-08b-ex1-second-service`, `lab04-09-ex2-revisions`, `lab04-10-ex3-inventory`, `lab04-10b-ex4-cleanup`, `lab04-11-ex5-linkage`, all `.png`, in `labs/lab-04-ecs/img/`.
-
-## 11. Commits
-
-`983923e` verify-lab-02 `.gitkeep` fix, `dd3544d` Lab 04 main (cluster, task definition, roles, group, service, env file), `53d1fd7` verification and cleanup scripts, `b704ba8` exercises 1 to 5.

@@ -258,11 +258,3 @@ First, an autoscaler that "doesn't work" was working perfectly. The HPA refused 
 Second, two files declaring one object is a quiet way to break things. The PDB and the gateway Service both flipped back and forth depending on which file was applied last, and `kubectl diff` is what showed it.
 
 Third, persistence again. The scaling and exposure configuration survived the restart only because every piece of it was a file in Git; the one imperative command (`set env`) had to be repeated by hand, exactly as in Lab 07.
-
-## 10. Screenshot checklist
-
-`lab08-01-baseline`, `lab08-02-drift`, `lab08-03-hpa-scaleout`, `lab08-04-scalein-nodegroup`, `lab08-05-pdb-eviction`, `lab08-06-nodeport-lb`, `lab08-07-ingress`, `lab08-08-persistence`, `lab08-09-verify`, `lab08-10-exercises`, all `.png`, in `labs/lab-08-eks-scaling/img/`, all present.
-
-## 11. Commits
-
-The main lab (manifests, scripts, env file, notes and evidence); the exercises; this report.

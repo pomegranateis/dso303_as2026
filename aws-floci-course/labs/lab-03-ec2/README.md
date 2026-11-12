@@ -287,18 +287,3 @@ Answered in prose in `notes/lab-03-notes.md` (questions 1 to 7).
 ## 9. Reflection
 
 The most useful result of this lab was a failure. Every create call appeared to succeed, but the read-backs caught what did not: user data that ran but produced a blank page, an Elastic IP that was recorded but never reached the instance, launches that returned IDs and ended terminated, and a restart that left two instances not running. The six-link reachability list is also worth keeping: every AWS-side link was correct and the service was still down, because the one link configuration cannot show is whether a process is listening.
-
-## 10. Screenshot checklist
-
-| File | Taken |
-|---|---|
-| lab03-01 to lab03-05 | |
-| lab03-06 to lab03-12 | |
-| lab03-13 to lab03-16 | |
-| lab03-17 to lab03-21 | |
-| lab03-22 | |
-| lab03-23 to lab03-28 | |
-
-## 11. Commits
-
-`9c30518` (Lab 03 main), `5b87b2d` (review answers), `52e6cbb` and `64bb778` (Exercise 3), `ba777c9` (Exercise 4), `a17f86a` (Exercise 5).

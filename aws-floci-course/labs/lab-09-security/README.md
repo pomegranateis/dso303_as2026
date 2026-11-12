@@ -300,26 +300,3 @@ First, the most useful check in this lab was the one I almost didn't run. The la
 Second, my own subshell mistake was caught by a screenshot, not by a command. The commands all "succeeded". Reading the document I had written showed `"GroupId": ""`. Floci's silent acceptance of an empty ID is exactly why the lab keeps saying to judge controls by reading them.
 
 Third, the simulator changed the character of the identity half. The boundary was invisible to `get-role`, but the simulator showed it was there, and showed which of two ways of setting it actually worked. The auditors finding came from simulating users, which no role-based inventory would ever have shown.
-
-## 10. Screenshot checklist
-
-All `.png`, in `labs/lab-09-security/img/`, all present. The lab asks for Checkpoints 4, 8 and 10; those are screenshots 03, 06 and 08.
-
-| # | File | Shows |
-|---|---|---|
-| 01 | `lab09-01-probe-iam-audit` | support probe and IAM audit |
-| 02 | `lab09-02-readonly-trust` | read-only split and scoped trust |
-| 03 | `lab09-03-boundary-passrole` | boundary and PassRole (Checkpoint 4) |
-| 04 | `lab09-04-key-rotation-during` | rotation, two keys, one Inactive |
-| 05 | `lab09-05-imds` | IMDS not applied, and the alternative |
-| 06 | `lab09-06-egress-written` | egress on three groups (Checkpoint 8) |
-| 07 | `lab09-07-ssh-bastion` | SSH from the bastion group only |
-| 08 | `lab09-08-matrix-negative-proof` | matrix and negative proof (Checkpoint 10) |
-| 09 | `lab09-09-persistence` | persistence and regression |
-| 10 | `lab09-10-verify` | verify-lab-09 |
-| 11 | `lab09-11-ex1-ex2` | Exercises 1 and 2 |
-| 12 | `lab09-12-ex3-ex5` | Exercises 3 and 5 |
-
-## 11. Commits
-
-The main lab (policies, scripts, env files, notes, evidence); the exercises; this report and its screenshots.

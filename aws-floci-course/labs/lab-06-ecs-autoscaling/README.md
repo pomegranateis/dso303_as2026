@@ -154,11 +154,3 @@ Answered in prose in `notes/lab-06-notes.md`, all conceptual on this build.
 ## 9. Reflection
 
 Three things stood out. First, a build that does not have a service is easier to be honest about than one that half-has it: every Application Auto Scaling call failed loudly, so there was no temptation to read a stored object as a working one. Second, the most useful thing I could still do was write every request body so that it runs unchanged on real AWS, and make the verification script check those bodies, so "not runnable" did not become "not checked". Third, the lab's own script had a check that could only pass on this build, "no suspension switch left true", for the same reason as Lab 05's cutover check: it tested the absence of a problem without first checking that the thing exists. That is now the first thing I look for in any verification script.
-
-## 10. Screenshot checklist
-
-`lab06-01-support-probe`, `lab06-02-alarm`, `lab06-03-alarm-fired`, `lab06-04-verify`, `lab06-05-readiness`, all `.png`, in `labs/lab-06-ecs-autoscaling/img/`, all present.
-
-## 11. Commits
-
-`a3c33d4` support path C: metric, alarm, request bodies, env file, verification and cleanup scripts; `5a72af5` exercises 4 and 5 and review answers; the report.

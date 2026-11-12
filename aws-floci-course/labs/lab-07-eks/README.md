@@ -190,11 +190,3 @@ Answered in prose in `notes/lab-07-notes.md`.
 ## 9. Reflection
 
 Three things stood out. First, the split between control plane and data plane was not abstract here: an ACTIVE cluster record survived the restart while everything I had deployed into it vanished, which is that split made visible. Second, the restart turned the lab's point about declarative manifests into a demonstration: one `kubectl apply -f manifests/lab-07/` rebuilt the whole application on a new cluster, and the only thing that did not come back was the one change I had made imperatively. Third, more than one check in the provided verification script would have passed against the wrong cluster. Checking *which* thing answered, not just *that* something answered, caught the same class of problem as Lab 05's S3 false positive.
-
-## 10. Screenshot checklist
-
-`lab07-01-cluster-nodes`, `lab07-02-app-routing`, `lab07-03-verify`, all `.png`, in `labs/lab-07-eks/img/`, all present.
-
-## 11. Commits
-
-`e449419` main lab (IAM, cluster, node group, manifests, env file, scripts); `8b54338` exercises 1 to 5 and review answers; the report.
