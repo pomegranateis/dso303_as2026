@@ -1,0 +1,27 @@
+$ aws --endpoint-url http://localhost:4566 rds describe-db-instances --db-instance-identifier exam-db \
+    --query "DBInstances[0].{Id:DBInstanceIdentifier,Engine:Engine,Version:EngineVersion,MultiAZ:MultiAZ,Status:DBInstanceStatus,SubnetGroup:DBSubnetGroup.DBSubnetGroupName,SubnetAZs:DBSubnetGroup.Subnets[].SubnetAvailabilityZone.Name}"
+{
+    "Id": "exam-db",
+    "Engine": "postgres",
+    "Version": "16",
+    "MultiAZ": true,
+    "Status": "available",
+    "SubnetGroup": "exam-db-subnets",
+    "SubnetAZs": [
+        "us-east-1a",
+        "us-east-1b"
+    ]
+}
+
+$ aws --endpoint-url http://localhost:4566 ec2 describe-subnets --filters Name=tag:Name,Values="exam-*" \
+    --query "Subnets[].[Tags[?Key==\`Name\`]|[0].Value,AvailabilityZone,CidrBlock]" --output table
+---------------------------------------------------
+|                 DescribeSubnets                 |
++---------------+--------------+------------------+
+|  exam-public-a|  us-east-1a  |  10.20.0.0/19    |
+|  exam-data-a  |  us-east-1a  |  10.20.128.0/19  |
+|  exam-data-b  |  us-east-1b  |  10.20.160.0/19  |
+|  exam-public-b|  us-east-1b  |  10.20.32.0/19   |
+|  exam-app-a   |  us-east-1a  |  10.20.64.0/19   |
+|  exam-app-b   |  us-east-1b  |  10.20.96.0/19   |
++---------------+--------------+------------------+

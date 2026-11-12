@@ -25,7 +25,7 @@ It is designed for AWS (ap-south-1, two Availability Zones), and the same Terraf
 | [`architecture/walkthroughs.md`](architecture/walkthroughs.md) | Task 1 – the two request walkthroughs, and the peak / AZ-loss explanation (290 words) |
 | [`docs/services.md`](docs/services.md) | Task 2 – every service: role, why over an alternative, key configuration, connections |
 | [`simulation/`](simulation/) | Task 3 – the Cloud Architecture Lab build, as importable drafts, and how to run it |
-| [`evidence/`](evidence/) | Cloud Architecture Lab screenshots and deployment evidence |
+| [`evidence/`](evidence/) | Cloud Architecture Lab screenshots, app screenshots and deployment evidence (index: [`evidence/README.md`](evidence/README.md)) |
 | [`infra/`](infra/) | Terraform: the whole platform, frontend included |
 | [`app/`](app/) | The web app (`frontend/`) and four Lambda functions (`functions/`) |
 | [`scripts/`](scripts/) | `build.sh`, `deploy.sh`, `destroy.sh`, `smoke_test.py` |
@@ -101,7 +101,13 @@ A green run therefore proves that the repository alone recreates a working platf
 - **Walkthrough 2** (`exam-platform-walkthrough-2.cal.json`): **HTTP 202**, through S3, SQS and the processor in both AZs.
 - **Analyze:** rated **Resilient**, with no single point of failure.
 
-Details and the remaining analyser findings are in [`simulation/README.md`](simulation/README.md).
+Details and the remaining analyser findings are in [`simulation/README.md`](simulation/README.md). Screenshots of every step, and of the deployed app, are indexed in [`evidence/README.md`](evidence/README.md).
+
+| Walkthrough 1 – HTTP 200 | AZ-A outage – still HTTP 200 (AZ-B Lambda, RDS failover) |
+|---|---|
+| ![Walkthrough 1](evidence/cal-02-walkthrough-1-http200.jpg) | ![AZ-A outage](evidence/cal-03b-az-a-outage-http200.jpg) |
+| **Walkthrough 2 – HTTP 202** | **Analyze – Resilient, no single point of failure** |
+| ![Walkthrough 2](evidence/cal-04-walkthrough-2-http202.jpg) | ![Analyze](evidence/cal-05-analyze-resilient.jpg) |
 
 ## Floci differences (honest list)
 
@@ -122,6 +128,6 @@ Details and the remaining analyser findings are in [`simulation/README.md`](simu
 |---|---|
 | Architecture design | `architecture/` – tiers in two AZs, walkthroughs, peak and AZ loss |
 | Service documentation | `docs/services.md` – role, alternative, configuration, connections for every service |
-| Cloud Architecture Lab | `simulation/` drafts + `evidence/` screenshots: full build, both flows, AZ failure |
-| AWS deployment | `scripts/deploy.sh` on Floci; the video shows frontend, API, two-AZ database, S3 uploads and the async step |
+| Cloud Architecture Lab | `simulation/` drafts + `evidence/cal-*`: full build, both flows, AZ failure, Analyze |
+| AWS deployment | `scripts/deploy.sh` on Floci; `evidence/app-*` and `evidence/deployment/` (smoke test 24/24, `MultiAZ: true`); the video shows frontend, API, two-AZ database, S3 uploads and the async step |
 | IaC and CI/CD | `infra/` (everything in Terraform, frontend included) + the workflow: push to `main` redeploys and tests |
