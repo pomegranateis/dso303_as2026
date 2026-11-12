@@ -61,6 +61,42 @@ http://localhost:4566/exam-frontend-000000000000/index.html?autosave=5
 
 Demo accounts (Floci only, created by Terraform; password in `infra/floci.tfvars`): `student1@exams.example.edu`, `tutor1@exams.example.edu`, `admin1@exams.example.edu`. Emails sent through SES can be read at `http://localhost:4566/_aws/ses`.
 
+**The result.** On an empty Floci, `destroy.sh` then `deploy.sh` added **147 resources** and created the schema (6 tables, seed data); see [`deploy-from-scratch.txt`](evidence/deployment/deploy-from-scratch.txt). The database is Multi-AZ, with its subnet group and the three subnet tiers in both AZs ([`database-multi-az-and-subnets.txt`](evidence/deployment/database-multi-az-and-subnets.txt)):
+
+```
+"MultiAZ": true,  "SubnetGroup": "exam-db-subnets",  "SubnetAZs": ["us-east-1a", "us-east-1b"]
+
+exam-public-a  us-east-1a  10.20.0.0/19      exam-public-b  us-east-1b  10.20.32.0/19
+exam-app-a     us-east-1a  10.20.64.0/19     exam-app-b     us-east-1b  10.20.96.0/19
+exam-data-a    us-east-1a  10.20.128.0/19    exam-data-b    us-east-1b  10.20.160.0/19
+```
+
+The smoke test then passed **24/24** ([`smoke-test-output.txt`](evidence/deployment/smoke-test-output.txt)). The two walkthroughs below were done by hand on the same deployment.
+
+### Walkthrough 1 on the platform: open an exam, answers autosaved
+
+1. The tutor signs in and creates *DSO303 Quiz 2 – Resilience* (`POST /api/exams`, id `EX-F86CB0A0`).
+2. The student signs in: Cognito `InitiateAuth`, then the app sends the ID token with every API call.
+3. **My exams** loads (`GET /api/exams`). **Start** creates the attempt in RDS (`POST /api/exams/EX-F86CB0A0/attempts`) and starts the 20-minute timer.
+4. The student answers. The app autosaves on a timer (every 30 s; 5 s here with `?autosave=5`) with `PUT /api/attempts/{id}/answers` → **200 in 27 ms**, and the status line shows **"Saved at 12:04:49 PM (save #1)"**. A copy is also kept in the browser, so a failed save is retried and nothing typed is lost.
+
+![Walkthrough 1: exam started, answers autosaved, the API calls in the Activity log](evidence/app-01-exam-autosave.jpg)
+
+### Walkthrough 2 on the platform: 40 MB upload, tutor notified
+
+1. The student picks a 40 MB PDF. The app asks the API for an upload slot (`POST /api/assignments/DSO303-A2/upload-url` → 200): a **presigned S3 POST** that accepts only 1 byte to 50 MB, under this student's key.
+2. The browser sends the file **straight to S3**: 40.0 MB → **204 in 540 ms**. The API never handles the file.
+
+![Walkthrough 2: the upload slot from the API, then 40 MB straight to S3](evidence/app-02-upload-40mb-presigned-post.jpg)
+
+3. S3 puts an event on the uploads queue. The submission-processor Lambda checks the file is really a PDF (its first bytes), marks the submission **received** in RDS, and publishes `SubmissionReceived` on EventBridge. The tutor's **Submissions** list shows it:
+
+![Walkthrough 2: the tutor sees the 40 MB submission as received](evidence/app-03-tutor-submissions.jpg)
+
+4. EventBridge routes the event to the email queue. The notifier Lambda sends through **SES**: "New submission" to the tutor and a receipt to the student, both **within 2 s** of the upload (Floci's SES mailbox, filtered to this submission):
+
+![Walkthrough 2: the SES emails to the tutor and the student](evidence/app-04-ses-tutor-email.jpg)
+
 ### On AWS
 
 ```bash
@@ -90,24 +126,78 @@ On AWS the database and the user pool are deletion-protected **on purpose**. Tea
 4. `scripts/smoke_test.py`: **both walkthroughs and the results release**, 24 checks; Floci's log is printed if anything fails.
 5. Upload the test report as an artifact.
 
+**The first run** ([run 43167097133](https://github.com/pomegranateis/dso303_as2026/actions/runs/43167097133)) started when commit `97acb61` was pushed to `main`, and passed in 3 min 31 s. It started Floci in the runner and validated the Terraform. It then deployed all **147 resources from nothing** and passed the smoke test **24/24**, then kept the report as an artifact.
+
+![GitHub Actions: the push to main triggered the run, Success, smoke-report artifact](evidence/ci-01-github-actions-run.jpg)
+
+Every step is green. *Floci log (on failure)* is skipped because nothing failed. The key log lines (the apply, the schema and all 24 checks) are in [`ci-run-log.txt`](evidence/deployment/ci-run-log.txt).
+
+![GitHub Actions: the deploy job's steps](evidence/ci-02-github-actions-steps.jpg)
+
+The one annotation says that GitHub is moving these actions from Node.js 20 to Node.js 24. The runner already ran them on Node.js 24, so nothing needs to change.
+
 A green run therefore proves that the repository alone recreates a working platform. For AWS, the same workflow would assume an IAM role through GitHub OIDC (no stored keys) and run `deploy.sh aws`, with a manual approval and an "exam freeze" window. That part is designed but not wired, because the course runs on Floci.
 
 ## Cloud Architecture Lab (Task 3)
 
-[`simulation/`](simulation/) holds the full build as two drafts of the same diagram: 38 services across two AZs, numbered walkthrough steps, and a least-privilege IAM role on every function.
-- **To load:** Export → Upload JSON.
-- **Walkthrough 1** (`exam-platform.cal.json`): Send Request → **HTTP 200**, through CloudFront, API Gateway and Lambda to RDS.
-- **AZ failure:** Failure Lab → *AZ-A outage* → Send Request → **HTTP 200**. API Gateway picks the AZ-B Lambda and RDS fails over to its standby.
-- **Walkthrough 2** (`exam-platform-walkthrough-2.cal.json`): **HTTP 202**, through S3, SQS and the processor in both AZs.
-- **Analyze:** rated **Resilient**, with no single point of failure.
+[`simulation/`](simulation/) holds the full build as two drafts of the same diagram: 38 services across two AZs, numbered walkthrough steps, and a least-privilege IAM role on every function. The two drafts differ only in where the request starts. Details and the remaining analyser findings are in [`simulation/README.md`](simulation/README.md).
 
-Details and the remaining analyser findings are in [`simulation/README.md`](simulation/README.md). Screenshots of every step, and of the deployed app, are indexed in [`evidence/README.md`](evidence/README.md).
+### Step 1: load the build
 
-| Walkthrough 1 – HTTP 200 | AZ-A outage – still HTTP 200 (AZ-B Lambda, RDS failover) |
-|---|---|
-| ![Walkthrough 1](evidence/cal-02-walkthrough-1-http200.jpg) | ![AZ-A outage](evidence/cal-03b-az-a-outage-http200.jpg) |
-| **Walkthrough 2 – HTTP 202** | **Analyze – Resilient, no single point of failure** |
-| ![Walkthrough 2](evidence/cal-04-walkthrough-2-http202.jpg) | ![Analyze](evidence/cal-05-analyze-resilient.jpg) |
+**Export → Upload JSON →** `simulation/exam-platform.cal.json`. The canvas shows:
+- the region and the VPC `10.20.0.0/16`;
+- public, private app and private data subnets in **AZ-A and AZ-B** (/19 each, as in `infra/network.tf`);
+- the edge (Route 53, WAF, CloudFront, ACM), API Gateway, Cognito and the S3 buckets;
+- the Lambda network interfaces and RDS Proxy in both app subnets, and RDS Multi-AZ (primary AZ-A, standby AZ-B);
+- the async chain (queues, EventBridge, notifier, SES) and operations.
+
+![Cloud Architecture Lab: the full build](evidence/cal-01-full-build.png)
+
+### Step 2: walkthrough 1, exam autosave → HTTP 200
+
+**Simulate → Send Request** (`PUT /api/attempts/1234/answers` from the student browser). The request runs Route 53 → WAF → CloudFront (cache miss, `/api/*` forwarded) → API Gateway, which picks one of the two registered exam-api Lambdas. It reaches the **AZ-A** Lambda → SQL to RDS → **HTTP 200**, 11/11 steps.
+
+![Walkthrough 1 in the lab: HTTP 200](evidence/cal-02-walkthrough-1-http200.jpg)
+
+### Step 3: one AZ failure
+
+**Failure Lab → AZ-A outage.** The impact bar reports *"5 resource(s) directly failed, 8 dependent(s) fully survive"*.
+
+![AZ-A outage injected](evidence/cal-03a-az-a-outage-injected.jpg)
+
+**Send Request** again, with AZ-A still down:
+- **step 8:** API Gateway routes to the exam-api Lambda in **AZ-B**;
+- **step 9:** *"Multi-AZ Automated Database Failover"*, so RDS promotes the standby in AZ-B;
+- **step 10:** **HTTP 200**.
+
+The student's save still succeeds. **Restore all** brings AZ-A back.
+
+![The same request with AZ-A down: AZ-B Lambda, database failover, HTTP 200](evidence/cal-03b-az-a-outage-http200.jpg)
+
+### Step 4: walkthrough 2, 40 MB upload → HTTP 202
+
+**Export → Upload JSON →** `simulation/exam-platform-walkthrough-2.cal.json`, then **Send Request** (`POST /submissions/DSO303-A2/report.pdf`). The upload goes **straight to S3**, not through the API. Then:
+- S3 sends the event to the uploads queue (`sqs: send`);
+- the Lambda event source mapping invokes the submission-processor in **AZ-A and AZ-B**;
+- the result is **HTTP 202**, 8/8 steps.
+
+The lab stops a request at the asynchronous boundary (202 Accepted). The tutor-notification half (EventBridge → email queue → notifier → SES) is drawn as numbered connections. It runs for real in the deployment: see step 4 of walkthrough 2 above.
+
+![Walkthrough 2 in the lab: HTTP 202](evidence/cal-04-walkthrough-2-http202.jpg)
+
+### Step 5: Analyze
+
+**Analyze** rates the build **Resilient**:
+- Availability 100%;
+- Resilience 95%;
+- Fault Tolerance 100%: compute in both AZs, synchronous database replication with automatic failover;
+- Scalability 80%.
+
+![Analyze: Resilient](evidence/cal-05-analyze-resilient.jpg)
+
+**Single Points of Failure:** *"No single points of failure detected."* The bottleneck and configuration findings that remain are explained in [`simulation/README.md`](simulation/README.md#analyser-findings-that-remain-and-why).
+
+![Analyze: no single points of failure](evidence/cal-05b-no-single-points-of-failure.jpg)
 
 ## Floci differences (honest list)
 
@@ -130,4 +220,4 @@ Details and the remaining analyser findings are in [`simulation/README.md`](simu
 | Service documentation | `docs/services.md` – role, alternative, configuration, connections for every service |
 | Cloud Architecture Lab | `simulation/` drafts + `evidence/cal-*`: full build, both flows, AZ failure, Analyze |
 | AWS deployment | `scripts/deploy.sh` on Floci; `evidence/app-*` and `evidence/deployment/` (smoke test 24/24, `MultiAZ: true`); the video shows frontend, API, two-AZ database, S3 uploads and the async step |
-| IaC and CI/CD | `infra/` (everything in Terraform, frontend included) + the workflow: push to `main` redeploys and tests |
+| IaC and CI/CD | `infra/` (everything in Terraform, frontend included) + the workflow: push to `main` redeploys and tests (`evidence/ci-*`: the first run, green) |

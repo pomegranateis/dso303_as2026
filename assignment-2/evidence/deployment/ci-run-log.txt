@@ -1,0 +1,35 @@
+# GitHub Actions run 43167097133 (push of 97acb61 to main, 2026-11-12) - key lines from: gh run view 43167097133 --log
+# https://github.com/pomegranateis/dso303_as2026/actions/runs/43167097133
+
+start Floci   | 2026-11-12T06:17:59.9794259Z Floci 1.5.34 health check returned all services running
+fmt + validate| 2026-11-12T06:17:59.9847176Z terraform -chdir=infra fmt -check -recursive
+fmt + validate| 2026-11-12T06:17:59.9847626Z terraform -chdir=infra init -input=false -no-color
+fmt + validate| 2026-11-12T06:17:59.9848091Z terraform -chdir=infra validate -no-color
+fmt + validate| 2026-11-12T06:18:16.7313357Z Success! The configuration is valid.
+deploy        | 2026-11-12T06:20:30.2657808Z Apply complete! Resources: 147 added, 0 changed, 0 destroyed.
+deploy        | 2026-11-12T06:20:37.1370860Z {"tables": 6, "seeded": true}
+smoke test    | 2026-11-12T06:20:40.5688110Z   ok   GET /api/health reaches Lambda and the database  -- HTTP 200, 29 ms
+smoke test    | 2026-11-12T06:20:40.5721139Z   ok   no token -> 401 (authorizer on AWS; token check in the function everywhere)  -- HTTP 401
+smoke test    | 2026-11-12T06:20:40.5809777Z   ok   Cognito sign-in student1@exams.example.edu  -- HTTP 200
+smoke test    | 2026-11-12T06:20:40.5889282Z   ok   Cognito sign-in tutor1@exams.example.edu  -- HTTP 200
+smoke test    | 2026-11-12T06:20:40.6013382Z   ok   student calling a tutor endpoint -> 403  -- HTTP 403
+smoke test    | 2026-11-12T06:20:40.6113670Z   ok   tutor creates an exam (POST /api/exams)  -- HTTP 201, EX-B8878D4B
+smoke test    | 2026-11-12T06:20:40.6142621Z   ok   student cannot create exams (403)  -- HTTP 403
+smoke test    | 2026-11-12T06:20:40.6240635Z   ok   start attempt returns questions without answer keys  -- HTTP 200, 9 ms
+smoke test    | 2026-11-12T06:20:40.6312589Z   ok   autosave #1 (2 answers)  -- HTTP 200, 7 ms
+smoke test    | 2026-11-12T06:20:40.6397164Z   ok   autosave #2 (4 answers)  -- HTTP 200, 8 ms
+smoke test    | 2026-11-12T06:20:40.6507919Z   ok   resume returns the saved answers; a stale retry (seq 1) did not overwrite seq 2  -- {"EX-
+smoke test    | 2026-11-12T06:20:40.6597820Z   ok   submit -> 202, marking queued on SQS  -- HTTP 202, 8 ms
+smoke test    | 2026-11-12T06:20:43.6732846Z   ok   auto-marker (SQS -> Lambda) marked the attempt
+smoke test    | 2026-11-12T06:20:43.6780288Z   ok   autosave after submit is refused (409)  -- HTTP 409
+smoke test    | 2026-11-12T06:20:43.6824999Z   ok   60 MB request refused before any upload (400)  -- HTTP 400
+smoke test    | 2026-11-12T06:20:43.6863619Z   ok   non PDF/ZIP refused (400)  -- HTTP 400
+smoke test    | 2026-11-12T06:20:43.8484939Z   ok   presigned POST issued (policy limits size and type)  -- HTTP 200, 9 ms
+smoke test    | 2026-11-12T06:20:44.7762263Z   ok   40 MB file POSTed straight to S3 (not through the API)  -- HTTP 204, 0.9 s
+smoke test    | 2026-11-12T06:20:47.7914189Z   ok   S3 -> SQS -> submission-processor marked it received  -- size_bytes=41943040
+smoke test    | 2026-11-12T06:20:47.7928133Z   ok   tutor e-mailed through EventBridge -> SQS -> notifier -> SES  -- New submission: DSO303 A
+smoke test    | 2026-11-12T06:20:47.7988915Z   ok   tutor gets a short-lived download URL  -- HTTP 200
+smoke test    | 2026-11-12T06:20:47.8077886Z   ok   tutor releases results -> ResultsReleased on EventBridge  -- HTTP 202
+smoke test    | 2026-11-12T06:20:50.8116880Z   ok   student e-mailed the result (marking queue fan-out -> email queue -> SES)
+smoke test    | 2026-11-12T06:20:50.8186264Z   ok   student sees the released MCQ score (2 of 3 MCQs right)  -- 2.0 / 3.0
+smoke test    | 2026-11-12T06:20:50.8190652Z 24/24 checks passed

@@ -14,7 +14,7 @@ All screenshots were taken on 12 November 2026. The Cloud Architecture Lab ones 
 | 5 | [`cal-05-analyze-resilient.jpg`](cal-05-analyze-resilient.jpg) | **Analyze:** rated **Resilient**. Availability 100%, Resilience 95%, Fault Tolerance 100%, Scalability 80%. |
 | 5b | [`cal-05b-no-single-points-of-failure.jpg`](cal-05b-no-single-points-of-failure.jpg) | **Analyze → Single Points of Failure:** "No single points of failure detected." The remaining findings are explained in [`../simulation/README.md`](../simulation/README.md). |
 
-## Deployment (Floci)
+## Deployment (Floci) and CI/CD
 
 | # | Evidence | What it shows |
 |---|---|---|
@@ -26,3 +26,6 @@ All screenshots were taken on 12 November 2026. The Cloud Architecture Lab ones 
 | 11 | [`deployment/deploy-from-scratch.txt`](deployment/deploy-from-scratch.txt) | `destroy.sh` followed by `deploy.sh` on an empty Floci: **147 resources added**, and the schema and seed data created (6 tables). Evidence 6–10 come from this deployment. |
 | 12 | [`deployment/database-multi-az-and-subnets.txt`](deployment/database-multi-az-and-subnets.txt) | The database is `MultiAZ: true`, and its subnet group spans both AZs. All six subnets are listed: public, app and data in each AZ. |
 | 13 | [`deployment/plan-after-apply.txt`](deployment/plan-after-apply.txt) | `terraform plan` right after an apply: 0 to add, 0 to destroy. The 39 in-place updates are attributes that Floci accepts but does not return (see "Floci differences" in the main README). |
+| 14 | [`ci-01-github-actions-run.jpg`](ci-01-github-actions-run.jpg) | **CI/CD.** The push of `97acb61` to `main` triggered the *assignment-2 deploy* workflow: **Success** in 3 min 31 s, with the `smoke-report` artifact. |
+| 15 | [`ci-02-github-actions-steps.jpg`](ci-02-github-actions-steps.jpg) | The deploy job's steps, all green: start Floci, `fmt` + `validate`, deploy everything from code, the smoke test. *Floci log (on failure)* was skipped. |
+| 16 | [`deployment/ci-run-log.txt`](deployment/ci-run-log.txt) | Key lines from that run's log: `Apply complete! Resources: 147 added`, the schema, and all 24 smoke-test checks. |
