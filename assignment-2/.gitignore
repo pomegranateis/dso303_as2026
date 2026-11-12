@@ -1,0 +1,14 @@
+# Build output (scripts/build.sh, terraform zips, test reports)
+build/
+
+# Terraform: working directory and state. State holds the generated database
+# password, so it is never committed. The provider lock file IS committed.
+infra/.terraform/
+*.tfstate
+*.tfstate.*
+*.tfplan
+crash.log
+
+# Python
+__pycache__/
+*.pyc

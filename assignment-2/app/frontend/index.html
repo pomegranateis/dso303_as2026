@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Online Exams</title>
+  <link rel="stylesheet" href="styles.css">
+  <script src="config.js"></script>
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">Online Exams <span id="env" class="chip"></span></div>
+    <div id="who" class="who"></div>
+  </header>
+
+  <main>
+    <!-- Sign in -->
+    <section id="view-login" class="card narrow">
+      <h1>Sign in</h1>
+      <form id="login-form">
+        <label>Email <input id="login-email" type="email" autocomplete="username" required></label>
+        <label>Password <input id="login-password" type="password" autocomplete="current-password" required></label>
+        <button type="submit">Sign in</button>
+        <p id="login-error" class="error" role="alert"></p>
+      </form>
+    </section>
+
+    <!-- Signed in -->
+    <section id="view-app" hidden>
+      <nav class="tabs" id="tabs"></nav>
+
+      <!-- Student: exams -->
+      <section id="tab-exams" class="card" hidden>
+        <h2>My exams</h2>
+        <table class="list"><thead><tr><th>Exam</th><th>Duration</th><th>Status</th><th></th></tr></thead>
+          <tbody id="exam-rows"></tbody></table>
+      </section>
+
+      <!-- Student: an exam in progress -->
+      <section id="tab-attempt" class="card" hidden>
+        <div class="attempt-head">
+          <h2 id="attempt-title"></h2>
+          <div class="timer" id="timer">--:--</div>
+        </div>
+        <div class="savebar"><span id="save-dot" class="dot"></span><span id="save-status">Not saved yet</span></div>
+        <form id="questions"></form>
+        <div class="actions">
+          <button id="save-now" type="button" class="secondary">Save now</button>
+          <button id="submit-attempt" type="button">Submit exam</button>
+        </div>
+        <p id="attempt-result" class="note"></p>
+      </section>
+
+      <!-- Student: upload an assignment -->
+      <section id="tab-upload" class="card" hidden>
+        <h2>Upload assignment</h2>
+        <p class="muted">DSO303-A2 &middot; PDF or ZIP, up to 50 MB. The file goes straight to storage; the server only signs the upload.</p>
+        <input id="upload-file" type="file" accept=".pdf,.zip,application/pdf,application/zip">
+        <button id="upload-go" type="button">Upload</button>
+        <progress id="upload-progress" max="100" value="0" hidden></progress>
+        <p id="upload-status" class="note"></p>
+      </section>
+
+      <!-- Tutor: submissions -->
+      <section id="tab-submissions" class="card" hidden>
+        <div class="row-between"><h2>Submissions</h2><button id="refresh-subs" type="button" class="secondary">Refresh</button></div>
+        <table class="list"><thead><tr><th>Student</th><th>File</th><th>Size</th><th>Status</th><th>Received</th><th></th></tr></thead>
+          <tbody id="sub-rows"></tbody></table>
+      </section>
+
+      <!-- Tutor: create an exam -->
+      <section id="tab-create" class="card" hidden>
+        <h2>Create exam</h2>
+        <label>Title <input id="new-title" type="text" value="DSO303 Quiz 2 - Resilience"></label>
+        <label>Duration (minutes) <input id="new-duration" type="number" min="1" max="300" value="20"></label>
+        <label>Questions, one per line. MCQ: <code>Question | option | *correct option | option</code>. No <code>|</code> means a short answer.
+          <textarea id="new-questions" rows="6">Which RDS feature keeps a synchronous standby in a second AZ? | Read replica | *Multi-AZ deployment | Snapshots
+What absorbs a burst of 3,000 result e-mails? | *An SQS queue | A bigger Lambda | A NAT gateway
+Explain in two sentences how the platform survives the loss of one Availability Zone.</textarea></label>
+        <button id="create-go" type="button">Create exam</button>
+        <p id="create-status" class="note"></p>
+      </section>
+
+      <!-- Tutor: results -->
+      <section id="tab-results" class="card" hidden>
+        <h2>Release results</h2>
+        <table class="list"><thead><tr><th>Exam</th><th>Released</th><th></th></tr></thead>
+          <tbody id="release-rows"></tbody></table>
+        <p id="release-status" class="note"></p>
+      </section>
+    </section>
+
+    <!-- What the browser is doing: every API call, for the walkthrough demo -->
+    <section class="card activity">
+      <div class="row-between"><h3>Activity</h3><button id="clear-log" type="button" class="link">clear</button></div>
+      <ol id="log"></ol>
+    </section>
+  </main>
+
+  <script src="app.js"></script>
+</body>
+</html>

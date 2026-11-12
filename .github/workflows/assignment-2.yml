@@ -1,0 +1,93 @@
+# DSO303 Assignment 2 - continuous deployment.
+# Every push to main that touches assignment-2/ rebuilds the whole platform from code
+# (Terraform + functions + frontend) on a fresh Floci 1.5.34 inside the runner, then
+# proves both walkthroughs end to end. A green run means the repository alone is
+# enough to recreate a working deployment.
+name: assignment-2 deploy
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "assignment-2/**"
+      - ".github/workflows/assignment-2.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: assignment-2-deploy
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 45
+    defaults:
+      run:
+        working-directory: assignment-2
+    env:
+      FLOCI_IMAGE: floci/floci:1.5.34
+      TF_IN_AUTOMATION: "1"
+      TF_PLUGIN_CACHE_DIR: ${{ github.workspace }}/.terraform-plugin-cache
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: 1.13.4
+          terraform_wrapper: false
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Cache Terraform providers
+        uses: actions/cache@v4
+        with:
+          path: ${{ github.workspace }}/.terraform-plugin-cache
+          key: tf-${{ hashFiles('assignment-2/infra/.terraform.lock.hcl') }}
+
+      - name: Start Floci (same settings as the course environment)
+        run: |
+          mkdir -p "$TF_PLUGIN_CACHE_DIR"
+          docker network create floci-net
+          docker run -d --name floci --network floci-net -p 4566:4566 \
+            -v /var/run/docker.sock:/var/run/docker.sock \
+            -e FLOCI_HOSTNAME=floci \
+            -e FLOCI_SERVICES_DOCKER_NETWORK=floci-net \
+            -e FLOCI_SERVICES_RDS_PROXY_BASE_PORT=7001 \
+            -e FLOCI_SERVICES_RDS_PROXY_MAX_PORT=7005 \
+            "$FLOCI_IMAGE"
+          # Lambda and RDS run as real containers: pull their images while Floci boots.
+          docker pull -q public.ecr.aws/lambda/python:3.12 &
+          docker pull -q postgres:16-alpine &
+          for i in $(seq 1 60); do curl -sf http://localhost:4566/_floci/health > /dev/null && break; sleep 2; done
+          wait
+          curl -sf http://localhost:4566/_floci/health && echo " <- Floci healthy"
+
+      - name: Check formatting and validate
+        run: |
+          terraform -chdir=infra fmt -check -recursive
+          terraform -chdir=infra init -input=false -no-color
+          terraform -chdir=infra validate -no-color
+
+      - name: Deploy everything from code
+        run: ./scripts/deploy.sh floci
+
+      - name: Smoke test - walkthrough 1 (exam + autosave) and walkthrough 2 (40 MB upload + tutor e-mail)
+        run: python3 scripts/smoke_test.py
+
+      - name: Floci log (on failure)
+        if: failure()
+        run: docker logs floci 2>&1 | tail -400
+
+      - name: Keep the smoke-test report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: smoke-report
+          path: assignment-2/build/smoke-report.json
+          if-no-files-found: ignore
