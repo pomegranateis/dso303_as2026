@@ -1,0 +1,37 @@
+API: http://localhost:4566/restapis/ef88d0cc48/prod/_user_request_/api
+
+Health and access control
+  ok   GET /api/health reaches Lambda and the database  -- HTTP 200, 7 ms
+  ok   no token -> 401 (authorizer on AWS; token check in the function everywhere)  -- HTTP 401
+  ok   Cognito sign-in student1@exams.example.edu  -- HTTP 200
+  ok   Cognito sign-in tutor1@exams.example.edu  -- HTTP 200
+  ok   student calling a tutor endpoint -> 403  -- HTTP 403
+
+Tutor creates a timed exam (a fresh one each run, so the test can be repeated)
+  ok   tutor creates an exam (POST /api/exams)  -- HTTP 201, EX-7C56333E
+  ok   student cannot create exams (403)  -- HTTP 403
+
+Walkthrough 1: open an exam, autosave, submit
+  ok   start attempt returns questions without answer keys  -- HTTP 200, 7 ms
+  ok   autosave #1 (2 answers)  -- HTTP 200, 6 ms
+  ok   autosave #2 (4 answers)  -- HTTP 200, 6 ms
+  ok   resume returns the saved answers; a stale retry (seq 1) did not overwrite seq 2  -- {"EX-7C56333E-Q1": "Multi-AZ deployment", "EX-7C56333E-Q2": "S3 presigned POST", "EX-7C56333E-Q3": "Messages older than 
+  ok   submit -> 202, marking queued on SQS  -- HTTP 202, 6 ms
+  ok   auto-marker (SQS -> Lambda) marked the attempt
+  ok   autosave after submit is refused (409)  -- HTTP 409
+
+Walkthrough 2: upload a 40 MB assignment, tutor notified
+  ok   60 MB request refused before any upload (400)  -- HTTP 400
+  ok   non PDF/ZIP refused (400)  -- HTTP 400
+  ok   presigned POST issued (policy limits size and type)  -- HTTP 200, 8 ms
+  ok   40 MB file POSTed straight to S3 (not through the API)  -- HTTP 204, 0.6 s
+  ok   S3 -> SQS -> submission-processor marked it received  -- size_bytes=41943040
+  ok   tutor e-mailed through EventBridge -> SQS -> notifier -> SES  -- New submission: DSO303 Assignment 2 - Architecture Design
+  ok   tutor gets a short-lived download URL  -- HTTP 200
+
+Results release (asynchronous e-mail)
+  ok   tutor releases results -> ResultsReleased on EventBridge  -- HTTP 202
+  ok   student e-mailed the result (marking queue fan-out -> email queue -> SES)
+  ok   student sees the released MCQ score (2 of 3 MCQs right)  -- 2.0 / 3.0
+
+24/24 checks passed

@@ -1,0 +1,2 @@
+# terraform plan straight after a fresh apply on Floci: in-place updates are Floci read-back gaps (see README)
+Plan: 0 to add, 39 to change, 0 to destroy.

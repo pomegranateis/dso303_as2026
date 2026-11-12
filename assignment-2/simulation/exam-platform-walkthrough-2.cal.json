@@ -1,0 +1,2187 @@
+{
+  "format": "aws-architecture-lab",
+  "version": 2,
+  "applicationRelease": null,
+  "savedAt": "2026-11-12T00:00:00.000Z",
+  "state": {
+    "draftName": "Online exam platform - Walkthrough 2 - 40 MB upload, tutor notified",
+    "nodes": [
+      {
+        "id": "region",
+        "type": "boundaryNode",
+        "position": {
+          "x": 560,
+          "y": 0
+        },
+        "style": {
+          "width": 2700,
+          "height": 1560
+        },
+        "data": {
+          "label": "AWS Region \u00b7 ap-south-1 (Mumbai)",
+          "boundaryType": "region",
+          "width": 2700,
+          "height": 1560
+        }
+      },
+      {
+        "id": "vpc",
+        "type": "boundaryNode",
+        "position": {
+          "x": 600,
+          "y": 120
+        },
+        "style": {
+          "width": 1300,
+          "height": 1400
+        },
+        "data": {
+          "label": "exam-vpc \u00b7 10.20.0.0/16 \u00b7 two Availability Zones",
+          "boundaryType": "vpc",
+          "width": 1300,
+          "height": 1400,
+          "cidr": "10.20.0.0/16"
+        }
+      },
+      {
+        "id": "public-a",
+        "type": "boundaryNode",
+        "position": {
+          "x": 630,
+          "y": 220
+        },
+        "style": {
+          "width": 600,
+          "height": 230
+        },
+        "data": {
+          "label": "Public A \u00b7 AZ-A",
+          "boundaryType": "public_subnet",
+          "width": 600,
+          "height": 230,
+          "az": "AZ-A",
+          "cidr": "10.20.0.0/19"
+        }
+      },
+      {
+        "id": "public-b",
+        "type": "boundaryNode",
+        "position": {
+          "x": 1270,
+          "y": 220
+        },
+        "style": {
+          "width": 600,
+          "height": 230
+        },
+        "data": {
+          "label": "Public B \u00b7 AZ-B",
+          "boundaryType": "public_subnet",
+          "width": 600,
+          "height": 230,
+          "az": "AZ-B",
+          "cidr": "10.20.32.0/19"
+        }
+      },
+      {
+        "id": "app-a",
+        "type": "boundaryNode",
+        "position": {
+          "x": 630,
+          "y": 480
+        },
+        "style": {
+          "width": 600,
+          "height": 470
+        },
+        "data": {
+          "label": "Private app A \u00b7 AZ-A",
+          "boundaryType": "private_subnet",
+          "width": 600,
+          "height": 470,
+          "az": "AZ-A",
+          "cidr": "10.20.64.0/19"
+        }
+      },
+      {
+        "id": "app-b",
+        "type": "boundaryNode",
+        "position": {
+          "x": 1270,
+          "y": 480
+        },
+        "style": {
+          "width": 600,
+          "height": 470
+        },
+        "data": {
+          "label": "Private app B \u00b7 AZ-B",
+          "boundaryType": "private_subnet",
+          "width": 600,
+          "height": 470,
+          "az": "AZ-B",
+          "cidr": "10.20.96.0/19"
+        }
+      },
+      {
+        "id": "data-a",
+        "type": "boundaryNode",
+        "position": {
+          "x": 630,
+          "y": 980
+        },
+        "style": {
+          "width": 600,
+          "height": 330
+        },
+        "data": {
+          "label": "Private data A \u00b7 AZ-A",
+          "boundaryType": "private_subnet",
+          "width": 600,
+          "height": 330,
+          "az": "AZ-A",
+          "cidr": "10.20.128.0/19"
+        }
+      },
+      {
+        "id": "data-b",
+        "type": "boundaryNode",
+        "position": {
+          "x": 1270,
+          "y": 980
+        },
+        "style": {
+          "width": 600,
+          "height": 330
+        },
+        "data": {
+          "label": "Private data B \u00b7 AZ-B",
+          "boundaryType": "private_subnet",
+          "width": 600,
+          "height": 330,
+          "az": "AZ-B",
+          "cidr": "10.20.160.0/19"
+        }
+      },
+      {
+        "id": "student",
+        "type": "serviceNode",
+        "position": {
+          "x": 20,
+          "y": 380
+        },
+        "data": {
+          "serviceId": "user",
+          "label": "Student browser (walkthrough 1: exam + autosave)",
+          "category": "Client / Ingress",
+          "health": "healthy",
+          "az": "Edge / Global",
+          "subnet": "global",
+          "replicas": 1,
+          "multiAz": false,
+          "notes": "Start node for walkthrough 1: opens the exam and autosaves every 30 s",
+          "customConfig": {}
+        }
+      },
+      {
+        "id": "uploader",
+        "type": "serviceNode",
+        "position": {
+          "x": 20,
+          "y": 760
+        },
+        "data": {
+          "serviceId": "user",
+          "label": "Student browser (walkthrough 2: 40 MB upload)",
+          "category": "Client / Ingress",
+          "health": "healthy",
+          "az": "Edge / Global",
+          "subnet": "global",
+          "replicas": 1,
+          "multiAz": false,
+          "notes": "Start node for walkthrough 2: POSTs the file straight to S3 with a presigned form",
+          "customConfig": {}
+        }
+      },
+      {
+        "id": "tutor",
+        "type": "serviceNode",
+        "position": {
+          "x": 20,
+          "y": 1080
+        },
+        "data": {
+          "serviceId": "user",
+          "label": "Tutor (receives the e-mail)",
+          "category": "Client / Ingress",
+          "health": "healthy",
+          "az": "Edge / Global",
+          "subnet": "global",
+          "replicas": 1,
+          "multiAz": false,
+          "notes": "Notified by SES; downloads via a presigned GET",
+          "customConfig": {}
+        }
+      },
+      {
+        "id": "route53",
+        "type": "serviceNode",
+        "position": {
+          "x": 230,
+          "y": 160
+        },
+        "data": {
+          "serviceId": "route53",
+          "label": "Route 53 \u00b7 exams.<university>",
+          "category": "Networking & Content Delivery",
+          "health": "healthy",
+          "az": "Edge / Global",
+          "subnet": "global",
+          "replicas": 1,
+          "multiAz": false,
+          "notes": "",
+          "customConfig": {}
+        }
+      },
+      {
+        "id": "waf",
+        "type": "serviceNode",
+        "position": {
+          "x": 230,
+          "y": 380
+        },
+        "data": {
+          "serviceId": "waf",
+          "label": "AWS WAF \u00b7 managed rules + rate limit",
+          "category": "Security, Identity & Compliance",
+          "health": "healthy",
+          "az": "Edge / Global",
+          "subnet": "global",
+          "replicas": 1,
+          "multiAz": false,
+          "notes": "",
+          "customConfig": {}
+        }
+      },
+      {
+        "id": "cloudfront",
+        "type": "serviceNode",
+        "position": {
+          "x": 230,
+          "y": 600
+        },
+        "data": {
+          "serviceId": "cloudfront",
+          "label": "CloudFront \u00b7 / -> S3, /api/* -> API",
+          "category": "Networking & Content Delivery",
+          "health": "healthy",
+          "az": "Edge / Global",
+          "subnet": "global",
+          "replicas": 1,
+          "multiAz": false,
+          "notes": "",
+          "customConfig": {}
+        }
+      },
+      {
+        "id": "acm",
+        "type": "serviceNode",
+        "position": {
+          "x": 230,
+          "y": 820
+        },
+        "data": {
+          "serviceId": "acm",
+          "label": "ACM certificate (us-east-1)",
+          "category": "Security, Identity & Compliance",
+          "health": "healthy",
+          "az": "Edge / Global",
+          "subnet": "global",
+          "replicas": 1,
+          "multiAz": false,
+          "notes": "",
+          "customConfig": {}
+        }
+      },
+      {
+        "id": "github",
+        "type": "serviceNode",
+        "position": {
+          "x": 20,
+          "y": 1320
+        },
+        "data": {
+          "serviceId": "github",
+          "label": "GitHub Actions \u00b7 terraform apply on push to main",
+          "category": "Third-Party & External",
+          "health": "healthy",
+          "az": "Edge / Global",
+          "subnet": "global",
+          "replicas": 1,
+          "multiAz": false,
+          "notes": "",
+          "customConfig": {}
+        }
+      },
+      {
+        "id": "site",
+        "type": "serviceNode",
+        "position": {
+          "x": 380,
+          "y": 120
+        },
+        "data": {
+          "serviceId": "s3",
+          "label": "S3 frontend (private, OAC)",
+          "category": "Storage",
+          "health": "healthy",
+          "az": "Edge / Global",
+          "subnet": "global",
+          "replicas": 1,
+          "multiAz": false,
+          "notes": "",
+          "customConfig": {
+            "resourceArn": "arn:aws:s3:::exam-frontend"
+          }
+        }
+      },
+      {
+        "id": "apigw",
+        "type": "serviceNode",
+        "position": {
+          "x": 380,
+          "y": 600
+        },
+        "data": {
+          "serviceId": "api_gateway",
+          "label": "API Gateway REST \u00b7 Cognito authorizer",
+          "category": "Networking & Content Delivery",
+          "health": "healthy",
+          "az": "Edge / Global",
+          "subnet": "global",
+          "replicas": 1,
+          "multiAz": false,
+          "notes": "",
+          "customConfig": {}
+        }
+      },
+      {
+        "id": "cognito",
+        "type": "serviceNode",
+        "position": {
+          "x": 380,
+          "y": 1050
+        },
+        "data": {
+          "serviceId": "cognito",
+          "label": "Cognito \u00b7 students | tutors | admins",
+          "category": "Security, Identity & Compliance",
+          "health": "healthy",
+          "az": "Edge / Global",
+          "subnet": "global",
+          "replicas": 1,
+          "multiAz": false,
+          "notes": "",
+          "customConfig": {}
+        }
+      },
+      {
+        "id": "uploads",
+        "type": "serviceNode",
+        "position": {
+          "x": 1960,
+          "y": 140
+        },
+        "data": {
+          "serviceId": "s3",
+          "label": "S3 uploads \u00b7 SSE-KMS \u00b7 IA->Glacier->expire 5 y",
+          "category": "Storage",
+          "health": "healthy",
+          "az": "Edge / Global",
+          "subnet": "global",
+          "replicas": 1,
+          "multiAz": false,
+          "notes": "",
+          "customConfig": {
+            "versioning": true,
+            "encryption": "SSE-KMS",
+            "lifecycle": "STANDARD_IA 30d, GLACIER_IR 180d, DEEP_ARCHIVE 365d, expire 1830d",
+            "resourceArn": "arn:aws:s3:::exam-uploads"
+          }
+        }
+      },
+      {
+        "id": "igw",
+        "type": "serviceNode",
+        "position": {
+          "x": 1180,
+          "y": 140
+        },
+        "data": {
+          "serviceId": "internet_gateway",
+          "label": "Internet gateway",
+          "category": "Networking & Content Delivery",
+          "health": "healthy",
+          "az": "Edge / Global",
+          "subnet": "global",
+          "replicas": 1,
+          "multiAz": false,
+          "notes": "",
+          "customConfig": {}
+        }
+      },
+      {
+        "id": "nat-a",
+        "type": "serviceNode",
+        "position": {
+          "x": 830,
+          "y": 280
+        },
+        "data": {
+          "serviceId": "nat_gateway",
+          "label": "NAT gateway A",
+          "category": "Networking & Content Delivery",
+          "health": "healthy",
+          "az": "AZ-A",
+          "subnet": "public",
+          "replicas": 1,
+          "multiAz": false,
+          "notes": "",
+          "customConfig": {}
+        }
+      },
+      {
+        "id": "nat-b",
+        "type": "serviceNode",
+        "position": {
+          "x": 1470,
+          "y": 280
+        },
+        "data": {
+          "serviceId": "nat_gateway",
+          "label": "NAT gateway B",
+          "category": "Networking & Content Delivery",
+          "health": "healthy",
+          "az": "AZ-B",
+          "subnet": "public",
+          "replicas": 1,
+          "multiAz": false,
+          "notes": "",
+          "customConfig": {}
+        }
+      },
+      {
+        "id": "api-a",
+        "type": "serviceNode",
+        "position": {
+          "x": 680,
+          "y": 540
+        },
+        "data": {
+          "serviceId": "lambda",
+          "label": "exam-api Lambda (ENI AZ-A)",
+          "category": "Compute",
+          "health": "healthy",
+          "az": "AZ-A",
+          "subnet": "private",
+          "replicas": 1,
+          "multiAz": false,
+          "notes": "",
+          "customConfig": {},
+          "iamRole": {
+            "id": "exam-exam-api-role",
+            "trustPolicy": {
+              "id": "exam-exam-api-role-trust",
+              "kind": "trust",
+              "statements": [
+                {
+                  "effect": "Allow",
+                  "actions": [
+                    "sts:AssumeRole"
+                  ],
+                  "principals": [
+                    "lambda.amazonaws.com"
+                  ],
+                  "resources": []
+                }
+              ]
+            },
+            "identityPolicies": [
+              {
+                "id": "exam-exam-api-role-least-privilege",
+                "kind": "identity",
+                "statements": [
+                  {
+                    "effect": "Allow",
+                    "actions": [
+                      "rds-db:connect"
+                    ],
+                    "resources": [
+                      "arn:aws:rds:ap-south-1:111122223333:db:exam-db"
+                    ]
+                  },
+                  {
+                    "effect": "Allow",
+                    "actions": [
+                      "secretsmanager:GetSecretValue"
+                    ],
+                    "resources": [
+                      "arn:aws:secretsmanager:ap-south-1:111122223333:secret:exam/db/master"
+                    ]
+                  },
+                  {
+                    "effect": "Allow",
+                    "actions": [
+                      "cloudwatch:PutMetricData",
+                      "logs:CreateLogStream",
+                      "logs:PutLogEvents"
+                    ],
+                    "resources": [
+                      "*"
+                    ]
+                  },
+                  {
+                    "effect": "Allow",
+                    "actions": [
+                      "sqs:SendMessage"
+                    ],
+                    "resources": [
+                      "arn:aws:sqs:ap-south-1:111122223333:exam-marking-queue"
+                    ]
+                  },
+                  {
+                    "effect": "Allow",
+                    "actions": [
+                      "events:PutEvents"
+                    ],
+                    "resources": [
+                      "arn:aws:events:ap-south-1:111122223333:event-bus/exam-events"
+                    ]
+                  },
+                  {
+                    "effect": "Allow",
+                    "actions": [
+                      "s3:PutObject",
+                      "s3:GetObject"
+                    ],
+                    "resources": [
+                      "arn:aws:s3:::exam-uploads/submissions/*"
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      },
+      {
+        "id": "api-b",
+        "type": "serviceNode",
+        "position": {
+          "x": 1320,
+          "y": 540
+        },
+        "data": {
+          "serviceId": "lambda",
+          "label": "exam-api Lambda (ENI AZ-B)",
+          "category": "Compute",
+          "health": "healthy",
+          "az": "AZ-B",
+          "subnet": "private",
+          "replicas": 1,
+          "multiAz": false,
+          "notes": "",
+          "customConfig": {},
+          "iamRole": {
+            "id": "exam-exam-api-role",
+            "trustPolicy": {
+              "id": "exam-exam-api-role-trust",
+              "kind": "trust",
+              "statements": [
+                {
+                  "effect": "Allow",
+                  "actions": [
+                    "sts:AssumeRole"
+                  ],
+                  "principals": [
+                    "lambda.amazonaws.com"
+                  ],
+                  "resources": []
+                }
+              ]
+            },
+            "identityPolicies": [
+              {
+                "id": "exam-exam-api-role-least-privilege",
+                "kind": "identity",
+                "statements": [
+                  {
+                    "effect": "Allow",
+                    "actions": [
+                      "rds-db:connect"
+                    ],
+                    "resources": [
+                      "arn:aws:rds:ap-south-1:111122223333:db:exam-db"
+                    ]
+                  },
+                  {
+                    "effect": "Allow",
+                    "actions": [
+                      "secretsmanager:GetSecretValue"
+                    ],
+                    "resources": [
+                      "arn:aws:secretsmanager:ap-south-1:111122223333:secret:exam/db/master"
+                    ]
+                  },
+                  {
+                    "effect": "Allow",
+                    "actions": [
+                      "cloudwatch:PutMetricData",
+                      "logs:CreateLogStream",
+                      "logs:PutLogEvents"
+                    ],
+                    "resources": [
+                      "*"
+                    ]
+                  },
+                  {
+                    "effect": "Allow",
+                    "actions": [
+                      "sqs:SendMessage"
+                    ],
+                    "resources": [
+                      "arn:aws:sqs:ap-south-1:111122223333:exam-marking-queue"
+                    ]
+                  },
+                  {
+                    "effect": "Allow",
+                    "actions": [
+                      "events:PutEvents"
+                    ],
+                    "resources": [
+                      "arn:aws:events:ap-south-1:111122223333:event-bus/exam-events"
+                    ]
+                  },
+                  {
+                    "effect": "Allow",
+                    "actions": [
+                      "s3:PutObject",
+                      "s3:GetObject"
+                    ],
+                    "resources": [
+                      "arn:aws:s3:::exam-uploads/submissions/*"
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      },
+      {
+        "id": "proc-a",
+        "type": "serviceNode",
+        "position": {
+          "x": 980,
+          "y": 540
+        },
+        "data": {
+          "serviceId": "lambda",
+          "label": "submission-processor (ENI AZ-A)",
+          "category": "Compute",
+          "health": "healthy",
+          "az": "AZ-A",
+          "subnet": "private",
+          "replicas": 1,
+          "multiAz": false,
+          "notes": "",
+          "customConfig": {},
+          "iamRole": {
+            "id": "exam-submission-processor-role",
+            "trustPolicy": {
+              "id": "exam-submission-processor-role-trust",
+              "kind": "trust",
+              "statements": [
+                {
+                  "effect": "Allow",
+                  "actions": [
+                    "sts:AssumeRole"
+                  ],
+                  "principals": [
+                    "lambda.amazonaws.com"
+                  ],
+                  "resources": []
+                }
+              ]
+            },
+            "identityPolicies": [
+              {
+                "id": "exam-submission-processor-role-least-privilege",
+                "kind": "identity",
+                "statements": [
+                  {
+                    "effect": "Allow",
+                    "actions": [
+                      "rds-db:connect"
+                    ],
+                    "resources": [
+                      "arn:aws:rds:ap-south-1:111122223333:db:exam-db"
+                    ]
+                  },
+                  {
+                    "effect": "Allow",
+                    "actions": [
+                      "secretsmanager:GetSecretValue"
+                    ],
+                    "resources": [
+                      "arn:aws:secretsmanager:ap-south-1:111122223333:secret:exam/db/master"
+                    ]
+                  },
+                  {
+                    "effect": "Allow",
+                    "actions": [
+                      "cloudwatch:PutMetricData",
+                      "logs:CreateLogStream",
+                      "logs:PutLogEvents"
+                    ],
+                    "resources": [
+                      "*"
+                    ]
+                  },
+                  {
+                    "effect": "Allow",
+                    "actions": [
+                      "sqs:ReceiveMessage",
+                      "sqs:DeleteMessage",
+                      "sqs:GetQueueAttributes"
+                    ],
+                    "resources": [
+                      "arn:aws:sqs:ap-south-1:111122223333:exam-uploads-queue"
+                    ]
+                  },
+                  {
+                    "effect": "Allow",
+                    "actions": [
+                      "s3:GetObject"
+                    ],
+                    "resources": [
+                      "arn:aws:s3:::exam-uploads/submissions/*"
+                    ]
+                  },
+                  {
+                    "effect": "Allow",
+                    "actions": [
+                      "events:PutEvents"
+                    ],
+                    "resources": [
+                      "arn:aws:events:ap-south-1:111122223333:event-bus/exam-events"
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      },
+      {
+        "id": "proc-b",
+        "type": "serviceNode",
+        "position": {
+          "x": 1620,
+          "y": 540
+        },
+        "data": {
+          "serviceId": "lambda",
+          "label": "submission-processor (ENI AZ-B)",
+          "category": "Compute",
+          "health": "healthy",
+          "az": "AZ-B",
+          "subnet": "private",
+          "replicas": 1,
+          "multiAz": false,
+          "notes": "",
+          "customConfig": {},
+          "iamRole": {
+            "id": "exam-submission-processor-role",
+            "trustPolicy": {
+              "id": "exam-submission-processor-role-trust",
+              "kind": "trust",
+              "statements": [
+                {
+                  "effect": "Allow",
+                  "actions": [
+                    "sts:AssumeRole"
+                  ],
+                  "principals": [
+                    "lambda.amazonaws.com"
+                  ],
+                  "resources": []
+                }
+              ]
+            },
+            "identityPolicies": [
+              {
+                "id": "exam-submission-processor-role-least-privilege",
+                "kind": "identity",
+                "statements": [
+                  {
+                    "effect": "Allow",
+                    "actions": [
+                      "rds-db:connect"
+                    ],
+                    "resources": [
+                      "arn:aws:rds:ap-south-1:111122223333:db:exam-db"
+                    ]
+                  },
+                  {
+                    "effect": "Allow",
+                    "actions": [
+                      "secretsmanager:GetSecretValue"
+                    ],
+                    "resources": [
+                      "arn:aws:secretsmanager:ap-south-1:111122223333:secret:exam/db/master"
+                    ]
+                  },
+                  {
+                    "effect": "Allow",
+                    "actions": [
+                      "cloudwatch:PutMetricData",
+                      "logs:CreateLogStream",
+                      "logs:PutLogEvents"
+                    ],
+                    "resources": [
+                      "*"
+                    ]
+                  },
+                  {
+                    "effect": "Allow",
+                    "actions": [
+                      "sqs:ReceiveMessage",
+                      "sqs:DeleteMessage",
+                      "sqs:GetQueueAttributes"
+                    ],
+                    "resources": [
+                      "arn:aws:sqs:ap-south-1:111122223333:exam-uploads-queue"
+                    ]
+                  },
+                  {
+                    "effect": "Allow",
+                    "actions": [
+                      "s3:GetObject"
+                    ],
+                    "resources": [
+                      "arn:aws:s3:::exam-uploads/submissions/*"
+                    ]
+                  },
+                  {
+                    "effect": "Allow",
+                    "actions": [
+                      "events:PutEvents"
+                    ],
+                    "resources": [
+                      "arn:aws:events:ap-south-1:111122223333:event-bus/exam-events"
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      },
+      {
+        "id": "marker-a",
+        "type": "serviceNode",
+        "position": {
+          "x": 980,
+          "y": 760
+        },
+        "data": {
+          "serviceId": "lambda",
+          "label": "auto-marker (ENI AZ-A)",
+          "category": "Compute",
+          "health": "healthy",
+          "az": "AZ-A",
+          "subnet": "private",
+          "replicas": 1,
+          "multiAz": false,
+          "notes": "",
+          "customConfig": {},
+          "iamRole": {
+            "id": "exam-auto-marker-role",
+            "trustPolicy": {
+              "id": "exam-auto-marker-role-trust",
+              "kind": "trust",
+              "statements": [
+                {
+                  "effect": "Allow",
+                  "actions": [
+                    "sts:AssumeRole"
+                  ],
+                  "principals": [
+                    "lambda.amazonaws.com"
+                  ],
+                  "resources": []
+                }
+              ]
+            },
+            "identityPolicies": [
+              {
+                "id": "exam-auto-marker-role-least-privilege",
+                "kind": "identity",
+                "statements": [
+                  {
+                    "effect": "Allow",
+                    "actions": [
+                      "rds-db:connect"
+                    ],
+                    "resources": [
+                      "arn:aws:rds:ap-south-1:111122223333:db:exam-db"
+                    ]
+                  },
+                  {
+                    "effect": "Allow",
+                    "actions": [
+                      "secretsmanager:GetSecretValue"
+                    ],
+                    "resources": [
+                      "arn:aws:secretsmanager:ap-south-1:111122223333:secret:exam/db/master"
+                    ]
+                  },
+                  {
+                    "effect": "Allow",
+                    "actions": [
+                      "cloudwatch:PutMetricData",
+                      "logs:CreateLogStream",
+                      "logs:PutLogEvents"
+                    ],
+                    "resources": [
+                      "*"
+                    ]
+                  },
+                  {
+                    "effect": "Allow",
+                    "actions": [
+                      "sqs:ReceiveMessage",
+                      "sqs:DeleteMessage",
+                      "sqs:GetQueueAttributes"
+                    ],
+                    "resources": [
+                      "arn:aws:sqs:ap-south-1:111122223333:exam-marking-queue"
+                    ]
+                  },
+                  {
+                    "effect": "Allow",
+                    "actions": [
+                      "sqs:SendMessage"
+                    ],
+                    "resources": [
+                      "arn:aws:sqs:ap-south-1:111122223333:exam-email-queue"
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      },
+      {
+        "id": "marker-b",
+        "type": "serviceNode",
+        "position": {
+          "x": 1620,
+          "y": 760
+        },
+        "data": {
+          "serviceId": "lambda",
+          "label": "auto-marker (ENI AZ-B)",
+          "category": "Compute",
+          "health": "healthy",
+          "az": "AZ-B",
+          "subnet": "private",
+          "replicas": 1,
+          "multiAz": false,
+          "notes": "",
+          "customConfig": {},
+          "iamRole": {
+            "id": "exam-auto-marker-role",
+            "trustPolicy": {
+              "id": "exam-auto-marker-role-trust",
+              "kind": "trust",
+              "statements": [
+                {
+                  "effect": "Allow",
+                  "actions": [
+                    "sts:AssumeRole"
+                  ],
+                  "principals": [
+                    "lambda.amazonaws.com"
+                  ],
+                  "resources": []
+                }
+              ]
+            },
+            "identityPolicies": [
+              {
+                "id": "exam-auto-marker-role-least-privilege",
+                "kind": "identity",
+                "statements": [
+                  {
+                    "effect": "Allow",
+                    "actions": [
+                      "rds-db:connect"
+                    ],
+                    "resources": [
+                      "arn:aws:rds:ap-south-1:111122223333:db:exam-db"
+                    ]
+                  },
+                  {
+                    "effect": "Allow",
+                    "actions": [
+                      "secretsmanager:GetSecretValue"
+                    ],
+                    "resources": [
+                      "arn:aws:secretsmanager:ap-south-1:111122223333:secret:exam/db/master"
+                    ]
+                  },
+                  {
+                    "effect": "Allow",
+                    "actions": [
+                      "cloudwatch:PutMetricData",
+                      "logs:CreateLogStream",
+                      "logs:PutLogEvents"
+                    ],
+                    "resources": [
+                      "*"
+                    ]
+                  },
+                  {
+                    "effect": "Allow",
+                    "actions": [
+                      "sqs:ReceiveMessage",
+                      "sqs:DeleteMessage",
+                      "sqs:GetQueueAttributes"
+                    ],
+                    "resources": [
+                      "arn:aws:sqs:ap-south-1:111122223333:exam-marking-queue"
+                    ]
+                  },
+                  {
+                    "effect": "Allow",
+                    "actions": [
+                      "sqs:SendMessage"
+                    ],
+                    "resources": [
+                      "arn:aws:sqs:ap-south-1:111122223333:exam-email-queue"
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      },
+      {
+        "id": "proxy",
+        "type": "serviceNode",
+        "position": {
+          "x": 680,
+          "y": 760
+        },
+        "data": {
+          "serviceId": "rds_proxy",
+          "label": "RDS Proxy (app subnets A + B)",
+          "category": "Databases",
+          "health": "healthy",
+          "az": "Multi-AZ",
+          "subnet": "private",
+          "replicas": 1,
+          "multiAz": true,
+          "notes": "",
+          "customConfig": {},
+          "iamRole": {
+            "id": "exam-rds-proxy-role",
+            "trustPolicy": {
+              "id": "exam-rds-proxy-role-trust",
+              "kind": "trust",
+              "statements": [
+                {
+                  "effect": "Allow",
+                  "actions": [
+                    "sts:AssumeRole"
+                  ],
+                  "principals": [
+                    "rds.amazonaws.com"
+                  ],
+                  "resources": []
+                }
+              ]
+            },
+            "identityPolicies": [
+              {
+                "id": "exam-rds-proxy-role-least-privilege",
+                "kind": "identity",
+                "statements": [
+                  {
+                    "effect": "Allow",
+                    "actions": [
+                      "secretsmanager:GetSecretValue"
+                    ],
+                    "resources": [
+                      "arn:aws:secretsmanager:ap-south-1:111122223333:secret:exam/db/master"
+                    ]
+                  },
+                  {
+                    "effect": "Allow",
+                    "actions": [
+                      "kms:Decrypt"
+                    ],
+                    "resources": [
+                      "arn:aws:kms:ap-south-1:111122223333:key/exam-data"
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      },
+      {
+        "id": "endpoints",
+        "type": "serviceNode",
+        "position": {
+          "x": 1320,
+          "y": 760
+        },
+        "data": {
+          "serviceId": "privatelink",
+          "label": "VPC endpoints \u00b7 SQS, Secrets, EventBridge, KMS",
+          "category": "Networking & Content Delivery",
+          "health": "healthy",
+          "az": "Multi-AZ",
+          "subnet": "private",
+          "replicas": 1,
+          "multiAz": true,
+          "notes": "",
+          "customConfig": {
+            "endpointService": "sqs",
+            "services": [
+              "sqs",
+              "secretsmanager",
+              "events",
+              "kms"
+            ]
+          }
+        }
+      },
+      {
+        "id": "db",
+        "type": "serviceNode",
+        "position": {
+          "x": 830,
+          "y": 1100
+        },
+        "data": {
+          "serviceId": "rds",
+          "label": "RDS PostgreSQL Multi-AZ \u00b7 primary AZ-A, sync standby AZ-B",
+          "category": "Databases",
+          "health": "healthy",
+          "az": "AZ-A",
+          "subnet": "private",
+          "replicas": 1,
+          "multiAz": true,
+          "notes": "",
+          "customConfig": {
+            "engine": "postgres16",
+            "backupRetentionDays": 35,
+            "encrypted": true,
+            "resourceArn": "arn:aws:rds:ap-south-1:111122223333:db:exam-db"
+          }
+        }
+      },
+      {
+        "id": "db-standby",
+        "type": "serviceNode",
+        "position": {
+          "x": 1470,
+          "y": 1100
+        },
+        "data": {
+          "serviceId": "rds",
+          "label": "RDS standby (synchronous replica of the Multi-AZ instance)",
+          "category": "Databases",
+          "health": "healthy",
+          "az": "AZ-B",
+          "subnet": "private",
+          "replicas": 1,
+          "multiAz": true,
+          "notes": "Same Multi-AZ instance; promoted automatically if AZ-A fails",
+          "customConfig": {}
+        }
+      },
+      {
+        "id": "q-uploads",
+        "type": "serviceNode",
+        "position": {
+          "x": 2200,
+          "y": 140
+        },
+        "data": {
+          "serviceId": "sqs",
+          "label": "uploads queue (+DLQ)",
+          "category": "Integration & Messaging",
+          "health": "healthy",
+          "az": "Edge / Global",
+          "subnet": "global",
+          "replicas": 1,
+          "multiAz": false,
+          "notes": "",
+          "customConfig": {
+            "resourceArn": "arn:aws:sqs:ap-south-1:111122223333:exam-uploads-queue"
+          }
+        }
+      },
+      {
+        "id": "bus",
+        "type": "serviceNode",
+        "position": {
+          "x": 2440,
+          "y": 140
+        },
+        "data": {
+          "serviceId": "eventbridge",
+          "label": "EventBridge bus \u00b7 SubmissionReceived, ResultsReleased",
+          "category": "Integration & Messaging",
+          "health": "healthy",
+          "az": "Edge / Global",
+          "subnet": "global",
+          "replicas": 1,
+          "multiAz": false,
+          "notes": "",
+          "customConfig": {
+            "resourceArn": "arn:aws:events:ap-south-1:111122223333:event-bus/exam-events"
+          }
+        }
+      },
+      {
+        "id": "q-email",
+        "type": "serviceNode",
+        "position": {
+          "x": 2680,
+          "y": 140
+        },
+        "data": {
+          "serviceId": "sqs",
+          "label": "email queue (+DLQ)",
+          "category": "Integration & Messaging",
+          "health": "healthy",
+          "az": "Edge / Global",
+          "subnet": "global",
+          "replicas": 1,
+          "multiAz": false,
+          "notes": "",
+          "customConfig": {
+            "resourceArn": "arn:aws:sqs:ap-south-1:111122223333:exam-email-queue"
+          }
+        }
+      },
+      {
+        "id": "notifier",
+        "type": "serviceNode",
+        "position": {
+          "x": 2680,
+          "y": 360
+        },
+        "data": {
+          "serviceId": "lambda",
+          "label": "notifier Lambda (outside the VPC)",
+          "category": "Compute",
+          "health": "healthy",
+          "az": "Multi-AZ",
+          "subnet": "global",
+          "replicas": 1,
+          "multiAz": true,
+          "notes": "",
+          "customConfig": {},
+          "iamRole": {
+            "id": "exam-notifier-role",
+            "trustPolicy": {
+              "id": "exam-notifier-role-trust",
+              "kind": "trust",
+              "statements": [
+                {
+                  "effect": "Allow",
+                  "actions": [
+                    "sts:AssumeRole"
+                  ],
+                  "principals": [
+                    "lambda.amazonaws.com"
+                  ],
+                  "resources": []
+                }
+              ]
+            },
+            "identityPolicies": [
+              {
+                "id": "exam-notifier-role-least-privilege",
+                "kind": "identity",
+                "statements": [
+                  {
+                    "effect": "Allow",
+                    "actions": [
+                      "cloudwatch:PutMetricData",
+                      "logs:CreateLogStream",
+                      "logs:PutLogEvents"
+                    ],
+                    "resources": [
+                      "*"
+                    ]
+                  },
+                  {
+                    "effect": "Allow",
+                    "actions": [
+                      "sqs:ReceiveMessage",
+                      "sqs:DeleteMessage",
+                      "sqs:GetQueueAttributes"
+                    ],
+                    "resources": [
+                      "arn:aws:sqs:ap-south-1:111122223333:exam-email-queue"
+                    ]
+                  },
+                  {
+                    "effect": "Allow",
+                    "actions": [
+                      "ses:SendEmail"
+                    ],
+                    "resources": [
+                      "arn:aws:ses:ap-south-1:111122223333:identity/no-reply@exams.example.edu"
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      },
+      {
+        "id": "ses",
+        "type": "serviceNode",
+        "position": {
+          "x": 2920,
+          "y": 360
+        },
+        "data": {
+          "serviceId": "ses",
+          "label": "Amazon SES",
+          "category": "Business Applications",
+          "health": "healthy",
+          "az": "Edge / Global",
+          "subnet": "global",
+          "replicas": 1,
+          "multiAz": false,
+          "notes": "",
+          "customConfig": {
+            "resourceArn": "arn:aws:ses:ap-south-1:111122223333:identity/no-reply@exams.example.edu"
+          }
+        }
+      },
+      {
+        "id": "q-marking",
+        "type": "serviceNode",
+        "position": {
+          "x": 2200,
+          "y": 360
+        },
+        "data": {
+          "serviceId": "sqs",
+          "label": "marking queue (+DLQ)",
+          "category": "Integration & Messaging",
+          "health": "healthy",
+          "az": "Edge / Global",
+          "subnet": "global",
+          "replicas": 1,
+          "multiAz": false,
+          "notes": "",
+          "customConfig": {
+            "resourceArn": "arn:aws:sqs:ap-south-1:111122223333:exam-marking-queue"
+          }
+        }
+      },
+      {
+        "id": "dlq",
+        "type": "serviceNode",
+        "position": {
+          "x": 2440,
+          "y": 360
+        },
+        "data": {
+          "serviceId": "sqs_dlq",
+          "label": "Dead-letter queues (alarmed)",
+          "category": "Integration & Messaging",
+          "health": "healthy",
+          "az": "Edge / Global",
+          "subnet": "global",
+          "replicas": 1,
+          "multiAz": false,
+          "notes": "",
+          "customConfig": {
+            "resourceArn": "arn:aws:sqs:ap-south-1:111122223333:exam-uploads-dlq"
+          }
+        }
+      },
+      {
+        "id": "secrets",
+        "type": "serviceNode",
+        "position": {
+          "x": 1960,
+          "y": 620
+        },
+        "data": {
+          "serviceId": "secrets_manager",
+          "label": "Secrets Manager \u00b7 DB credentials",
+          "category": "Security, Identity & Compliance",
+          "health": "healthy",
+          "az": "Edge / Global",
+          "subnet": "global",
+          "replicas": 1,
+          "multiAz": false,
+          "notes": "",
+          "customConfig": {
+            "resourceArn": "arn:aws:secretsmanager:ap-south-1:111122223333:secret:exam/db/master"
+          }
+        }
+      },
+      {
+        "id": "kms",
+        "type": "serviceNode",
+        "position": {
+          "x": 2200,
+          "y": 620
+        },
+        "data": {
+          "serviceId": "kms",
+          "label": "KMS customer key",
+          "category": "Security, Identity & Compliance",
+          "health": "healthy",
+          "az": "Edge / Global",
+          "subnet": "global",
+          "replicas": 1,
+          "multiAz": false,
+          "notes": "",
+          "customConfig": {
+            "resourceArn": "arn:aws:kms:ap-south-1:111122223333:key/exam-data"
+          }
+        }
+      },
+      {
+        "id": "cw",
+        "type": "serviceNode",
+        "position": {
+          "x": 2440,
+          "y": 620
+        },
+        "data": {
+          "serviceId": "cloudwatch",
+          "label": "CloudWatch \u00b7 logs, alarms, dashboard",
+          "category": "Management & Governance",
+          "health": "healthy",
+          "az": "Edge / Global",
+          "subnet": "global",
+          "replicas": 1,
+          "multiAz": false,
+          "notes": "",
+          "customConfig": {
+            "resourceArn": "arn:aws:cloudwatch:ap-south-1:111122223333:*"
+          }
+        }
+      },
+      {
+        "id": "sns",
+        "type": "serviceNode",
+        "position": {
+          "x": 2680,
+          "y": 620
+        },
+        "data": {
+          "serviceId": "sns",
+          "label": "SNS ops alerts",
+          "category": "Integration & Messaging",
+          "health": "healthy",
+          "az": "Edge / Global",
+          "subnet": "global",
+          "replicas": 1,
+          "multiAz": false,
+          "notes": "",
+          "customConfig": {}
+        }
+      },
+      {
+        "id": "trail",
+        "type": "serviceNode",
+        "position": {
+          "x": 1960,
+          "y": 860
+        },
+        "data": {
+          "serviceId": "cloudtrail",
+          "label": "CloudTrail audit",
+          "category": "Management & Governance",
+          "health": "healthy",
+          "az": "Edge / Global",
+          "subnet": "global",
+          "replicas": 1,
+          "multiAz": false,
+          "notes": "",
+          "customConfig": {}
+        }
+      },
+      {
+        "id": "backup",
+        "type": "serviceNode",
+        "position": {
+          "x": 2200,
+          "y": 860
+        },
+        "data": {
+          "serviceId": "backup",
+          "label": "AWS Backup \u00b7 daily 35 d, monthly 5 y",
+          "category": "Storage",
+          "health": "healthy",
+          "az": "Edge / Global",
+          "subnet": "global",
+          "replicas": 1,
+          "multiAz": false,
+          "notes": "",
+          "customConfig": {}
+        }
+      }
+    ],
+    "edges": [
+      {
+        "id": "student-route53",
+        "source": "student",
+        "target": "route53",
+        "type": "custom",
+        "data": {
+          "protocol": "DNS",
+          "interactionType": "synchronous",
+          "isCriticalDependency": true,
+          "timeoutMs": 1500,
+          "stepNumber": 1
+        }
+      },
+      {
+        "id": "route53-waf",
+        "source": "route53",
+        "target": "waf",
+        "type": "custom",
+        "data": {
+          "protocol": "HTTPS",
+          "interactionType": "synchronous",
+          "isCriticalDependency": true,
+          "timeoutMs": 1500,
+          "stepNumber": 2
+        }
+      },
+      {
+        "id": "waf-cloudfront",
+        "source": "waf",
+        "target": "cloudfront",
+        "type": "custom",
+        "data": {
+          "protocol": "HTTPS",
+          "interactionType": "synchronous",
+          "isCriticalDependency": true,
+          "timeoutMs": 1500,
+          "stepNumber": 3
+        }
+      },
+      {
+        "id": "cloudfront-apigw",
+        "source": "cloudfront",
+        "target": "apigw",
+        "type": "custom",
+        "data": {
+          "protocol": "HTTPS",
+          "interactionType": "synchronous",
+          "isCriticalDependency": true,
+          "timeoutMs": 1500,
+          "stepNumber": 4
+        }
+      },
+      {
+        "id": "cloudfront-site",
+        "source": "cloudfront",
+        "target": "site",
+        "type": "custom",
+        "data": {
+          "protocol": "HTTPS",
+          "interactionType": "synchronous",
+          "isCriticalDependency": true,
+          "timeoutMs": 1500
+        }
+      },
+      {
+        "id": "apigw-cognito",
+        "source": "apigw",
+        "target": "cognito",
+        "type": "custom",
+        "data": {
+          "protocol": "HTTPS",
+          "interactionType": "synchronous",
+          "isCriticalDependency": true,
+          "timeoutMs": 1500,
+          "traversal": "dependency"
+        }
+      },
+      {
+        "id": "apigw-api-a",
+        "source": "apigw",
+        "target": "api-a",
+        "type": "custom",
+        "data": {
+          "protocol": "HTTPS",
+          "interactionType": "synchronous",
+          "isCriticalDependency": true,
+          "timeoutMs": 1500,
+          "stepNumber": 5
+        }
+      },
+      {
+        "id": "apigw-api-b",
+        "source": "apigw",
+        "target": "api-b",
+        "type": "custom",
+        "data": {
+          "protocol": "HTTPS",
+          "interactionType": "synchronous",
+          "isCriticalDependency": true,
+          "timeoutMs": 1500,
+          "stepNumber": 5
+        }
+      },
+      {
+        "id": "api-a-db",
+        "source": "api-a",
+        "target": "db",
+        "type": "custom",
+        "data": {
+          "protocol": "SQL",
+          "interactionType": "synchronous",
+          "isCriticalDependency": true,
+          "timeoutMs": 1500,
+          "stepNumber": 6
+        }
+      },
+      {
+        "id": "api-a-q-marking",
+        "source": "api-a",
+        "target": "q-marking",
+        "type": "custom",
+        "data": {
+          "protocol": "Message",
+          "interactionType": "asynchronous",
+          "isCriticalDependency": false,
+          "timeoutMs": 1500,
+          "traversal": "dependency"
+        }
+      },
+      {
+        "id": "api-a-proxy",
+        "source": "api-a",
+        "target": "proxy",
+        "type": "custom",
+        "data": {
+          "protocol": "SQL",
+          "interactionType": "synchronous",
+          "isCriticalDependency": false,
+          "timeoutMs": 1500,
+          "traversal": "dependency"
+        }
+      },
+      {
+        "id": "api-a-cw",
+        "source": "api-a",
+        "target": "cw",
+        "type": "custom",
+        "data": {
+          "protocol": "HTTPS",
+          "interactionType": "synchronous",
+          "isCriticalDependency": false,
+          "timeoutMs": 1500,
+          "traversal": "dependency"
+        }
+      },
+      {
+        "id": "api-b-db",
+        "source": "api-b",
+        "target": "db",
+        "type": "custom",
+        "data": {
+          "protocol": "SQL",
+          "interactionType": "synchronous",
+          "isCriticalDependency": true,
+          "timeoutMs": 1500,
+          "stepNumber": 6
+        }
+      },
+      {
+        "id": "api-b-q-marking",
+        "source": "api-b",
+        "target": "q-marking",
+        "type": "custom",
+        "data": {
+          "protocol": "Message",
+          "interactionType": "asynchronous",
+          "isCriticalDependency": false,
+          "timeoutMs": 1500,
+          "traversal": "dependency"
+        }
+      },
+      {
+        "id": "api-b-proxy",
+        "source": "api-b",
+        "target": "proxy",
+        "type": "custom",
+        "data": {
+          "protocol": "SQL",
+          "interactionType": "synchronous",
+          "isCriticalDependency": false,
+          "timeoutMs": 1500,
+          "traversal": "dependency"
+        }
+      },
+      {
+        "id": "api-b-cw",
+        "source": "api-b",
+        "target": "cw",
+        "type": "custom",
+        "data": {
+          "protocol": "HTTPS",
+          "interactionType": "synchronous",
+          "isCriticalDependency": false,
+          "timeoutMs": 1500,
+          "traversal": "dependency"
+        }
+      },
+      {
+        "id": "proxy-db",
+        "source": "proxy",
+        "target": "db",
+        "type": "custom",
+        "data": {
+          "protocol": "SQL",
+          "interactionType": "synchronous",
+          "isCriticalDependency": true,
+          "timeoutMs": 1500,
+          "relationship": "manages"
+        }
+      },
+      {
+        "id": "proxy-secrets",
+        "source": "proxy",
+        "target": "secrets",
+        "type": "custom",
+        "data": {
+          "protocol": "HTTPS",
+          "interactionType": "synchronous",
+          "isCriticalDependency": true,
+          "timeoutMs": 1500,
+          "traversal": "dependency"
+        }
+      },
+      {
+        "id": "secrets-kms",
+        "source": "secrets",
+        "target": "kms",
+        "type": "custom",
+        "data": {
+          "protocol": "HTTPS",
+          "interactionType": "synchronous",
+          "isCriticalDependency": true,
+          "timeoutMs": 1500,
+          "traversal": "dependency"
+        }
+      },
+      {
+        "id": "uploader-uploads",
+        "source": "uploader",
+        "target": "uploads",
+        "type": "custom",
+        "data": {
+          "protocol": "HTTPS",
+          "interactionType": "synchronous",
+          "isCriticalDependency": true,
+          "timeoutMs": 1500,
+          "stepNumber": 1
+        }
+      },
+      {
+        "id": "uploads-q-uploads",
+        "source": "uploads",
+        "target": "q-uploads",
+        "type": "custom",
+        "data": {
+          "protocol": "Message",
+          "interactionType": "asynchronous",
+          "isCriticalDependency": true,
+          "timeoutMs": 1500,
+          "stepNumber": 2
+        }
+      },
+      {
+        "id": "q-uploads-proc-a",
+        "source": "q-uploads",
+        "target": "proc-a",
+        "type": "custom",
+        "data": {
+          "protocol": "Message",
+          "interactionType": "asynchronous",
+          "isCriticalDependency": true,
+          "timeoutMs": 1500,
+          "stepNumber": 3
+        }
+      },
+      {
+        "id": "q-uploads-proc-b",
+        "source": "q-uploads",
+        "target": "proc-b",
+        "type": "custom",
+        "data": {
+          "protocol": "Message",
+          "interactionType": "asynchronous",
+          "isCriticalDependency": true,
+          "timeoutMs": 1500,
+          "stepNumber": 3
+        }
+      },
+      {
+        "id": "q-uploads-dlq",
+        "source": "q-uploads",
+        "target": "dlq",
+        "type": "custom",
+        "data": {
+          "protocol": "Message",
+          "interactionType": "asynchronous",
+          "isCriticalDependency": false,
+          "timeoutMs": 1500
+        }
+      },
+      {
+        "id": "proc-a-bus",
+        "source": "proc-a",
+        "target": "bus",
+        "type": "custom",
+        "data": {
+          "protocol": "Event",
+          "interactionType": "asynchronous",
+          "isCriticalDependency": true,
+          "timeoutMs": 1500,
+          "stepNumber": 4
+        }
+      },
+      {
+        "id": "proc-a-db",
+        "source": "proc-a",
+        "target": "db",
+        "type": "custom",
+        "data": {
+          "protocol": "SQL",
+          "interactionType": "synchronous",
+          "isCriticalDependency": true,
+          "timeoutMs": 1500,
+          "traversal": "dependency"
+        }
+      },
+      {
+        "id": "proc-b-bus",
+        "source": "proc-b",
+        "target": "bus",
+        "type": "custom",
+        "data": {
+          "protocol": "Event",
+          "interactionType": "asynchronous",
+          "isCriticalDependency": true,
+          "timeoutMs": 1500,
+          "stepNumber": 4
+        }
+      },
+      {
+        "id": "proc-b-db",
+        "source": "proc-b",
+        "target": "db",
+        "type": "custom",
+        "data": {
+          "protocol": "SQL",
+          "interactionType": "synchronous",
+          "isCriticalDependency": true,
+          "timeoutMs": 1500,
+          "traversal": "dependency"
+        }
+      },
+      {
+        "id": "bus-q-email",
+        "source": "bus",
+        "target": "q-email",
+        "type": "custom",
+        "data": {
+          "protocol": "Message",
+          "interactionType": "asynchronous",
+          "isCriticalDependency": true,
+          "timeoutMs": 1500,
+          "stepNumber": 5
+        }
+      },
+      {
+        "id": "bus-q-marking",
+        "source": "bus",
+        "target": "q-marking",
+        "type": "custom",
+        "data": {
+          "protocol": "Message",
+          "interactionType": "asynchronous",
+          "isCriticalDependency": false,
+          "timeoutMs": 1500
+        }
+      },
+      {
+        "id": "q-email-notifier",
+        "source": "q-email",
+        "target": "notifier",
+        "type": "custom",
+        "data": {
+          "protocol": "Message",
+          "interactionType": "asynchronous",
+          "isCriticalDependency": true,
+          "timeoutMs": 1500,
+          "stepNumber": 6
+        }
+      },
+      {
+        "id": "notifier-ses",
+        "source": "notifier",
+        "target": "ses",
+        "type": "custom",
+        "data": {
+          "protocol": "HTTPS",
+          "interactionType": "synchronous",
+          "isCriticalDependency": true,
+          "timeoutMs": 1500,
+          "stepNumber": 7
+        }
+      },
+      {
+        "id": "ses-tutor",
+        "source": "ses",
+        "target": "tutor",
+        "type": "custom",
+        "data": {
+          "protocol": "HTTPS",
+          "interactionType": "asynchronous",
+          "isCriticalDependency": true,
+          "timeoutMs": 1500,
+          "stepNumber": 8
+        }
+      },
+      {
+        "id": "q-marking-marker-a",
+        "source": "q-marking",
+        "target": "marker-a",
+        "type": "custom",
+        "data": {
+          "protocol": "Message",
+          "interactionType": "asynchronous",
+          "isCriticalDependency": true,
+          "timeoutMs": 1500
+        }
+      },
+      {
+        "id": "q-marking-marker-b",
+        "source": "q-marking",
+        "target": "marker-b",
+        "type": "custom",
+        "data": {
+          "protocol": "Message",
+          "interactionType": "asynchronous",
+          "isCriticalDependency": true,
+          "timeoutMs": 1500
+        }
+      },
+      {
+        "id": "marker-a-db",
+        "source": "marker-a",
+        "target": "db",
+        "type": "custom",
+        "data": {
+          "protocol": "SQL",
+          "interactionType": "synchronous",
+          "isCriticalDependency": true,
+          "timeoutMs": 1500,
+          "traversal": "dependency"
+        }
+      },
+      {
+        "id": "marker-a-q-email",
+        "source": "marker-a",
+        "target": "q-email",
+        "type": "custom",
+        "data": {
+          "protocol": "Message",
+          "interactionType": "asynchronous",
+          "isCriticalDependency": false,
+          "timeoutMs": 1500
+        }
+      },
+      {
+        "id": "marker-b-db",
+        "source": "marker-b",
+        "target": "db",
+        "type": "custom",
+        "data": {
+          "protocol": "SQL",
+          "interactionType": "synchronous",
+          "isCriticalDependency": true,
+          "timeoutMs": 1500,
+          "traversal": "dependency"
+        }
+      },
+      {
+        "id": "marker-b-q-email",
+        "source": "marker-b",
+        "target": "q-email",
+        "type": "custom",
+        "data": {
+          "protocol": "Message",
+          "interactionType": "asynchronous",
+          "isCriticalDependency": false,
+          "timeoutMs": 1500
+        }
+      },
+      {
+        "id": "nat-a-igw",
+        "source": "nat-a",
+        "target": "igw",
+        "type": "custom",
+        "data": {
+          "protocol": "HTTPS",
+          "interactionType": "synchronous",
+          "isCriticalDependency": false,
+          "timeoutMs": 1500
+        }
+      },
+      {
+        "id": "nat-b-igw",
+        "source": "nat-b",
+        "target": "igw",
+        "type": "custom",
+        "data": {
+          "protocol": "HTTPS",
+          "interactionType": "synchronous",
+          "isCriticalDependency": false,
+          "timeoutMs": 1500
+        }
+      },
+      {
+        "id": "cw-sns",
+        "source": "cw",
+        "target": "sns",
+        "type": "custom",
+        "data": {
+          "protocol": "HTTPS",
+          "interactionType": "synchronous",
+          "isCriticalDependency": false,
+          "timeoutMs": 1500,
+          "traversal": "dependency"
+        }
+      },
+      {
+        "id": "backup-db",
+        "source": "backup",
+        "target": "db",
+        "type": "custom",
+        "data": {
+          "protocol": "SQL",
+          "interactionType": "synchronous",
+          "isCriticalDependency": false,
+          "timeoutMs": 1500,
+          "relationship": "manages"
+        }
+      },
+      {
+        "id": "github-apigw",
+        "source": "github",
+        "target": "apigw",
+        "type": "custom",
+        "data": {
+          "protocol": "HTTPS",
+          "interactionType": "synchronous",
+          "isCriticalDependency": false,
+          "timeoutMs": 1500,
+          "relationship": "manages"
+        }
+      },
+      {
+        "id": "cloudfront-acm",
+        "source": "cloudfront",
+        "target": "acm",
+        "type": "custom",
+        "data": {
+          "protocol": "HTTPS",
+          "interactionType": "synchronous",
+          "isCriticalDependency": false,
+          "timeoutMs": 1500,
+          "traversal": "dependency"
+        }
+      },
+      {
+        "id": "db-db-standby",
+        "source": "db",
+        "target": "db-standby",
+        "type": "custom",
+        "data": {
+          "protocol": "Replication",
+          "interactionType": "synchronous",
+          "isCriticalDependency": false,
+          "timeoutMs": 1500
+        }
+      },
+      {
+        "id": "trail-uploads",
+        "source": "trail",
+        "target": "uploads",
+        "type": "custom",
+        "data": {
+          "protocol": "HTTPS",
+          "interactionType": "synchronous",
+          "isCriticalDependency": false,
+          "timeoutMs": 1500,
+          "traversal": "dependency"
+        }
+      }
+    ],
+    "scenario": {
+      "id": "walkthrough-2",
+      "name": "Walkthrough 2 - 40 MB upload, tutor notified",
+      "method": "POST",
+      "path": "/submissions/DSO303-A2/report.pdf",
+      "startNodeId": "uploader",
+      "trafficLevel": "normal"
+    },
+    "activeFailures": [],
+    "appMode": "design",
+    "selectedNodeId": null,
+    "selectedEdgeId": null,
+    "activeChallengeId": null,
+    "challengeResult": null,
+    "playbackSpeed": 1,
+    "highlightTaskFlow": false,
+    "showNaclSideColumn": false,
+    "activeStepIndex": null,
+    "viewport": {
+      "x": 40,
+      "y": 40,
+      "zoom": 0.45
+    },
+    "simulationResult": null,
+    "activeLabReference": null
+  }
+}

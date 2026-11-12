@@ -1,0 +1,41 @@
+# scripts/destroy.sh then scripts/deploy.sh on a clean Floci (2026-11-12) - tail of the output
+aws_lambda_event_source_mapping.sqs["submission_processor"]: Creation complete after 0s [id=827cbd11-527f-4bbd-a672-6626de3cec9c]
+
+Apply complete! Resources: 147 added, 0 changed, 0 destroyed.
+
+Outputs:
+
+api_base_url = "http://localhost:4566/restapis/ef88d0cc48/prod/_user_request_/api"
+app_url = "http://localhost:4566/exam-frontend-000000000000/index.html"
+db_instance = {
+  "endpoint" = "172.20.0.2"
+  "identifier" = "exam-db"
+  "multi_az" = true
+  "primary_az" = "us-east-1a"
+  "subnet_azs" = tolist([
+    "us-east-1a",
+    "us-east-1b",
+  ])
+}
+demo_users = [
+  "admin1@exams.example.edu (admins)",
+  "student1@exams.example.edu (students)",
+  "tutor1@exams.example.edu (tutors)",
+]
+event_bus = "exam-events"
+exam_api_function = "exam-exam-api"
+frontend_bucket = "exam-frontend-000000000000"
+queues = {
+  "email" = "http://floci:4566/000000000000/exam-email-queue"
+  "marking" = "http://floci:4566/000000000000/exam-marking-queue"
+  "uploads" = "http://floci:4566/000000000000/exam-uploads-queue"
+}
+upload_bucket = "exam-uploads-000000000000"
+user_pool_client_id = "cab3ba5e0e314d7b8ad9b6fa7e"
+user_pool_id = "us-east-1_bfbeeeb1e"
+== 3/3 database schema and seed data (direct invoke of the API function)
+{"tables": 6, "seeded": true}
+
+App:  http://localhost:4566/exam-frontend-000000000000/index.html
+API:  http://localhost:4566/restapis/ef88d0cc48/prod/_user_request_/api
+Users: ["admin1@exams.example.edu (admins)","student1@exams.example.edu (students)","tutor1@exams.example.edu (tutors)"]
